@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Sticky Top Navbar -->
+  <nav class="navbar navbar-expand-lg admin-navbar sticky-top">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Brand Logo -->
+      <a class="admin-brand" href="index.html">
+        <img src="../assets/images/logo-white.png" alt="Prosix Sports">
+        <span>ADMIN</span>
+      </a>
+
+      <!-- Mobile Hamburger Toggler -->
+      <button class="navbar-toggler admin-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent" aria-controls="adminNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <!-- Navigation Links & Actions -->
+      <div class="collapse navbar-collapse admin-navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+          <li class="nav-item">
+            <a class="admin-nav-link active" href="index.html">
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="products.html">
+              <i class="bi bi-tag-fill"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="offers.html">
+              <i class="bi bi-images"></i>
+              <span>Banners & Offers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="messages.html">
+              <i class="bi bi-chat-dots-fill"></i>
+              <span>Inquiries</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Right Side Utility Badges & Storefront Link -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mt-3 mt-lg-0">
+          <div class="status-pill active shadow-sm">
+            <span class="live-dot"></span>
+            <span>Live Store Engine</span>
+          </div>
+          <a href="../user/index.html" class="btn-glass btn-sm">
+            <i class="bi bi-arrow-up-right-square"></i>
+            <span>Open Storefront</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Full-Width Content Container -->
+  <main class="admin-page-container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Page Header -->
+      <div class="admin-page-header">
+        <div>
+          <h3 class="fw-bold mb-1 text-dark">Dashboard Overview</h3>
+          <p class="text-muted small mb-0">Real-time catalogue telemetry, active uniform designs, and incoming team leads</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <a href="products.html" class="btn-glass btn-glass-primary btn-shimmer">
+            <i class="bi bi-plus-circle"></i>
+            <span>Add Product</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Frosted Stat Cards Row -->
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3 animate-fade-in-up delay-1">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Active Products</div>
+              <div class="stat-value" id="kpiProducts">48</div>
+              <div class="stat-meta text-success"><i class="bi bi-arrow-up-short"></i> Published & live</div>
+            </div>
+            <div class="stat-icon-wrap stat-icon-blue">
+              <i class="bi bi-tshirt"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3 animate-fade-in-up delay-2">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Sport Categories</div>
+              <div class="stat-value" id="kpiCategories">6</div>
+              <div class="stat-meta"><i class="bi bi-tags"></i> 7v7, Football, Baseball, +3</div>
+            </div>
+            <div class="stat-icon-wrap stat-icon-yellow">
+              <i class="bi bi-trophy"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3 animate-fade-in-up delay-3">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Customer Inquiries</div>
+              <div class="stat-value" id="kpiInquiries">19</div>
+              <div class="stat-meta text-primary"><i class="bi bi-envelope-open"></i> Leads awaiting response</div>
+            </div>
+            <div class="stat-icon-wrap stat-icon-purple">
+              <i class="bi bi-chat-quote"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3 animate-fade-in-up delay-4">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">System Health</div>
+              <div class="stat-value text-success" id="kpiHealth">100%</div>
+              <div class="stat-meta text-muted"><i class="bi bi-shield-check text-success"></i> All systems operational</div>
+            </div>
+            <div class="stat-icon-wrap stat-icon-green">
+              <i class="bi bi-cpu"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content Grid -->
+      <div class="row g-4">
+        <!-- Recent Inquiries Section -->
+        <div class="col-12 col-lg-8 animate-fade-in-up delay-2">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h5 class="fw-bold mb-1">Recent Customer Inquiries & Leads</h5>
+                <p class="text-muted small mb-0">High-priority coach & athletic director inquiries</p>
+              </div>
+              <a href="messages.html" class="btn-glass btn-sm">
+                <span>View All Inquiries</span>
+                <i class="bi bi-chevron-right small"></i>
+              </a>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table admin-table table-hover text-nowrap align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Customer / Lead</th>
+                    <th>Sport</th>
+                    <th>Subject / Requirements</th>
+                    <th>Status</th>
+                    <th class="text-end">Quick Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardInquiriesBody">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Catalog Designs Quick-View -->
+        <div class="col-12 col-lg-4 animate-fade-in-up delay-3">
+          <div class="admin-card h-100">
+            <div class="admin-card-header">
+              <div>
+                <h5 class="fw-bold mb-1">Catalog Highlights</h5>
+                <p class="text-muted small mb-0">Popular team uniforms</p>
+              </div>
+              <a href="products.html" class="btn-glass btn-sm">
+                <i class="bi bi-sliders"></i>
+              </a>
+            </div>
+
+            <div id="catalogHighlightsList" class="d-flex flex-column gap-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Fetch & render KPIs
+      const stats = await AdminApp.fetchStats();
+      if (stats) {
+        document.getElementById('kpiProducts').textContent = stats.totalProducts;
+        document.getElementById('kpiCategories').textContent = stats.activeCategories;
+        document.getElementById('kpiInquiries').textContent = stats.totalInquiries;
+        document.getElementById('kpiHealth').textContent = stats.systemHealth;
+      }
+
+      // 2. Fetch & render Recent Inquiries
+      const inquiries = await AdminApp.fetchInquiries();
+      const inquiriesTbody = document.getElementById('dashboardInquiriesBody');
+      if (inquiriesTbody && inquiries.length > 0) {
+        let html = '';
+        inquiries.slice(0, 4).forEach(i => {
+          const isNew = i.status === 'new';
+          html += `
+            <tr>
+              <td>
+                <span class="fw-bold text-dark me-2">${i.name}</span>
+                <span class="text-muted small">${i.email}</span>
+              </td>
+              <td><span class="badge bg-light text-dark border px-2 py-1 text-nowrap">${i.sport}</span></td>
+              <td>
+                <span class="fw-semibold text-truncate d-inline-block text-nowrap" style="max-width: 250px; vertical-align: middle;">${i.subject}</span>
+              </td>
+              <td>
+                <span class="status-pill ${isNew ? 'new' : 'replied'}">
+                  ${isNew ? '<span class="live-dot" style="background:#2563eb; width:6px; height:6px;"></span> New' : '<i class="bi bi-check2"></i> Replied'}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn-glass btn-glass-primary btn-sm py-1 px-3 text-nowrap" onclick="handleDashboardReply(${i.id})">
+                  <i class="bi bi-reply-fill"></i> Reply
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+        inquiriesTbody.innerHTML = html;
+      }
+
+      // 3. Fetch & render Catalog Highlights
+      const products = await AdminApp.fetchProducts();
+      const highlightsContainer = document.getElementById('catalogHighlightsList');
+      if (highlightsContainer && products.length > 0) {
+        let html = '';
+        products.slice(0, 4).forEach(p => {
+          html += `
+            <div class="p-2 rounded-3 border d-flex align-items-center justify-content-between" style="background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);">
+              <div class="d-flex align-items-center gap-3">
+                <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 2px;">
+                <div>
+                  <div class="fw-bold text-dark small">${p.name}</div>
+                  <div class="text-muted" style="font-size: 0.75rem;">${p.sport} • <strong class="text-dark">$${Number(p.price).toFixed(2)}</strong></div>
+                </div>
+              </div>
+              <a href="products.html" class="btn-glass btn-sm py-1 px-2 text-primary" title="Edit in Catalog">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+            </div>
+          `;
+        });
+        highlightsContainer.innerHTML = html;
+      }
+    });
+
+    function handleDashboardReply(id) {
+      AdminApp.replyToInquiry(id);
+      setTimeout(() => {
+        location.reload();
+      }, 900);
+    }
+  </script>
+</body>
+</html>

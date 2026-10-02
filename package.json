@@ -1,0 +1,21 @@
+{
+  "name": "prosix-sports-template",
+  "version": "1.0.0",
+  "description": "Prosix Sports Custom Athletic Wear & Team Uniform Store",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node backend/src/server.js",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.12.0"
+  },
+  "keywords": ["ecommerce", "sportswear", "customizer", "vercel", "express", "postgresql"],
+  "author": "Prosix Sports",
+  "license": "ISC"
+}

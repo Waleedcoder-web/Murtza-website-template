@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="bg-light">
+
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo"><img src="../assets/images/logo-black.png" alt="Prosix Sports"></a>
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+      <div class="nav-actions">
+        </div>
+    </div>
+  </header>
+
+  <!-- Tracking Search Section -->
+  <section class="py-5">
+    <div class="container" style="max-width: 780px;">
+      <div class="p-4 p-md-5 bg-white border rounded-4 shadow-sm text-center mb-4">
+        <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+          <i class="bi bi-truck"></i>
+        </div>
+        <h2 class="fw-bold mb-2 text-uppercase">TRACK YOUR SHIPMENT</h2>
+        <p class="text-muted mb-4">Enter your Prosix Order Number (e.g. PO-394812) and your billing email address below.</p>
+
+        <form onsubmit="handleTrack(event)" class="row g-3 justify-content-center text-start">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-uppercase">Order Number *</label>
+            <input type="text" class="form-control form-control-lg" placeholder="PO-394812" value="PO-394812" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold text-uppercase">Billing Email *</label>
+            <input type="email" class="form-control form-control-lg" placeholder="coach@raptors.com" value="coach@raptors.com" required>
+          </div>
+          <div class="col-12 text-center pt-2">
+            <button type="submit" class="btn btn-dark btn-lg px-5 py-3 rounded-pill fw-bold text-uppercase fs-5">
+              Check Order Status
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tracking Results Card (Initially visible sample) -->
+      <div id="trackingResultCard" class="p-4 bg-white border rounded-4 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+          <div>
+            <h5 class="fw-bold mb-1">Order #PO-394812 (Texas Raptors 7v7)</h5>
+            <span class="text-muted small">Carrier: FedEx Priority Freight | Tracking #: 783921049281</span>
+          </div>
+          <span class="badge bg-success px-3 py-2 text-uppercase">IN TRANSIT</span>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="row text-center g-2 position-relative mb-4">
+          <div class="col-3">
+            <div class="rounded-circle bg-dark text-white mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <div class="small fw-bold">Order Received</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Sep 24</div>
+          </div>
+          <div class="col-3">
+            <div class="rounded-circle bg-dark text-white mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              <i class="bi bi-palette-fill"></i>
+            </div>
+            <div class="small fw-bold">Artwork Proof</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Sep 26</div>
+          </div>
+          <div class="col-3">
+            <div class="rounded-circle bg-dark text-white mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              <i class="bi bi-gear-wide-connected"></i>
+            </div>
+            <div class="small fw-bold">Sublimation & Sewing</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Oct 02</div>
+          </div>
+          <div class="col-3">
+            <div class="rounded-circle bg-primary text-white mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              <i class="bi bi-truck"></i>
+            </div>
+            <div class="small fw-bold text-primary">In Transit</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Est: Oct 28</div>
+          </div>
+        </div>
+
+        <div class="alert alert-light border mb-0 text-muted small">
+          <i class="bi bi-info-circle me-1"></i> Your shipment has departed the distribution hub in Dallas, TX. Estimated delivery to Wilmington, DE on Tuesday by 4:30 PM.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top"><img src="../assets/images/logo-white.png" alt="Prosix Sports" style="height: 40px;"></div>
+      <div class="footer-bottom"><p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    function handleTrack(e) {
+      e.preventDefault();
+      CartStore.showToast('Tracking info updated!');
+      document.getElementById('trackingResultCard').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

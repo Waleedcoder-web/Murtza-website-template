@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products - Prosix Admin</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Sticky Top Navbar -->
+  <nav class="navbar navbar-expand-lg admin-navbar sticky-top">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Brand Logo -->
+      <a class="admin-brand" href="index.html">
+        <img src="../assets/images/logo-white.png" alt="Prosix Sports">
+        <span>ADMIN</span>
+      </a>
+
+      <!-- Mobile Hamburger Toggler -->
+      <button class="navbar-toggler admin-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent" aria-controls="adminNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <!-- Navigation Links & Actions -->
+      <div class="collapse navbar-collapse admin-navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+          <li class="nav-item">
+            <a class="admin-nav-link" href="index.html">
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link active" href="products.html">
+              <i class="bi bi-tag-fill"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="offers.html">
+              <i class="bi bi-images"></i>
+              <span>Banners & Offers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="messages.html">
+              <i class="bi bi-chat-dots-fill"></i>
+              <span>Inquiries</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Right Side Utility Badges & Storefront Link -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mt-3 mt-lg-0">
+          <div class="status-pill active shadow-sm">
+            <span class="live-dot"></span>
+            <span>Live Store Engine</span>
+          </div>
+          <a href="../user/index.html" class="btn-glass btn-sm">
+            <i class="bi bi-arrow-up-right-square"></i>
+            <span>Open Storefront</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Full-Width Content Container -->
+  <main class="admin-page-container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Page Header -->
+      <div class="admin-page-header">
+        <div>
+          <h3 class="fw-bold mb-1 text-dark">Product Catalog & Uniform Models</h3>
+          <p class="text-muted small mb-0">Manage live jerseys, custom sub-gear, pricing, and collection tags (PostgreSQL Powered)</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn-glass" data-bs-toggle="modal" data-bs-target="#categoriesModal" onclick="loadCategoriesModal()">
+            <i class="bi bi-tags"></i>
+            <span>Manage Categories</span>
+          </button>
+          <button class="btn-glass btn-glass-primary btn-shimmer" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-lg"></i>
+            <span>Add New Product</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter and Search Row -->
+      <div class="admin-card animate-fade-in-up delay-1 p-3 mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <!-- Filter chips -->
+          <div class="d-flex flex-wrap align-items-center gap-2" id="filterChipsContainer">
+            <button class="filter-chip active" onclick="setCategoryFilter('all', this)">All Uniforms</button>
+            <button class="filter-chip" onclick="setCategoryFilter('7v7 Football', this)">7v7 Football</button>
+            <button class="filter-chip" onclick="setCategoryFilter('Football', this)">Tackle Football</button>
+            <button class="filter-chip" onclick="setCategoryFilter('Baseball', this)">Baseball</button>
+            <button class="filter-chip" onclick="setCategoryFilter('Basketball', this)">Basketball</button>
+            <button class="filter-chip" onclick="setCategoryFilter('Soccer', this)">Soccer</button>
+          </div>
+
+          <!-- Search input -->
+          <div style="min-width: 260px;" class="flex-grow-1 flex-md-grow-0">
+            <div class="position-relative">
+              <i class="bi bi-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
+              <input type="text" class="form-control form-control-glass ps-5 w-100" placeholder="Search catalog..." id="productSearchInput" oninput="handleSearch(this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products List Card -->
+      <div class="admin-card animate-fade-in-up delay-2">
+        <div class="admin-card-header">
+          <div>
+            <h5 class="fw-bold mb-1">Active Catalogue Items</h5>
+            <span class="text-muted small">Showing uniforms stored in PostgreSQL database</span>
+          </div>
+          <span class="badge bg-light text-dark border px-3 py-2" id="productCountBadge">Loading...</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table admin-table table-hover text-nowrap align-middle mb-0">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Design</th>
+                <th>Product Title & SKU</th>
+                <th>Sport Category</th>
+                <th>Collection Tag</th>
+                <th>Unit Price</th>
+                <th>Store Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <!-- Dynamically loaded -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Manage Categories Modal (Frosted Glass) -->
+  <div class="modal fade" id="categoriesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass-modal p-4 border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+              <i class="bi bi-tags-fill fs-5"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-0">Manage Categories</h5>
+              <span class="text-muted small">PostgreSQL Category Table & Storefront Filtering</span>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Add Category Inline Form -->
+        <div class="p-3 mb-3 rounded-3" style="background: rgba(241, 245, 249, 0.7); border: 1px solid #e2e8f0;">
+          <h6 class="fw-bold text-dark mb-2 small"><i class="bi bi-plus-circle me-1 text-primary"></i> Create New Category</h6>
+          <form id="createCategoryForm" onsubmit="handleCreateCategory(event)" class="row g-2">
+            <div class="col-md-5">
+              <input type="text" class="form-control form-control-glass form-control-sm" id="newCatName" placeholder="Category Name (e.g. Compression Wear)" required>
+            </div>
+            <div class="col-md-5">
+              <input type="text" class="form-control form-control-glass form-control-sm" id="newCatDesc" placeholder="Brief description (optional)">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn-glass btn-glass-primary btn-sm w-100 h-100">
+                <span>Save</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+          <table class="table admin-table table-hover text-nowrap align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Slug</th>
+                <th>Products Count</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categoriesTableBody">
+              <tr>
+                <td colspan="4" class="text-center py-4 text-muted">Loading categories...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button type="button" class="btn-glass" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product Modal (Frosted Glass) -->
+  <div class="modal fade" id="addProductModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass-modal p-4 border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">Add New Uniform Model</h5>
+            <span class="text-muted small">Publish a new sublimated jersey or uniform template to PostgreSQL & user storefront</span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form onsubmit="handleCreateProduct(event)">
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label small fw-bold text-dark">Design Name *</label>
+              <input type="text" class="form-control form-control-glass" placeholder="e.g. TITANS SUB-PRO JERSEY" required id="newProductName">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-dark">Base Price ($ USD) *</label>
+              <input type="number" step="0.01" class="form-control form-control-glass" value="120.00" required id="newProductPrice">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-dark">Sport Type *</label>
+              <select class="form-select form-select-glass" id="newProductSport">
+                <option value="7v7 Football">7v7 Football</option>
+                <option value="Football">Tackle Football</option>
+                <option value="Baseball">Baseball</option>
+                <option value="Basketball">Basketball</option>
+                <option value="Soccer">Soccer</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Track & Field">Track & Field</option>
+                <option value="Volleyball">Volleyball</option>
+                <option value="Wrestling">Wrestling</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-dark">Category (Text Input) *</label>
+              <input type="text" class="form-control form-control-glass" id="newProductCategory" list="categoriesDatalist" placeholder="Type category name (e.g. Compression Wear)..." required>
+              <datalist id="categoriesDatalist">
+                <!-- Dynamically populated from PostgreSQL categories -->
+              </datalist>
+              <div class="form-text text-muted" style="font-size: 0.76rem;">Type any custom category or pick from suggested database categories.</div>
+            </div>
+          </div>
+
+          <!-- Product Image File Uploader -->
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-dark mb-1">Product Image Upload *</label>
+
+            <!-- Drag & Drop File Box -->
+            <div class="upload-dropzone mb-2" id="uploadDropzone" onclick="triggerFileInput()">
+              <input type="file" id="productImageFileInput" accept="image/*" class="d-none" onchange="handleFileSelect(event)">
+              <div id="dropzoneContent">
+                <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-2 d-block"></i>
+                <div class="fw-bold text-dark mb-1" id="dropzoneText">Click or Drag & Drop product image here</div>
+                <div class="text-muted small">Supports PNG, JPG, JPEG, WEBP, SVG files</div>
+              </div>
+            </div>
+
+            <!-- Uploaded Image Preview Box (Hidden until file is chosen) -->
+            <div class="preview-thumb-box d-none" id="imagePreviewBox">
+              <img id="modalPreviewImg" src="" alt="Preview" class="preview-thumb-img">
+              <div class="flex-grow-1 overflow-hidden">
+                <div class="small fw-bold text-dark text-truncate" id="previewFileName"></div>
+                <div class="small text-success" id="previewFileStatus"><i class="bi bi-check2-circle me-1"></i> Ready for upload</div>
+              </div>
+              <button type="button" class="btn btn-outline-danger btn-sm px-2" onclick="removeSelectedImage(event)" title="Remove Image">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <div id="imageRequiredError" class="text-danger small mt-1 d-none"><i class="bi bi-exclamation-circle me-1"></i> Please upload an image for this product.</div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" class="btn-glass flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" id="submitProductBtn" class="btn-glass btn-glass-primary btn-shimmer flex-grow-1">Publish to Database & Store</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    let productsList = [];
+    let categoriesList = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let selectedUploadFile = null;
+    let selectedImageSrc = '';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      setupDropzone();
+      await Promise.all([loadCategories(), loadProducts()]);
+    });
+
+    // Load categories from PostgreSQL
+    async function loadCategories() {
+      categoriesList = await AdminApp.fetchCategories();
+      populateCategoriesUI();
+    }
+
+    function populateCategoriesUI() {
+      // 1. Populate <datalist> for Add Product Category text input
+      const datalist = document.getElementById('categoriesDatalist');
+      if (datalist) {
+        datalist.innerHTML = categoriesList.map(c => `<option value="${c.name}">`).join('');
+      }
+
+      // 2. Set default category text if empty
+      const catInput = document.getElementById('newProductCategory');
+      if (catInput && !catInput.value && categoriesList.length > 0) {
+        catInput.value = categoriesList[0].name;
+      }
+    }
+
+    // Modal Category Management
+    async function loadCategoriesModal() {
+      await loadCategories();
+      const tbody = document.getElementById('categoriesTableBody');
+      if (!tbody) return;
+
+      if (!categoriesList || categoriesList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="text-center py-4 text-muted">
+              No categories found. Create one above!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let html = '';
+      categoriesList.forEach(c => {
+        html += `
+          <tr>
+            <td>
+              <span class="fw-bold text-dark">${c.name}</span>
+              ${c.description ? `<br><span class="text-muted small">${c.description}</span>` : ''}
+            </td>
+            <td><code>${c.slug || '-'}</code></td>
+            <td>
+              <span class="badge bg-light text-dark border px-2 py-1">${c.product_count || 0} products</span>
+            </td>
+            <td class="text-end">
+              <button class="btn-glass btn-glass-danger btn-sm px-2" title="Delete Category" onclick="handleDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}')">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    async function handleCreateCategory(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('newCatName');
+      const descInput = document.getElementById('newCatDesc');
+      const name = nameInput.value.trim();
+      const description = descInput.value.trim();
+
+      if (!name) return;
+
+      await AdminApp.createCategory({ name, description });
+      nameInput.value = '';
+      descInput.value = '';
+      await loadCategoriesModal();
+      populateCategoriesUI();
+    }
+
+    async function handleDeleteCategory(id, name) {
+      if (confirm(`Are you sure you want to delete category "${name}"?`)) {
+        await AdminApp.deleteCategory(id);
+        await loadCategoriesModal();
+        populateCategoriesUI();
+      }
+    }
+
+    // Trigger file chooser when dropzone is clicked
+    function triggerFileInput() {
+      const fileInput = document.getElementById('productImageFileInput');
+      if (fileInput) fileInput.click();
+    }
+
+    // Dropzone & File Upload Logic
+    function setupDropzone() {
+      const dropzone = document.getElementById('uploadDropzone');
+      if (!dropzone) return;
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('dragover');
+        }, false);
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+          processSelectedFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        processSelectedFile(file);
+      }
+    }
+
+    function processSelectedFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Please choose an image file (PNG, JPG, JPEG, WEBP, SVG).');
+        return;
+      }
+      selectedUploadFile = file;
+      document.getElementById('imageRequiredError')?.classList.add('d-none');
+
+      const previewBox = document.getElementById('imagePreviewBox');
+      const previewImg = document.getElementById('modalPreviewImg');
+      const fileNameEl = document.getElementById('previewFileName');
+      const statusEl = document.getElementById('previewFileStatus');
+      const dropzoneText = document.getElementById('dropzoneText');
+
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      if (statusEl) statusEl.innerHTML = `<i class="bi bi-check2-circle me-1"></i> Ready (${(file.size / 1024).toFixed(1)} KB)`;
+      if (dropzoneText) dropzoneText.textContent = `Selected: ${file.name} (Click to change)`;
+
+      if (previewBox) previewBox.classList.remove('d-none');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (previewImg) previewImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeSelectedImage(e) {
+      if (e) e.stopPropagation();
+      selectedUploadFile = null;
+      const fileInput = document.getElementById('productImageFileInput');
+      if (fileInput) fileInput.value = '';
+
+      const previewBox = document.getElementById('imagePreviewBox');
+      if (previewBox) previewBox.classList.add('d-none');
+
+      const previewImg = document.getElementById('modalPreviewImg');
+      if (previewImg) previewImg.src = '';
+
+      const dropzoneText = document.getElementById('dropzoneText');
+      if (dropzoneText) dropzoneText.textContent = 'Click or Drag & Drop product image here';
+    }
+
+    // Load Products
+    async function loadProducts() {
+      productsList = await AdminApp.fetchProducts();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const tbody = document.getElementById('productsTableBody');
+      if (!tbody) return;
+
+      const filtered = productsList.filter(p => {
+        const matchesCategory = currentFilter === 'all' || 
+          p.sport.toLowerCase().includes(currentFilter.toLowerCase()) || 
+          (p.category && p.category.toLowerCase().includes(currentFilter.toLowerCase()));
+        const matchesSearch = !searchQuery || 
+          p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          p.sport.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (p.category && p.category.toLowerCase().includes(searchQuery.toLowerCase()));
+        return matchesCategory && matchesSearch;
+      });
+
+      document.getElementById('productCountBadge').textContent = `${filtered.length} Items`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>
+              No products found matching your filter criteria.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(p => {
+        const skuText = p.sku || `PRO-${p.id}`;
+        html += `
+          <tr>
+            <td style="width: 56px;">
+              <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 2px;">
+            </td>
+            <td>
+              <span class="fw-bold text-dark me-2">${p.name}</span>
+              <span class="text-muted small">#${skuText}</span>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border px-2 py-1 text-nowrap">${p.sport}</span>
+            </td>
+            <td>
+              <span class="category-chip-badge text-nowrap">${p.category || 'General'}</span>
+            </td>
+            <td>
+              <strong class="text-dark">$${Number(p.price).toFixed(2)}</strong>
+            </td>
+            <td>
+              <span class="status-pill active text-nowrap"><span class="live-dot" style="width:6px; height:6px;"></span> Live</span>
+            </td>
+            <td class="text-end">
+              <div class="d-inline-flex gap-2">
+                <a href="../user/product-details.html?id=${p.id}" target="_blank" class="btn-glass btn-sm px-2 text-primary text-nowrap" title="View on Storefront">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <button class="btn-glass btn-glass-danger btn-sm px-2 text-nowrap" title="Remove Product" onclick="deleteProduct(${p.id})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function setCategoryFilter(category, btnElement) {
+      currentFilter = category;
+      document.querySelectorAll('#filterChipsContainer .filter-chip').forEach(c => c.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      renderProducts();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim();
+      renderProducts();
+    }
+
+    async function deleteProduct(id) {
+      if (confirm('Delete this product design from the database and catalog?')) {
+        await AdminApp.deleteProduct(id);
+        await loadProducts();
+      }
+    }
+
+    async function handleCreateProduct(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitProductBtn');
+
+      // 1. Validate image upload
+      if (!selectedUploadFile) {
+        const errorEl = document.getElementById('imageRequiredError');
+        if (errorEl) errorEl.classList.remove('d-none');
+        document.getElementById('uploadDropzone')?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Uploading image & saving...';
+      }
+
+      try {
+        const name = document.getElementById('newProductName').value;
+        const sport = document.getElementById('newProductSport').value;
+        const category = document.getElementById('newProductCategory').value.trim();
+        const price = parseFloat(document.getElementById('newProductPrice').value);
+
+        // 2. Upload the selected image file to backend
+        const uploadResult = await AdminApp.uploadImage(selectedUploadFile);
+        if (!uploadResult || !uploadResult.url) {
+          throw new Error('Image upload failed. Please try again.');
+        }
+
+        // 3. Create product in PostgreSQL
+        await AdminApp.createProduct({
+          name,
+          sport,
+          category,
+          price,
+          image: uploadResult.url
+        });
+
+        // 4. Close modal and clean reset
+        const modalEl = document.getElementById('addProductModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) modalInstance.hide();
+
+        e.target.reset();
+        removeSelectedImage();
+
+        // 5. Refresh products and categories in admin
+        await Promise.all([loadCategories(), loadProducts()]);
+      } catch (err) {
+        alert('Failed to publish product: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Publish to Database & Store';
+        }
+      }
+    }
+  </script>
+</body>
+</html>

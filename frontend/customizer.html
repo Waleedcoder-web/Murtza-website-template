@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniform Customizer Studio - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .customizer-stage {
+      background: radial-gradient(circle, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 16px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 520px;
+      position: relative;
+      border: 1px solid #dee2e6;
+    }
+    .view-toggle-btn-group {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 5;
+    }
+    .view-btn {
+      padding: 6px 18px;
+      border: 2px solid #000;
+      background: #fff;
+      font-weight: 700;
+      border-radius: 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .view-btn.active {
+      background: #000;
+      color: #fff;
+    }
+    .color-swatch-picker {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      cursor: pointer;
+      padding: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/images/logo-black.png" alt="Prosix Sports Logo">
+      </a>
+
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link active">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="action-icon-btn trigger-search-modal" title="Search">
+          <i class="bi bi-search"></i>
+        </button>
+
+        <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
+
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <img src="assets/images/logo-black.png" alt="Prosix Sports" style="height: 38px;">
+      <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+      <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
+      <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
+      <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
+      <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+      <li><a href="faqs.html" class="nav-link">FAQs</a></li>
+    </ul>
+  </div>
+
+  <!-- Studio Header -->
+  <section class="bg-dark text-white py-4">
+    <div class="container text-center">
+      <h1 class="display-6 fw-black text-uppercase tracking-wider mb-2">3D Uniform Customizer Studio</h1>
+      <p class="text-white-50 mb-0">Design authentic team jerseys, tweak colors, choose fonts, and assemble your team roster live.</p>
+    </div>
+  </section>
+
+  <!-- Main Customizer Studio -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="row g-4">
+        <!-- SVG Stage Column -->
+        <div class="col-lg-7">
+          <div class="customizer-stage">
+            <div class="view-toggle-btn-group">
+              <button class="view-btn active" id="viewFrontBtn">Front View</button>
+              <button class="view-btn" id="viewBackBtn">Back View</button>
+            </div>
+
+            <!-- Dynamic Interactive Jersey SVG -->
+            <svg id="jerseyPreviewSvg" viewBox="0 0 500 550" width="100%" height="450" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="jerseyShine" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+                  <stop offset="50%" stop-color="#ffffff" stop-opacity="0.0" />
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0.25" />
+                </linearGradient>
+              </defs>
+
+              <!-- Sleeves / Shoulders -->
+              <path id="jerseySleeves" d="M 80,110 L 20,200 L 80,240 L 120,180 Z M 420,110 L 480,200 L 420,240 L 380,180 Z" fill="#ff0000" />
+              <!-- Jersey Body / Torso -->
+              <path id="jerseyBase" d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="#000000" />
+              <!-- Shading Overlay -->
+              <path d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="url(#jerseyShine)" />
+              <!-- Collar V-Neck -->
+              <polygon id="jerseyCollar" points="200,100 250,180 300,100 280,100 250,150 220,100" fill="#ff0000" />
+
+              <!-- Front Chest Text -->
+              <text id="jerseyChestText" x="250" y="240" font-family="'Oswald', sans-serif" font-weight="900" font-size="40" fill="#ffffff" text-anchor="middle" letter-spacing="3">PROSIX</text>
+              <!-- Front/Back Player Number -->
+              <text id="jerseyNumberText" x="250" y="340" font-family="'Impact', sans-serif" font-weight="bold" font-size="75" fill="#ffffff" text-anchor="middle">07</text>
+              <!-- Back Player Name -->
+              <text id="jerseyBackNameText" x="250" y="200" font-family="'Oswald', sans-serif" font-weight="bold" font-size="34" fill="#ffffff" text-anchor="middle" style="display: none;">CHAMPION</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Customization Controls Column -->
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm p-4 rounded-4 mb-4">
+            <h4 class="fw-bold mb-3 text-uppercase"><i class="bi bi-palette me-2"></i>Jersey Colorways</h4>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-4 text-center">
+                <label class="small fw-bold d-block mb-1">Body Color</label>
+                <input type="color" class="color-swatch-picker" id="customPrimaryColor" value="#000000">
+              </div>
+              <div class="col-4 text-center">
+                <label class="small fw-bold d-block mb-1">Accent / Collar</label>
+                <input type="color" class="color-swatch-picker" id="customSecondaryColor" value="#ff0000">
+              </div>
+              <div class="col-4 text-center">
+                <label class="small fw-bold d-block mb-1">Text & Number</label>
+                <input type="color" class="color-swatch-picker" id="customTextColor" value="#ffffff">
+              </div>
+            </div>
+
+            <h4 class="fw-bold mb-3 text-uppercase border-top pt-3"><i class="bi bi-type me-2"></i>Team & Numbering</h4>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Team Name on Chest</label>
+              <input type="text" class="form-control fw-bold" id="customTeamName" value="PROSIX" placeholder="Enter Team Name">
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label small fw-bold">Sample Number</label>
+                <input type="text" class="form-control fw-bold" id="customPlayerNumber" value="07" maxlength="3">
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-bold">Sample Player Name</label>
+                <input type="text" class="form-control fw-bold" id="customPlayerName" value="CHAMPION">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Roster Builder Section -->
+      <div class="card border-0 shadow-sm p-4 rounded-4 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div>
+            <h4 class="fw-bold text-uppercase mb-0"><i class="bi bi-people me-2"></i>Team Roster & Sizes</h4>
+            <small class="text-muted">Enter your players, jersey numbers, and sizes for this custom order.</small>
+          </div>
+          <button type="button" class="btn btn-outline-dark fw-bold rounded-pill" id="addPlayerRowBtn">
+            <i class="bi bi-plus-circle me-1"></i> Add Player
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Player Name</th>
+                <th style="width: 120px;">Jersey #</th>
+                <th style="width: 140px;">Size</th>
+                <th style="width: 80px;" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top flex-wrap gap-3">
+          <div>
+            <span class="fs-5 fw-bold">Total Players: <span id="rosterTotalCount" class="text-danger">3</span></span>
+          </div>
+          <button type="button" class="btn btn-dark btn-lg px-5 py-3 rounded-pill fw-bold text-uppercase" id="addCustomOrderToCartBtn">
+            <i class="bi bi-arrow-right-circle me-2"></i> Proceed To Team Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top">
+        <img src="assets/images/logo-white.png" alt="Prosix Sports" style="height: 40px;">
+      </div>
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved. Built with plain HTML5, CSS3 & Vanilla JavaScript.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/customizer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

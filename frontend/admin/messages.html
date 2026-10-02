@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Inquiries & Leads - Prosix Admin</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Sticky Top Navbar -->
+  <nav class="navbar navbar-expand-lg admin-navbar sticky-top">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Brand Logo -->
+      <a class="admin-brand" href="index.html">
+        <img src="../assets/images/logo-white.png" alt="Prosix Sports">
+        <span>ADMIN</span>
+      </a>
+
+      <!-- Mobile Hamburger Toggler -->
+      <button class="navbar-toggler admin-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent" aria-controls="adminNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <!-- Navigation Links & Actions -->
+      <div class="collapse navbar-collapse admin-navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+          <li class="nav-item">
+            <a class="admin-nav-link" href="index.html">
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="products.html">
+              <i class="bi bi-tag-fill"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="offers.html">
+              <i class="bi bi-images"></i>
+              <span>Banners & Offers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link active" href="messages.html">
+              <i class="bi bi-chat-dots-fill"></i>
+              <span>Inquiries</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Right Side Utility Badges & Storefront Link -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mt-3 mt-lg-0">
+          <div class="status-pill active shadow-sm">
+            <span class="live-dot"></span>
+            <span>Live Store Engine</span>
+          </div>
+          <a href="../user/index.html" class="btn-glass btn-sm">
+            <i class="bi bi-arrow-up-right-square"></i>
+            <span>Open Storefront</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Full-Width Content Container -->
+  <main class="admin-page-container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <!-- Page Header -->
+      <div class="admin-page-header">
+        <div>
+          <h3 class="fw-bold mb-1 text-dark">Customer Inquiries & Website Leads</h3>
+          <p class="text-muted small mb-0">Manage coach consultation requests, bulk quotes, and custom orders</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn-glass btn-sm" onclick="AdminApp.showAdminToast('Refreshed leads data', 'bi-arrow-clockwise text-primary')">
+            <i class="bi bi-arrow-repeat"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="admin-card animate-fade-in-up delay-1 p-3 mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div class="d-flex flex-wrap align-items-center gap-2" id="inquiryFilterChips">
+            <button class="filter-chip active" onclick="filterInquiries('all', this)">All Messages</button>
+            <button class="filter-chip" onclick="filterInquiries('Contact Form', this)">Contact Forms</button>
+            <button class="filter-chip" onclick="filterInquiries('Website Request', this)">Website Requests</button>
+            <button class="filter-chip" onclick="filterInquiries('Quote Request', this)">Quote Requests</button>
+          </div>
+
+          <div style="min-width: 260px;" class="flex-grow-1 flex-md-grow-0">
+            <div class="position-relative">
+              <i class="bi bi-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
+              <input type="text" class="form-control form-control-glass ps-5 w-100" placeholder="Search inquiries..." id="inquirySearchInput" oninput="searchInquiries(this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inquiries Table Card -->
+      <div class="admin-card animate-fade-in-up delay-2">
+        <div class="admin-card-header">
+          <div>
+            <h5 class="fw-bold mb-1">Incoming Inquiries</h5>
+            <span class="text-muted small">Prospective team orders and portal requests</span>
+          </div>
+          <span class="badge bg-light text-dark border px-3 py-2" id="inquiryCountBadge">Loading...</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table admin-table table-hover text-nowrap align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Lead Channel</th>
+                <th>Customer / Contact</th>
+                <th>Sport</th>
+                <th>Subject & Details</th>
+                <th>Received</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inquiriesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Reply Modal (Frosted Glass) -->
+  <div class="modal fade" id="replyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-modal p-4 border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Dispatch Response</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <p class="text-muted small mb-3">Send official uniform quotation & mock presentation email.</p>
+
+        <form onsubmit="handleSendReply(event)">
+          <input type="hidden" id="replyInquiryId">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Recipient</label>
+            <input type="text" class="form-control form-control-glass" id="replyRecipient" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Subject</label>
+            <input type="text" class="form-control form-control-glass" id="replySubject" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-dark">Message / Proposal Details</label>
+            <textarea class="form-control form-control-glass" rows="4" id="replyMessage" required placeholder="Type quotation or next steps for the team..."></textarea>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn-glass flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn-glass btn-glass-primary btn-shimmer flex-grow-1">
+              <i class="bi bi-send-fill me-1"></i> Send Reply
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    let inquiriesList = [];
+    let activeChannelFilter = 'all';
+    let searchQuery = '';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      inquiriesList = await AdminApp.fetchInquiries();
+      renderInquiries();
+    });
+
+    function renderInquiries() {
+      const tbody = document.getElementById('inquiriesTableBody');
+      if (!tbody) return;
+
+      const filtered = inquiriesList.filter(i => {
+        const matchesChannel = activeChannelFilter === 'all' || i.type === activeChannelFilter;
+        const matchesSearch = !searchQuery || 
+          i.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          i.email.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          i.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          i.sport.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesChannel && matchesSearch;
+      });
+
+      document.getElementById('inquiryCountBadge').textContent = `${filtered.length} Inquiries`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-chat-left-dots fs-2 d-block mb-2 text-secondary"></i>
+              No inquiries found for this filter.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(i => {
+        const isNew = i.status === 'new';
+        html += `
+          <tr>
+            <td>
+              <span class="badge ${i.type === 'Website Request' ? 'bg-dark' : 'bg-primary'} px-2 py-1">${i.type}</span>
+            </td>
+            <td>
+              <span class="fw-bold text-dark me-2">${i.name}</span>
+              <span class="text-muted small">${i.email}</span>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border px-2 py-1">${i.sport}</span>
+            </td>
+            <td>
+              <div class="fw-semibold text-dark text-truncate" style="max-width: 280px;">${i.subject}</div>
+            </td>
+            <td class="text-muted small">
+              ${i.date}
+            </td>
+            <td>
+              <span class="status-pill ${isNew ? 'new' : 'replied'}">
+                ${isNew ? '<span class="live-dot" style="background:#2563eb; width:6px; height:6px;"></span> New' : '<i class="bi bi-check2"></i> Replied'}
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="d-inline-flex gap-2">
+                <button class="btn-glass btn-glass-primary btn-sm px-3" onclick="openReplyModal(${i.id})">
+                  <i class="bi bi-reply"></i> Reply
+                </button>
+                <button class="btn-glass btn-glass-danger btn-sm px-2" title="Archive" onclick="deleteInquiryRecord(${i.id})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function filterInquiries(channel, btn) {
+      activeChannelFilter = channel;
+      document.querySelectorAll('#inquiryFilterChips .filter-chip').forEach(c => c.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderInquiries();
+    }
+
+    function searchInquiries(val) {
+      searchQuery = val.trim();
+      renderInquiries();
+    }
+
+    function openReplyModal(id) {
+      const inquiry = inquiriesList.find(i => i.id === id);
+      if (!inquiry) return;
+      document.getElementById('replyInquiryId').value = inquiry.id;
+      document.getElementById('replyRecipient').value = `${inquiry.name} <${inquiry.email}>`;
+      document.getElementById('replySubject').value = `Re: ${inquiry.subject}`;
+      document.getElementById('replyMessage').value = `Hi ${inquiry.name},\n\nThank you for reaching out regarding the ${inquiry.sport} uniform requirements. We have prepared an initial quote and design options for your team.`;
+      
+      const modal = new bootstrap.Modal(document.getElementById('replyModal'));
+      modal.show();
+    }
+
+    function handleSendReply(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('replyInquiryId').value, 10);
+      const inquiry = inquiriesList.find(i => i.id === id);
+      if (inquiry) {
+        inquiry.status = 'replied';
+        renderInquiries();
+        AdminApp.showAdminToast(`Proposal email sent to ${inquiry.name}!`, 'bi-check-circle-fill text-success');
+      }
+      bootstrap.Modal.getInstance(document.getElementById('replyModal')).hide();
+    }
+
+    function deleteInquiryRecord(id) {
+      if (confirm('Archive this customer inquiry?')) {
+        inquiriesList = inquiriesList.filter(i => i.id !== id);
+        renderInquiries();
+        AdminApp.showAdminToast('Inquiry archived.', 'bi-trash-fill text-danger');
+      }
+    }
+  </script>
+</body>
+</html>

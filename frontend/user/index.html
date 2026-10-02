@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prosix Sports - Premium Custom Sportswear & Uniforms</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="../assets/images/logo-black.png" alt="Prosix Sports Logo">
+      </a>
+
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="action-icon-btn trigger-search-modal" title="Search">
+          <i class="bi bi-search"></i>
+        </button>
+
+        <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
+
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <img src="../assets/images/logo-black.png" alt="Prosix Sports" style="height: 38px;">
+      <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+      <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
+      <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
+      <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
+      <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+      <li><a href="faqs.html" class="nav-link">FAQs</a></li>
+    </ul>
+    <div class="mt-auto pt-3 border-top">
+      <a href="customizer.html" class="btn btn-dark w-100 py-2 rounded-pill fw-bold">CUSTOMIZE NOW</a>
+    </div>
+  </div>
+
+  <!-- Hero Carousel -->
+  <section class="hero-carousel">
+    <!-- Slide 1 -->
+    <div class="hero-slide active" style="background-image: url('assets/images/hero-banner-1.jpg');">
+      <div class="hero-overlay">
+        <div class="full-container">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1 class="hero-title">Play Big. Dream Bigger. All Sports Here.</h1>
+              <p class="hero-subtitle">High-performance custom team jerseys, athletic wear & premium sports gear built to win.</p>
+              <div>
+                <a href="catalogue.html" class="btn-hero">Shop The Collection</a>
+              </div>
+            </div>
+            <div class="hero-athlete-wrap">
+              <img src="../assets/images/hero-athlete-1.png" alt="Featured Athlete" class="hero-athlete-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="hero-slide" style="background-image: url('assets/images/hero-banner-2.jpg');">
+      <div class="hero-overlay">
+        <div class="full-container">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1 class="hero-title">All Sports. One Ultimate Arena.</h1>
+              <p class="hero-subtitle">Elevate your team with sublimated fabrics, precision stitching, and custom roster customization.</p>
+              <div>
+                <a href="customizer.html" class="btn-hero">Start Customizer</a>
+              </div>
+            </div>
+            <div class="hero-athlete-wrap">
+              <img src="../assets/images/hero-athlete-2.png" alt="Featured Athlete" class="hero-athlete-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide" style="background-image: url('assets/images/hero-banner-3.jpg');">
+      <div class="hero-overlay">
+        <div class="full-container">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1 class="hero-title">Live The Game. Love Every Sport.</h1>
+              <p class="hero-subtitle">Trusted by thousands of schools, clubs, and competitive leagues worldwide.</p>
+              <div>
+                <a href="placeorder.html" class="btn-hero">Request Team Quote</a>
+              </div>
+            </div>
+            <div class="hero-athlete-wrap">
+              <img src="../assets/images/hero-athlete-3.png" alt="Featured Athlete" class="hero-athlete-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="hero-controls">
+      <button class="hero-ctrl-btn" id="heroPrevBtn"><i class="bi bi-chevron-left"></i></button>
+      <button class="hero-ctrl-btn" id="heroNextBtn"><i class="bi bi-chevron-right"></i></button>
+    </div>
+
+    <!-- Dots -->
+    <div class="hero-dots">
+      <button class="hero-dot active"></button>
+      <button class="hero-dot"></button>
+      <button class="hero-dot"></button>
+    </div>
+  </section>
+
+  <!-- Sports Category Track (Marquee) -->
+  <section class="sports-icons-section">
+    <div class="sports-track-container">
+      <div class="sports-track">
+        <a href="catalogue.html?sport=7v7" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-7v7.png" alt="7v7 Football"></div>
+          <span class="sport-name">7v7</span>
+        </a>
+        <a href="catalogue.html?sport=baseball" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-baseball.png" alt="Baseball"></div>
+          <span class="sport-name">Baseball</span>
+        </a>
+        <a href="catalogue.html?sport=basketball" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-basketball.png" alt="Basketball"></div>
+          <span class="sport-name">Basketball</span>
+        </a>
+        <a href="catalogue.html?sport=cheer" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-cheer.png" alt="Cheer"></div>
+          <span class="sport-name">Cheer</span>
+        </a>
+        <a href="catalogue.html?sport=hockey" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-hockey.png" alt="Ice Hockey"></div>
+          <span class="sport-name">Ice Hockey</span>
+        </a>
+        <a href="catalogue.html?sport=lacrosse" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-lacrosse.png" alt="Lacrosse"></div>
+          <span class="sport-name">Lacrosse</span>
+        </a>
+        <a href="catalogue.html?sport=soccer" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-soccer.png" alt="Soccer"></div>
+          <span class="sport-name">Soccer</span>
+        </a>
+        <a href="catalogue.html?sport=track" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-track.png" alt="Track & Field"></div>
+          <span class="sport-name">Track & Field</span>
+        </a>
+        <a href="catalogue.html?sport=volleyball" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-volleyball.png" alt="Volleyball"></div>
+          <span class="sport-name">Volleyball</span>
+        </a>
+        <a href="catalogue.html?sport=wrestling" class="sport-icon-card">
+          <div class="sport-icon-circle"><img src="../assets/images/sport-wrestling.png" alt="Wrestling"></div>
+          <span class="sport-name">Wrestling</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Deals Section -->
+  <section class="deals-section">
+    <div class="full-container">
+      <div class="deals-heading">
+        <h2 id="specialOffersHeading">SEASON SPECIAL OFFERS</h2>
+        <p id="specialOffersSubheading">Save up to 40% on select bulk team packages and seasonal uniform designs</p>
+      </div>
+
+      <div class="deals-grid">
+        <div class="deal-main-banner">
+          <img id="featuredDealImg" src="../assets/images/hero-banner-2.jpg" alt="Featured Team Deal">
+          <div class="p-4 position-absolute bottom-0 text-white bg-dark bg-opacity-75 w-100">
+            <h3 id="featuredDealTitle" class="fw-bold fs-2 mb-1">PRO TEAM STARTER KIT</h3>
+            <p id="featuredDealDesc" class="mb-2">Includes home & away custom jerseys, team hoodies, and matching shorts.</p>
+            <a id="featuredDealBtn" href="placeorder.html" class="btn btn-light btn-sm fw-bold px-3 rounded-pill">GET PACKAGE QUOTE</a>
+          </div>
+        </div>
+
+        <div class="deals-sub-grid" id="dealsSubGrid">
+          <div class="deal-card">
+            <span class="deal-badge">25% OFF</span>
+            <img src="../assets/images/sample-jersey-1.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=287" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+          <div class="deal-card">
+            <span class="deal-badge">HOT DEAL</span>
+            <img src="../assets/images/sample-jersey-2.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=288" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+          <div class="deal-card">
+            <span class="deal-badge">30% OFF</span>
+            <img src="../assets/images/sample-jersey-3.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=289" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+          <div class="deal-card">
+            <span class="deal-badge">POPULAR</span>
+            <img src="../assets/images/sample-jersey-5.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=291" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+          <div class="deal-card">
+            <span class="deal-badge">SAVE $20</span>
+            <img src="../assets/images/sample-jersey-6.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=296" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+          <div class="deal-card">
+            <span class="deal-badge">BEST SELLER</span>
+            <img src="../assets/images/sample-jersey-7.png" alt="Deal Jersey">
+            <div class="deal-overlay-btn">
+              <a href="product-details.html?id=297" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Products Section -->
+  <section class="trending-products-section">
+    <div class="full-container">
+      <div class="tabs-header-row">
+        <span class="section-ribbon">TRENDING NOW</span>
+        <div class="filter-tabs">
+          <button class="tab-btn active" data-tab="all">All</button>
+          <button class="tab-btn" data-tab="new">New Arrivals</button>
+          <button class="tab-btn" data-tab="bestsellers">Best Sellers</button>
+        </div>
+      </div>
+
+      <div class="trending-carousel-outer">
+        <!-- Curved Glass Shadow Edge Overlays (Circular Illusion) -->
+        <div class="carousel-glass-edge edge-left"></div>
+        <div class="carousel-glass-edge edge-right"></div>
+
+        <!-- Left & Right Carousel Controls -->
+        <button class="carousel-nav-btn prev-btn" id="trendingPrevBtn" aria-label="Previous Products">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="carousel-nav-btn next-btn" id="trendingNextBtn" aria-label="Next Products">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+
+        <!-- Single Continuous Row Carousel Track -->
+        <div class="products-carousel-track" id="trendingProductsTrack">
+          <!-- Card 0 (Peeking on left) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_288.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=288" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 1 (Bengals 23 - Matches Screenshot) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_290.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=290" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 2 (Team Name 2 Yellow - Matches Screenshot) -->
+          <div class="product-card" data-category="new">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_291.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=291" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 3 (Team Name 23 Teal/Cyan - Matches Screenshot) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_292.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=292" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 4 (Team Name 23 Green - Matches Screenshot) -->
+          <div class="product-card" data-category="new">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_293.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=293" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 5 (Team Name 23 Black/Grey Diamond - Peeking on right) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_294.png" alt="Football Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=294" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 6 (Chargers Jersey) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_287.png" alt="Chargers Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">CHARGERS JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=287" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 7 (Wolfpack Jersey) -->
+          <div class="product-card" data-category="new">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_289.png" alt="Wolfpack Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">WOLFPACK JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=289" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 8 (Patriots Jersey) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_296.png" alt="Patriots Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">PATRIOTS JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=296" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 9 (Hawks Jersey) -->
+          <div class="product-card" data-category="new">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_297.png" alt="Hawks Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">HAWKS JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=297" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 10 (Army Jersey) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_298.png" alt="Army Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">ARMY JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=298" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 11 (Vikings Jersey) -->
+          <div class="product-card" data-category="new">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_299.png" alt="Vikings Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">VIKINGS JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=299" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+
+          <!-- Card 12 (Ohio Jersey) -->
+          <div class="product-card" data-category="bestsellers">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="../assets/images/thumbnail_302.png" alt="Ohio Jersey Designs" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name">OHIO JERSEY DESIGNS</span>
+                </div>
+              <a href="customizer.html?id=302" class="btn-customize-full">Customize</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="full-container">
+      <div class="benefits-grid">
+        <div class="benefit-box">
+          <div class="benefit-icon"><i class="bi bi-truck"></i></div>
+          <h3>Free Shipping Delivery & Returns</h3>
+          <p>Order team uniforms with confidence. We offer reliable, expedited door-to-door delivery across North America.</p>
+        </div>
+        <div class="benefit-box">
+          <div class="benefit-icon"><i class="bi bi-shield-check"></i></div>
+          <h3>100% Quality Guarantee</h3>
+          <p>Durable 4-way stretch fabrics, reinforced seams, and vibrant sublimation that never cracks or peels.</p>
+        </div>
+        <div class="benefit-box">
+          <div class="benefit-icon"><i class="bi bi-headset"></i></div>
+          <h3>24/7 Dedicated Team Support</h3>
+          <p>Our sports apparel design specialists are available around the clock to assist with your order rosters & mockups.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Reels Section -->
+  <section class="video-reels-section">
+    <div class="full-container">
+      <span class="section-ribbon">FEATURED REELS</span>
+      <div class="reels-grid">
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
+          <img src="../assets/images/hero-banner-1.jpg" alt="Reel 1">
+          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+          <div class="reel-caption">7v7 Championship Uniform Highlights</div>
+        </div>
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
+          <img src="../assets/images/hero-banner-2.jpg" alt="Reel 2">
+          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+          <div class="reel-caption">Sublimation Printing & Factory Craftsmanship</div>
+        </div>
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
+          <img src="../assets/images/hero-banner-3.jpg" alt="Reel 3">
+          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+          <div class="reel-caption">Game Day Athlete Fits & Reactions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Video Banner ("BUILT FOR THE GAME") -->
+  <section class="showcase-video-banner">
+    <div class="full-container">
+      <div class="showcase-content">
+        <span class="showcase-kicker">BUILT FOR THE GAME</span>
+        <h2 class="showcase-title">PLAY HARD. LOOK DIFFERENT.</h2>
+        <p class="showcase-desc">Engineered for peak performance, extreme comfort, and unforgettable style. Built specifically for championship-caliber teams.</p>
+        <a href="placeorder.html" class="btn btn-light fw-bold py-3 px-5 rounded-pill fs-5">START YOUR TEAM ORDER</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <div class="full-container">
+      <span class="section-ribbon">TRUSTED REVIEWS</span>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars-rating">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p class="testimonial-text">"The jersey quality completely exceeded our expectations! The custom logos came out super crisp and the turnaround was faster than any supplier we used before."</p>
+          <div class="author-meta">
+            <div class="author-avatar">MC</div>
+            <div class="author-info">
+              <h5>Marcus Clark</h5>
+              <span>Head Coach, Texas Knights</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars-rating">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p class="testimonial-text">"Prosix handled our 45-player travel team roster without a single sizing mistake. The kids felt like professionals walking out onto the field."</p>
+          <div class="author-meta">
+            <div class="author-avatar">DR</div>
+            <div class="author-info">
+              <h5>David Ramirez</h5>
+              <span>Athletic Director, West Coast Elite</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars-rating">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p class="testimonial-text">"Customer support helped us fine-tune our vector graphics within 2 hours. Seamless communication and unbeatable bulk pricing."</p>
+          <div class="author-meta">
+            <div class="author-avatar">SJ</div>
+            <div class="author-info">
+              <h5>Sarah Jenkins</h5>
+              <span>Team Coordinator, Velocity 7v7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stories / Blog Section -->
+  <section class="stories-section">
+    <div class="full-container">
+      <span class="section-ribbon">OUR STORIES</span>
+      <div class="stories-grid">
+        <div class="story-card">
+          <div class="story-img-col">
+            <img src="../assets/images/hero-banner-1.jpg" alt="Story 1">
+          </div>
+          <div class="story-content-col">
+            <div class="story-date">OCTOBER 15, 2026 • 0 COMMENTS</div>
+            <h3 class="story-title">How To Design The Ultimate 7v7 Uniform For Your Team</h3>
+            <p class="story-desc">Tips on color contrast, typography choices, and moisture-wicking technology to keep athletes fast and cool.</p>
+            <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-img-col">
+            <img src="../assets/images/hero-banner-3.jpg" alt="Story 2">
+          </div>
+          <div class="story-content-col">
+            <div class="story-date">NOVEMBER 02, 2026 • 0 COMMENTS</div>
+            <h3 class="story-title">Sublimation vs Screen Print: Why Sublimation Wins</h3>
+            <p class="story-desc">Discover how sublimation embeds ink straight into the fabric fibers for lifetime durability and lightweight feel.</p>
+            <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top">
+        <div class="footer-logos">
+          <img src="../assets/images/logo-white.png" alt="Prosix Sports">
+        </div>
+        <div class="social-links">
+          <a href="https://facebook.com/prosixsports" target="_blank" class="social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com/prosixsports" target="_blank" class="social-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com/@prosixsports" target="_blank" class="social-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://x.com/ProsixSports" target="_blank" class="social-btn" title="Twitter"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <!-- Schedule Col -->
+        <div class="footer-col">
+          <h4>WORKING HOURS</h4>
+          <ul class="schedule-list">
+            <li><span>Monday – Saturday</span> <strong class="text-white">08:00 – 18:00</strong></li>
+            <li><span>Sunday</span> <span class="text-danger">Closed</span></li>
+            <li><span>Live Online Support</span> <span class="text-success">24/7 Available</span></li>
+          </ul>
+        </div>
+
+        <!-- Contact Col -->
+        <div class="footer-col">
+          <h4>CONTACT US</h4>
+          <ul class="footer-contact-list">
+            <li><i class="bi bi-telephone"></i> <span>+1 929 210 4402</span></li>
+            <li><i class="bi bi-whatsapp"></i> <span>+1 929 210 4402</span></li>
+            <li><i class="bi bi-envelope"></i> <span>sales@prosix.com</span></li>
+            <li><i class="bi bi-geo-alt"></i> <span>2604 Whittier Place Wilmington, DE 19808</span></li>
+            <li><i class="bi bi-geo-alt"></i> <span>5556 E Kings Canyon Rd, Fresno, CA 93727</span></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter Col -->
+        <div class="footer-col">
+          <h4>NEWSLETTER</h4>
+          <p class="text-muted mb-3">Subscribe for exclusive discount codes, team kit drops, and special offers.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); CartStore.showToast('Thank you for subscribing!'); this.reset();">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+            <button type="submit" class="newsletter-btn">JOIN</button>
+          </form>
+          <div class="mt-4 p-3 bg-dark rounded border border-secondary">
+            <span class="badge bg-danger mb-2">PARTNER SERVICE</span>
+            <h6 class="text-white mb-1">Need a custom sports team website?</h6>
+            <a href="website-request.html" class="text-light small text-decoration-underline">Request a Team Website &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved. Built with plain HTML5, CSS3 & Vanilla JavaScript.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart Drawer -->
+  
+
+  <!-- Video Modal -->
+  <div class="custom-modal-backdrop" id="videoModalBackdrop">
+    <div class="video-modal-box">
+      <button class="close-modal-x" id="closeVideoModal">&times;</button>
+      <video id="modalVideoPlayer" controls></video>
+    </div>
+  </div>
+
+  <!-- Floating Buttons -->
+  <div class="floating-actions-left">
+    <a href="https://wa.me/19292104402" target="_blank" class="btn-float wa-btn" title="Chat on WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+  </div>
+
+  <div class="floating-actions-right">
+    <button class="btn-float chat-btn" onclick="alert('Live chat specialist is available! You can also contact us on WhatsApp or call +1 929 210 4402.');" title="Live Chat">
+      <i class="bi bi-headset"></i>
+    </button>
+    <button class="btn-back-to-top" id="backToTopBtn" title="Back to Top">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    const USER_API_BASE = (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') ? 'http://localhost:5000/api' : '/api';
+
+    function resolveAssetUrl(url) {
+      if (!url) return '../assets/images/sample-jersey-1.png';
+      if (window.location.protocol === 'file:') {
+        return url.startsWith('/') ? ('..' + url) : url;
+      }
+      if (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') {
+        return url.startsWith('/') ? ('http://localhost:5000' + url) : url;
+      }
+      return url;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Fetch live products from PostgreSQL
+      try {
+        const res = await fetch(`${USER_API_BASE}/products`);
+        if (res.ok) {
+          const products = await res.json();
+          const track = document.getElementById('trendingProductsTrack');
+          if (track && Array.isArray(products) && products.length > 0) {
+            let html = '';
+            products.forEach(p => {
+              let img = resolveAssetUrl(p.image);
+              html += `
+                <div class="product-card" data-category="${(p.category || 'new').toLowerCase().replace(/\s+/g, '')}">
+                  <div class="product-card-inner">
+                    <div class="product-img-wrap">
+                      <img src="${img}" alt="${p.name}" class="product-img">
+                    </div>
+                    <div class="product-info-row">
+                      <span class="product-name text-uppercase">${p.name}</span>
+                    </div>
+                    <a href="customizer.html?id=${p.id}" class="btn-customize-full">Customize</a>
+                  </div>
+                </div>
+              `;
+            });
+            track.innerHTML = html;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load trending products from API', e);
+      }
+
+      // 2. Fetch Storefront Offers & Hero Slides
+      try {
+        const res = await fetch(`${USER_API_BASE}/offers`);
+        if (res.ok) {
+          const data = await res.json();
+
+          // A. Special Offers Section & Featured Deal
+          if (data.special) {
+            const s = data.special;
+            if (s.heading && document.getElementById('specialOffersHeading')) {
+              document.getElementById('specialOffersHeading').textContent = s.heading;
+            }
+            if (s.subheading && document.getElementById('specialOffersSubheading')) {
+              document.getElementById('specialOffersSubheading').textContent = s.subheading;
+            }
+          }
+
+          // Featured Deal Banners (Multiple Banners Support)
+          const featBanners = Array.isArray(data.featured_banners) && data.featured_banners.length > 0
+            ? data.featured_banners
+            : (data.special && data.special.featured_image ? [{
+                title: data.special.featured_title,
+                description: data.special.featured_desc,
+                btn_text: data.special.featured_btn_text,
+                btn_link: data.special.featured_btn_link,
+                banner_image: data.special.featured_image
+              }] : []);
+
+          if (featBanners.length > 0) {
+            setupFeaturedBannersRotation(featBanners);
+          }
+
+          // B. The 6 Deal Cards
+          if (Array.isArray(data.deals) && data.deals.length > 0) {
+            const subGrid = document.getElementById('dealsSubGrid');
+            if (subGrid) {
+              let dealsHtml = '';
+              data.deals.forEach(d => {
+                const dealImg = resolveAssetUrl(d.image);
+                dealsHtml += `
+                  <div class="deal-card">
+                    <span class="deal-badge">${d.badge}</span>
+                    <img src="${dealImg}" alt="${d.title || 'Deal Jersey'}">
+                    <div class="deal-overlay-btn">
+                      <a href="${d.link_url || 'product-details.html'}" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
+                    </div>
+                  </div>
+                `;
+              });
+              subGrid.innerHTML = dealsHtml;
+            }
+          }
+
+          // C. Hero Carousel Slides (Multiple Banners Support)
+          if (Array.isArray(data.hero) && data.hero.length > 0) {
+            setupDynamicHeroCarousel(data.hero);
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load storefront offers from API', e);
+      }
+    });
+
+    function setupDynamicHeroCarousel(heroList) {
+      const carouselEl = document.querySelector('.hero-carousel');
+      if (!carouselEl || !Array.isArray(heroList) || heroList.length === 0) return;
+
+      let slidesHtml = '';
+      let dotsHtml = '';
+
+      heroList.forEach((h, idx) => {
+        const banner = resolveAssetUrl(h.banner_image);
+        const athlete = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
+        const isActive = idx === 0 ? 'active' : '';
+
+        slidesHtml += `
+          <div class="hero-slide ${isActive}" style="background-image: url('${banner}');">
+            <div class="hero-overlay">
+              <div class="full-container">
+                <div class="hero-grid">
+                  <div class="hero-content">
+                    <h1 class="hero-title">${h.title || ''}</h1>
+                    <p class="hero-subtitle">${h.subtitle || ''}</p>
+                    <div>
+                      <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop The Collection'}</a>
+                    </div>
+                  </div>
+                  <div class="hero-athlete-wrap">
+                    ${athlete ? `<img src="${athlete}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        dotsHtml += `<button class="hero-dot ${isActive}" data-idx="${idx}"></button>`;
+      });
+
+      // Remove existing slides
+      carouselEl.querySelectorAll('.hero-slide').forEach(s => s.remove());
+
+      // Insert new slides before controls
+      const controlsEl = carouselEl.querySelector('.hero-controls');
+      if (controlsEl) {
+        controlsEl.insertAdjacentHTML('beforebegin', slidesHtml);
+      }
+
+      // Update dots
+      const dotsContainer = carouselEl.querySelector('.hero-dots');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = dotsHtml;
+      }
+
+      // Bind interactive controls
+      bindHeroControls();
+    }
+
+    function bindHeroControls() {
+      const slides = document.querySelectorAll('.hero-carousel .hero-slide');
+      const dots = document.querySelectorAll('.hero-carousel .hero-dot');
+      const prevBtn = document.getElementById('heroPrevBtn');
+      const nextBtn = document.getElementById('heroNextBtn');
+
+      if (slides.length === 0) return;
+
+      let currentIdx = 0;
+
+      function showSlide(index) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        currentIdx = index;
+      }
+
+      function nextSlide() {
+        showSlide((currentIdx + 1) % slides.length);
+      }
+
+      function prevSlide() {
+        showSlide((currentIdx - 1 + slides.length) % slides.length);
+      }
+
+      if (nextBtn) {
+        nextBtn.onclick = () => { nextSlide(); resetTimer(); };
+      }
+      if (prevBtn) {
+        prevBtn.onclick = () => { prevSlide(); resetTimer(); };
+      }
+
+      dots.forEach((dot, idx) => {
+        dot.onclick = () => { showSlide(idx); resetTimer(); };
+      });
+
+      function resetTimer() {
+        if (window._heroTimer) clearInterval(window._heroTimer);
+        if (slides.length > 1) {
+          window._heroTimer = setInterval(nextSlide, 5000);
+        }
+      }
+
+      showSlide(0);
+      resetTimer();
+    }
+
+    function setupFeaturedBannersRotation(banners) {
+      const bannerContainer = document.querySelector('.deal-main-banner');
+      if (!bannerContainer || !Array.isArray(banners) || banners.length === 0) return;
+
+      let currentFeatIdx = 0;
+
+      function renderBanner(idx) {
+        const b = banners[idx];
+        const imgSrc = resolveAssetUrl(b.banner_image);
+        bannerContainer.innerHTML = `
+          <img src="${imgSrc}" alt="${b.title || 'Featured Deal'}" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease;">
+          <div class="p-4 position-absolute bottom-0 text-white bg-dark bg-opacity-75 w-100">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h3 class="fw-bold fs-2 mb-0">${b.title || 'PRO TEAM STARTER KIT'}</h3>
+              ${banners.length > 1 ? `<span class="badge bg-warning text-dark px-2 py-1 small fw-bold">Deal ${idx + 1} of ${banners.length}</span>` : ''}
+            </div>
+            <p class="mb-2">${b.description || ''}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="${b.btn_link || 'placeorder.html'}" class="btn btn-light btn-sm fw-bold px-3 rounded-pill">${b.btn_text || 'GET PACKAGE QUOTE'}</a>
+              ${banners.length > 1 ? `
+                <div class="d-flex gap-1 align-items-center">
+                  ${banners.map((_, i) => `<span class="feat-dot ${i === idx ? 'bg-white' : 'bg-white opacity-50'}" style="width: 9px; height: 9px; border-radius: 50%; display: inline-block; cursor: pointer; transition: transform 0.2s;" onclick="window.switchFeatBanner(${i})"></span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      window.switchFeatBanner = (i) => {
+        currentFeatIdx = i;
+        renderBanner(currentFeatIdx);
+      };
+
+      renderBanner(0);
+
+      if (banners.length > 1) {
+        if (window._featBannerInterval) clearInterval(window._featBannerInterval);
+        window._featBannerInterval = setInterval(() => {
+          currentFeatIdx = (currentFeatIdx + 1) % banners.length;
+          renderBanner(currentFeatIdx);
+        }, 6000);
+      }
+    }
+  </script>
+</body>
+</html>

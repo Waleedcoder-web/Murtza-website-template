@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .size-badge-btn {
+      width: 48px;
+      height: 48px;
+      border: 2px solid #000;
+      background: #fff;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .size-badge-btn.active, .size-badge-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/images/logo-black.png" alt="Prosix Sports">
+      </a>
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+      <div class="nav-actions">
+        <button class="action-icon-btn trigger-search-modal"><i class="bi bi-search"></i></button>
+        <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle"><i class="bi bi-list"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <img src="assets/images/logo-black.png" alt="Prosix Sports" style="height: 38px;">
+      <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+      <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
+      <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
+      <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
+      <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+    </ul>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="full-container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="index.html" class="text-dark">Home</a></li>
+          <li class="breadcrumb-item"><a href="catalogue.html" class="text-dark">Catalogue</a></li>
+          <li class="breadcrumb-item active" aria-current="page" id="breadcrumbProductName">Chargers Jersey Designs</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product Details Section -->
+  <section class="py-5">
+    <div class="full-container">
+      <div class="row g-5">
+        <!-- Gallery Col -->
+        <div class="col-lg-6">
+          <div class="p-4 bg-light rounded-4 text-center border mb-3">
+            <img id="mainProductImg" src="assets/images/sample-jersey-1.png" alt="Jersey Design" style="max-height: 480px; width: auto; margin: 0 auto; object-fit: contain;">
+          </div>
+          <div class="d-flex gap-3 justify-content-center">
+            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-1.png'">
+              <img src="assets/images/sample-jersey-1.png" style="width: 70px; height: 70px; object-fit: contain;">
+            </div>
+            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-2.png'">
+              <img src="assets/images/sample-jersey-2.png" style="width: 70px; height: 70px; object-fit: contain;">
+            </div>
+            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-3.png'">
+              <img src="assets/images/sample-jersey-3.png" style="width: 70px; height: 70px; object-fit: contain;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Info Col -->
+        <div class="col-lg-6">
+          <div class="badge bg-black text-white px-3 py-2 text-uppercase mb-2">CUSTOMIZABLE MODEL</div>
+          <h1 class="display-5 fw-bold mb-2" id="detailTitle">CHARGERS JERSEY DESIGNS</h1>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="text-warning">
+              <i class="bi bi-star-fill text-dark"></i>
+              <i class="bi bi-star-fill text-dark"></i>
+              <i class="bi bi-star-fill text-dark"></i>
+              <i class="bi bi-star-fill text-dark"></i>
+              <i class="bi bi-star-fill text-dark"></i>
+            </div>
+            <span class="text-muted small fw-bold">(42 Verified Team Reviews)</span>
+          </div>
+
+          <div class="fs-2 fw-bold text-black mb-4" id="detailPrice">$120.00</div>
+
+          <p class="text-muted mb-4 lead">
+            Engineered with ultra-breathable moisture-management poly-spandex mesh. Features 4-way stretch capability, heat-pressed flatlock seams, and fade-resistant full dye sublimation printing.
+          </p>
+
+          <!-- Select Size -->
+          <div class="mb-4">
+            <label class="fw-bold mb-2 d-block text-uppercase">Select Size:</label>
+            <div class="d-flex gap-2 flex-wrap" id="sizeSelectorWrap">
+              <button class="size-badge-btn" onclick="selectSize(this, 'S')">S</button>
+              <button class="size-badge-btn" onclick="selectSize(this, 'M')">M</button>
+              <button class="size-badge-btn active" onclick="selectSize(this, 'L')">L</button>
+              <button class="size-badge-btn" onclick="selectSize(this, 'XL')">XL</button>
+              <button class="size-badge-btn" onclick="selectSize(this, '2XL')">2XL</button>
+              <button class="size-badge-btn" onclick="selectSize(this, '3XL')">3XL</button>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="mb-4">
+            <label class="fw-bold mb-2 d-block text-uppercase">Quantity:</label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group" style="width: 140px;">
+                <button class="btn btn-outline-dark" type="button" onclick="adjustQty(-1)">-</button>
+                <input type="text" class="form-control text-center fw-bold" id="productQtyInput" value="1" readonly>
+                <button class="btn btn-outline-dark" type="button" onclick="adjustQty(1)">+</button>
+              </div>
+              <span class="text-muted small">Bulk discount applies automatically on orders over 15 units.</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex gap-3 mb-5">
+            <a href="placeorder.html" class="btn btn-dark btn-lg flex-grow-1 py-3 rounded-pill fw-bold text-uppercase">
+              <i class="bi bi-file-earmark-check me-2"></i> Place Team Order
+            </a>
+            <a href="customizer.html" class="btn btn-outline-dark btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase">
+              <i class="bi bi-palette me-2"></i> Customize
+            </a>
+          </div>
+
+          <!-- Quick Highlights -->
+          <div class="border-top pt-4">
+            <div class="row g-3">
+              <div class="col-6 d-flex align-items-center gap-3">
+                <i class="bi bi-truck fs-3 text-dark"></i>
+                <div>
+                  <div class="fw-bold">Fast Delivery</div>
+                  <div class="small text-muted">2-3 weeks production</div>
+                </div>
+              </div>
+              <div class="col-6 d-flex align-items-center gap-3">
+                <i class="bi bi-patch-check fs-3 text-dark"></i>
+                <div>
+                  <div class="fw-bold">Sublimated Print</div>
+                  <div class="small text-muted">Will not fade or peel</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Description Tabs -->
+      <div class="mt-5 pt-4 border-top">
+        <ul class="nav nav-tabs mb-4">
+          <li class="nav-item"><a class="nav-link active fw-bold" href="#features" data-bs-toggle="tab">Features & Fabric</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="#size-chart" data-bs-toggle="tab">Size Chart</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="#shipping" data-bs-toggle="tab">Shipping & Turnaround</a></li>
+        </ul>
+        <div class="tab-content p-2">
+          <div class="tab-pane fade show active" id="features">
+            <h4 class="fw-bold mb-3">Premium Performance Construction</h4>
+            <p>Every Prosix sports jersey is precision engineered to meet the demands of high-level athletes:</p>
+            <ul>
+              <li><strong>Fabric:</strong> 180 GSM heavyweight Poly-Spandex with dual-action antimicrobial moisture-wicking technology.</li>
+              <li><strong>Printing:</strong> Italian dye-sublimation ink infused directly into polymer fibers at 400°F.</li>
+              <li><strong>Fit:</strong> Athletic compression cut with ergonomically curved side panels for dynamic range of motion.</li>
+              <li><strong>Durability:</strong> 6-thread flatlock reinforced seam stitching.</li>
+            </ul>
+          </div>
+          <div class="tab-pane fade" id="size-chart">
+            <h4 class="fw-bold mb-3">Unisex Athletic Size Chart (Inches)</h4>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead class="table-dark">
+                  <tr><th>Size</th><th>Chest (in)</th><th>Length (in)</th><th>Sleeve (in)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Small (S)</td><td>36 - 38</td><td>28</td><td>15</td></tr>
+                  <tr><td>Medium (M)</td><td>39 - 41</td><td>29</td><td>16</td></tr>
+                  <tr><td>Large (L)</td><td>42 - 44</td><td>30</td><td>17</td></tr>
+                  <tr><td>X-Large (XL)</td><td>45 - 47</td><td>31</td><td>18</td></tr>
+                  <tr><td>2X-Large (2XL)</td><td>48 - 50</td><td>32</td><td>19</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="shipping">
+            <h4 class="fw-bold mb-3">Turnaround Time & Global Shipping</h4>
+            <p>Standard custom team uniform production timeline is 10 to 14 business days from artwork approval. Priority express shipping is handled via FedEx & DHL with tracking provided upon dispatch.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top">
+        <div class="footer-logos"><img src="assets/images/logo-white.png" alt="Prosix Sports"></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart Drawer -->
+  
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let selectedSize = 'L';
+    let qty = 1;
+
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-badge-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = size;
+    }
+
+    function adjustQty(delta) {
+      qty = Math.max(1, qty + delta);
+      document.getElementById('productQtyInput').value = qty;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      if (id) {
+        try {
+          const res = await fetch(`/api/products/${id}`);
+          if (res.ok) {
+            const product = await res.json();
+            if (product) {
+              if (document.getElementById('breadcrumbProductName')) {
+                document.getElementById('breadcrumbProductName').textContent = product.name;
+              }
+              if (document.getElementById('detailTitle')) {
+                document.getElementById('detailTitle').textContent = product.name.toUpperCase();
+              }
+              if (document.getElementById('detailPrice')) {
+                document.getElementById('detailPrice').textContent = `$${Number(product.price).toFixed(2)}`;
+              }
+              let img = product.image || '/assets/images/sample-jersey-1.png';
+              if (window.location.protocol === 'file:' && img.startsWith('/')) {
+                img = '.' + img;
+              }
+              if (document.getElementById('mainProductImg')) {
+                document.getElementById('mainProductImg').src = img;
+              }
+              const customizeLink = document.querySelector('a[href*="customizer.html"]');
+              if (customizeLink) customizeLink.href = `customizer.html?id=${product.id}`;
+            }
+          }
+        } catch (e) {
+          console.warn('Could not fetch product from API', e);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

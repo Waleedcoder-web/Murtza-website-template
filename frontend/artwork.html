@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Artwork & Mockup Request - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .artwork-dropzone {
+      border: 2px dashed #000;
+      border-radius: 14px;
+      padding: 40px;
+      text-align: center;
+      background: #fdfdfd;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .artwork-dropzone:hover {
+      background: #f4f4f4;
+      transform: scale(1.01);
+    }
+    .product-checkbox-card {
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .product-checkbox-card:hover, .product-checkbox-card.selected {
+      border-color: #000;
+      background: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo"><img src="assets/images/logo-black.png" alt="Prosix Sports"></a>
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link active">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+      <div class="nav-actions">
+        </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="bg-black text-white py-5">
+    <div class="full-container">
+      <h1 class="display-4 fw-bold text-uppercase mb-2">FREE ARTWORK & 3D MOCKUP REQUEST</h1>
+      <p class="lead text-light mb-0">Our professional graphic artists will bring your uniform vision to life. No commitment required.</p>
+    </div>
+  </section>
+
+  <!-- Artwork Form Section -->
+  <section class="py-5">
+    <div class="full-container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <form class="p-4 p-md-5 bg-white border rounded-4 shadow-sm" onsubmit="handleArtworkSubmit(event)">
+            <!-- Contact Info -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">1. Your Details</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Full Name *</label>
+                <input type="text" class="form-control form-control-lg" placeholder="John Doe" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Email *</label>
+                <input type="email" class="form-control form-control-lg" placeholder="john@example.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Phone / WhatsApp *</label>
+                <input type="tel" class="form-control form-control-lg" placeholder="+1 (555) 123-4567" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Team / Club Name *</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Phoenix Rising FC" required>
+              </div>
+            </div>
+
+            <!-- Sport & Style -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">2. Design Preferences</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Sport *</label>
+                <select class="form-select form-select-lg" required>
+                  <option value="">Select Sport...</option>
+                  <option>7v7 Football</option>
+                  <option>Baseball / Softball</option>
+                  <option>Basketball</option>
+                  <option>Soccer</option>
+                  <option>Ice Hockey</option>
+                  <option>Lacrosse</option>
+                  <option>Track & Field</option>
+                  <option>Volleyball</option>
+                  <option>Wrestling</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Design Aesthetic</label>
+                <select class="form-select form-select-lg">
+                  <option>Modern Geometric / Clean</option>
+                  <option>Bold Mascot Centric</option>
+                  <option>Classic Retro Stripes</option>
+                  <option>Aggressive / Cybernetic</option>
+                  <option>Gradient / Sublimated Blend</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold small text-uppercase">Team Color Palette</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Matte Black, Electric Neon Green, Metallic Silver">
+              </div>
+            </div>
+
+            <!-- Products Needed -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">3. Products Needed in Mockup</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p1" checked>
+                  <label for="p1" class="fw-bold mb-0">Jerseys (Tops)</label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p2" checked>
+                  <label for="p2" class="fw-bold mb-0">Shorts / Pants</label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p3">
+                  <label for="p3" class="fw-bold mb-0">Team Hoodies</label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p4">
+                  <label for="p4" class="fw-bold mb-0">Compression Sleeves</label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p5">
+                  <label for="p5" class="fw-bold mb-0">Custom Socks</label>
+                </div>
+              </div>
+              <div class="col-sm-4 col-6">
+                <div class="product-checkbox-card d-flex align-items-center gap-2">
+                  <input type="checkbox" id="p6">
+                  <label for="p6" class="fw-bold mb-0">Backpacks / Bags</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- File Upload -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">4. Upload Logos & Inspirations</h4>
+            <div class="mb-4">
+              <div class="artwork-dropzone" onclick="document.getElementById('artworkUploadInput').click()">
+                <i class="bi bi-file-earmark-arrow-up fs-1 d-block mb-2 text-dark"></i>
+                <h5 class="fw-bold mb-1">Click to Upload Team Logos & Sketches</h5>
+                <p class="text-muted small mb-0">Accepts AI, EPS, PDF, PSD, SVG, PNG or high-res JPG files</p>
+                <input type="file" id="artworkUploadInput" class="d-none" multiple>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-4">
+              <label class="form-label fw-bold small text-uppercase">Describe your concept / instructions</label>
+              <textarea class="form-control" rows="4" placeholder="Mention sponsor logos, chest text style, font preferences, collar cut or sleeve patterns..."></textarea>
+            </div>
+
+            <div class="text-center pt-3">
+              <button type="submit" class="btn btn-dark btn-lg px-5 py-3 rounded-pill fw-bold text-uppercase fs-5">
+                <i class="bi bi-palette me-2"></i> Request Free 3D Artwork
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top"><img src="assets/images/logo-white.png" alt="Prosix Sports" style="height: 40px;"></div>
+      <div class="footer-bottom"><p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p></div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart Drawer -->
+  
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function handleArtworkSubmit(e) {
+      e.preventDefault();
+      CartStore.showToast("Artwork request submitted! A designer will contact you within 24 hours.");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

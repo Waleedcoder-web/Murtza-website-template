@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Sportswear Catalogue - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/images/logo-black.png" alt="Prosix Sports Logo">
+      </a>
+
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="action-icon-btn trigger-search-modal" title="Search"><i class="bi bi-search"></i></button>
+        <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle"><i class="bi bi-list"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <img src="assets/images/logo-black.png" alt="Prosix Sports" style="height: 38px;">
+      <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
+      <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
+      <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
+      <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
+      <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+      <li><a href="faqs.html" class="nav-link">FAQs</a></li>
+    </ul>
+  </div>
+
+  <!-- Page Header Banner -->
+  <section class="bg-black text-white py-5">
+    <div class="full-container">
+      <h1 class="display-4 fw-bold text-uppercase mb-2">FULL SPORTS CATALOGUE</h1>
+      <p class="lead text-light mb-0">Browse over 500+ customizable athletic jerseys, practice wear, and team performance apparel.</p>
+    </div>
+  </section>
+
+  <!-- Catalogue Content Layout -->
+  <section class="py-5">
+    <div class="full-container">
+      <div class="row g-4">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3">
+          <div class="p-4 bg-light rounded-4 border">
+            <h5 class="fw-bold mb-3 text-uppercase"><i class="bi bi-filter me-2"></i>Filter by Sport</h5>
+            <div class="d-flex flex-column gap-2 mb-4" id="sportFilterGroup">
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="all" checked> All Sports
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="7v7"> 7v7 Football
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="baseball"> Baseball
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="basketball"> Basketball
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="soccer"> Soccer
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="volleyball"> Volleyball
+              </label>
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="track"> Track & Field
+              </label>
+            </div>
+
+            <hr>
+
+            <h5 class="fw-bold mb-3 text-uppercase">Price Range</h5>
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <input type="number" class="form-control form-control-sm" placeholder="Min $" value="0">
+              <span>-</span>
+              <input type="number" class="form-control form-control-sm" placeholder="Max $" value="200">
+            </div>
+
+            <button class="btn btn-dark w-100 rounded-pill fw-bold" onclick="CartStore.showToast('Filters Applied!')">Apply Filter</button>
+          </div>
+        </div>
+
+        <!-- Products Grid Area -->
+        <div class="col-lg-9">
+          <!-- Toolbar -->
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 pb-3 border-bottom">
+            <span class="text-muted fw-bold" id="catalogueCountDisplay">Showing <strong class="text-dark">12</strong> of 48 Designs</span>
+            <div class="d-flex align-items-center gap-2">
+              <span class="small text-muted text-uppercase fw-bold">Sort By:</span>
+              <select class="form-select form-select-sm" id="catalogueSortSelect" style="width: 180px;">
+                <option selected>Featured</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Newest Arrivals</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="products-grid">
+            <!-- 1 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-1.png" alt="Chargers"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">CHARGERS JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=287" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=287" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-2.png" alt="Football"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">FOOTBALL PRO DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=288" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=288" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-3.png" alt="Wolfpack"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">WOLFPACK JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=289" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=289" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-4.png" alt="Patriots"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">PATRIOTS JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=290" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=290" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-5.png" alt="Hawks"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">HAWKS ELITE DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=291" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=291" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-6.png" alt="Army"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">ARMY CAMO DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=296" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=296" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-7.png" alt="Vikings"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">VIKINGS JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=297" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=297" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-8.png" alt="Bears"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">BEARS JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=299" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=299" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 9 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-9.png" alt="Ohio"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">OHIO ATHLETIC DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=302" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=302" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 10 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-10.png" alt="Eagles"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">EAGLES JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=324" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=324" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 11 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-11.png" alt="Broncos"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">BRONCOS JERSEY DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=332" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=332" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+
+            <!-- 12 -->
+            <div class="product-card">
+              <div class="product-img-wrap"><img src="assets/images/sample-jersey-12.png" alt="Seahawks"></div>
+              <div class="product-info-row">
+                <h5 class="product-name">SEAHAWKS PRO DESIGNS</h5>
+                <span class="product-price">$120.00</span>
+              </div>
+              <div class="product-actions">
+                <a href="product-details.html?id=336" class="btn-card-action btn-card-outline">View</a>
+                <a href="customizer.html?id=336" class="btn-card-action btn-card-dark">Customize</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <nav class="mt-5 d-flex justify-content-center">
+            <ul class="pagination pagination-lg">
+              <li class="page-item active"><a class="page-link bg-black border-black text-white" href="#">1</a></li>
+              <li class="page-item"><a class="page-link text-black" href="#">2</a></li>
+              <li class="page-item"><a class="page-link text-black" href="#">3</a></li>
+              <li class="page-item"><a class="page-link text-black" href="#">&raquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top">
+        <div class="footer-logos">
+          <img src="assets/images/logo-white.png" alt="Prosix Sports">
+        </div>
+        <div class="social-links">
+          <a href="https://facebook.com/prosixsports" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com/prosixsports" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com/@prosixsports" target="_blank" class="social-btn"><i class="fab fa-youtube"></i></a>
+          <a href="https://x.com/ProsixSports" target="_blank" class="social-btn"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart Drawer -->
+  
+
+  <!-- Floating Buttons -->
+  <div class="floating-actions-left">
+    <a href="https://wa.me/19292104402" target="_blank" class="btn-float wa-btn"><i class="bi bi-whatsapp"></i></a>
+  </div>
+  <div class="floating-actions-right">
+    <button class="btn-back-to-top" id="backToTopBtn"><i class="bi bi-arrow-up"></i></button>
+  </div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let allCatalogueProducts = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadCatalogueProducts();
+
+      // Listen to sport radio filter change
+      document.querySelectorAll('input[name="sportFilter"]').forEach(radio => {
+        radio.addEventListener('change', () => filterCatalogue());
+      });
+
+      // Listen to sort change
+      document.getElementById('catalogueSortSelect')?.addEventListener('change', () => filterCatalogue());
+    });
+
+    const USER_API_BASE = (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') ? 'http://localhost:5000/api' : '/api';
+
+    function resolveAssetUrl(url) {
+      if (!url) return 'assets/images/sample-jersey-1.png';
+      if (window.location.protocol === 'file:') {
+        return url.startsWith('/') ? ('.' + url) : url;
+      }
+      if (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') {
+        return url.startsWith('/') ? ('http://localhost:5000' + url) : url;
+      }
+      return url;
+    }
+
+    async function loadCatalogueProducts() {
+      try {
+        const res = await fetch(`${USER_API_BASE}/products`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            allCatalogueProducts = data;
+            renderCatalogueGrid(allCatalogueProducts);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('API fetch failed, retaining static fallback', e);
+      }
+    }
+
+    function renderCatalogueGrid(products) {
+      const grid = document.querySelector('.products-grid');
+      const countEl = document.getElementById('catalogueCountDisplay');
+      if (!grid) return;
+
+      if (countEl) countEl.innerHTML = `Showing <strong class="text-dark">${products.length}</strong> of ${allCatalogueProducts.length} Designs`;
+
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+            <h5 class="fw-bold">No Products Found</h5>
+            <p class="text-muted">No uniform designs match the selected filter criteria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      products.forEach(p => {
+        let img = resolveAssetUrl(p.image);
+
+        html += `
+          <div class="product-card" data-sport="${p.sport || ''}">
+            <div class="product-img-wrap"><img src="${img}" alt="${p.name}"></div>
+            <div class="product-info-row">
+              <h5 class="product-name text-uppercase">${p.name}</h5>
+              <span class="product-price">$${Number(p.price).toFixed(2)}</span>
+            </div>
+            <div class="product-actions">
+              <a href="product-details.html?id=${p.id}" class="btn-card-action btn-card-outline">View</a>
+              <a href="customizer.html?id=${p.id}" class="btn-card-action btn-card-dark">Customize</a>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    function filterCatalogue() {
+      const selectedSport = document.querySelector('input[name="sportFilter"]:checked')?.value || 'all';
+      const sortVal = document.getElementById('catalogueSortSelect')?.value || 'Featured';
+
+      let filtered = [...allCatalogueProducts];
+      if (selectedSport !== 'all') {
+        filtered = filtered.filter(p => (p.sport || '').toLowerCase().includes(selectedSport.toLowerCase()));
+      }
+
+      if (sortVal === 'Price: Low to High') {
+        filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+      } else if (sortVal === 'Price: High to Low') {
+        filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+      } else if (sortVal === 'Newest Arrivals') {
+        filtered.sort((a, b) => b.id - a.id);
+      }
+
+      renderCatalogueGrid(filtered);
+    }
+  </script>
+</body>
+</html>

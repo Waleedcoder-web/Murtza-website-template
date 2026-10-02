@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Place Team Order - Prosix Sports</title>
+  <link rel="icon" type="image/png" href="assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .upload-dropzone {
+      border: 2px dashed #bbb;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .upload-dropzone:hover {
+      border-color: #000;
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo"><img src="assets/images/logo-black.png" alt="Prosix Sports"></a>
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link active">Place Order</a></li>
+        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+      <div class="nav-actions">
+        </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="bg-black text-white py-5">
+    <div class="full-container">
+      <h1 class="display-4 fw-bold text-uppercase mb-2">OFFICIAL TEAM ORDER SUBMISSION</h1>
+      <p class="lead text-light mb-0">Fill out your team specifications, upload mockups and roster details. Our production team will review within 24 hours.</p>
+    </div>
+  </section>
+
+  <!-- Order Form Section -->
+  <section class="py-5">
+    <div class="full-container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <form class="p-4 p-md-5 bg-white border rounded-4 shadow-sm" id="teamOrderForm" onsubmit="handleOrderSubmit(event)">
+            <!-- 1. Contact & Team Information -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">1. Contact & Team Details</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Full Name *</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Coach John Doe" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Email Address *</label>
+                <input type="email" class="form-control form-control-lg" placeholder="coach@team.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Phone / WhatsApp Number *</label>
+                <input type="tel" class="form-control form-control-lg" placeholder="+1 (555) 000-0000" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Organization / School Name</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Lincoln High Athletics">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Team Name *</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Texas Raptors 7v7" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Sport Category *</label>
+                <select class="form-select form-select-lg" required>
+                  <option value="">Select Sport...</option>
+                  <option>7v7 Football</option>
+                  <option>Baseball / Softball</option>
+                  <option>Basketball</option>
+                  <option>Cheer & Dance</option>
+                  <option>Ice Hockey</option>
+                  <option>Lacrosse</option>
+                  <option>Soccer</option>
+                  <option>Track & Field</option>
+                  <option>Volleyball</option>
+                  <option>Wrestling</option>
+                  <option>Other Athletic Program</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 2. Delivery & Timeline -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">2. Timeline & Colors</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Required Delivery Date *</label>
+                <input type="date" class="form-control form-control-lg" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Assigned Sales Representative (Optional)</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Sales Rep Name or ID">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold small text-uppercase">Team Color Codes (Hex / Pantone or Names)</label>
+                <input type="text" class="form-control form-control-lg" placeholder="e.g. Navy Blue #001f3f, Vegas Gold #C5B358, White">
+              </div>
+            </div>
+
+            <!-- 3. File Uploads -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">3. Mockups & Roster Files</h4>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Jersey Mockups / Concept Art</label>
+                <div class="upload-dropzone" onclick="document.getElementById('mockupFileInput').click()">
+                  <i class="bi bi-cloud-arrow-up fs-1 text-muted d-block mb-2"></i>
+                  <span class="fw-bold d-block">Click to upload mockups</span>
+                  <span class="small text-muted">PNG, JPG, PDF, AI or PSD</span>
+                  <input type="file" id="mockupFileInput" class="d-none" multiple>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small text-uppercase">Roster Spreadsheet / Sizing Document</label>
+                <div class="upload-dropzone" onclick="document.getElementById('rosterFileInput').click()">
+                  <i class="bi bi-file-earmark-spreadsheet fs-1 text-muted d-block mb-2"></i>
+                  <span class="fw-bold d-block">Click to upload roster sheet</span>
+                  <span class="small text-muted">XLS, XLSX, CSV, or PDF</span>
+                  <input type="file" id="rosterFileInput" class="d-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Notes -->
+            <h4 class="fw-bold mb-4 text-uppercase border-bottom pb-2">4. Special Instructions & Notes</h4>
+            <div class="mb-4">
+              <textarea class="form-control" rows="4" placeholder="Detail any specific collar styles, sponsors logos, sleeve lengths, fabric weight preferences, etc."></textarea>
+            </div>
+
+            <!-- Submit CTA -->
+            <div class="text-center pt-3">
+              <button type="submit" class="btn btn-dark btn-lg px-5 py-3 rounded-pill fw-bold text-uppercase fs-5">
+                <i class="bi bi-send-check me-2"></i> Submit Official Team Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="full-container">
+      <div class="footer-top"><img src="assets/images/logo-white.png" alt="Prosix Sports" style="height: 40px;"></div>
+      <div class="footer-bottom"><p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p></div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart Drawer -->
+  
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+      CartStore.showToast("Order submitted successfully! Order #PO-" + Math.floor(100000 + Math.random() * 900000));
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

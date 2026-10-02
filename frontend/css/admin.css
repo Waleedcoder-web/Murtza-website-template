@@ -1,0 +1,758 @@
+/* ==========================================================================
+   PROSIX SPORTS - ADMIN DASHBOARD STYLES (admin.css)
+   Enhanced with Frosted Glassmorphism, Tech Animations & Modern Visuals
+   Preserving Core Brand Colors: Navy (#12161f) & Clean Light Slate (#f4f6f9)
+   ========================================================================== */
+
+:root {
+  /* Preserved Core Brand Colors */
+  --admin-sidebar-bg: #12161f;
+  --admin-sidebar-hover: #1c2230;
+  --admin-sidebar-active: #2a3346;
+  --admin-header-bg: rgba(255, 255, 255, 0.85);
+  --admin-body-bg: #f4f6f9;
+  --admin-card-bg: rgba(255, 255, 255, 0.85);
+  --admin-border-color: #e2e8f0;
+  --admin-text-dark: #1e293b;
+  --admin-text-muted: #64748b;
+  --admin-primary: #0f172a;
+  --admin-accent: #2563eb;
+  --admin-success: #10b981;
+  --admin-warning: #f59e0b;
+  --admin-danger: #ef4444;
+
+  /* Frosted Glassmorphism Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-hover: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-border-subtle: rgba(226, 232, 240, 0.8);
+  --glass-blur: blur(14px);
+  --glass-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  --glass-shadow-lg: 0 18px 40px -8px rgba(15, 23, 42, 0.09), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+}
+
+body.admin-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  background-color: var(--admin-body-bg);
+  background-image: 
+    radial-gradient(900px circle at 90% 8%, rgba(37, 99, 235, 0.05), transparent 60%),
+    radial-gradient(800px circle at 10% 90%, rgba(16, 185, 129, 0.04), transparent 50%),
+    radial-gradient(600px circle at 50% 50%, rgba(139, 92, 246, 0.03), transparent 60%);
+  background-attachment: fixed;
+  color: var(--admin-text-dark);
+  font-size: 0.95rem;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes glassShine {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Animation Helper Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+
+/* Live Status Dot */
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--admin-success);
+  display: inline-block;
+  animation: pulseDot 2s infinite;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+   Top Navigation Bar (admin-navbar)
+   ========================================================================== */
+.admin-navbar {
+  background: linear-gradient(180deg, #12161f 0%, #0d121a 100%) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px 0;
+  z-index: 1000;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.admin-brand img {
+  height: 34px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.admin-brand span {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px !important;
+  color: #94a3b8 !important;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.admin-nav-link:hover {
+  background-color: var(--admin-sidebar-hover);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.admin-nav-link.active {
+  background-color: var(--admin-sidebar-active);
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  border-bottom: 2px solid var(--admin-accent);
+}
+
+.admin-nav-link i {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.admin-nav-link:hover i {
+  transform: scale(1.1);
+  color: #60a5fa;
+}
+
+.admin-navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  padding: 6px 12px !important;
+  border-radius: 8px;
+  font-size: 1.25rem;
+}
+
+.admin-navbar-toggler:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35) !important;
+}
+
+@media (max-width: 991.98px) {
+  .admin-navbar-collapse {
+    background: rgba(18, 22, 31, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 14px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+  }
+  .admin-nav-link {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+
+/* ==========================================================================
+   Full Page Container & Header
+   ========================================================================== */
+.admin-page-container {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  padding: 30px 0 50px 0;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   Frosted Glass Stat Cards
+   ========================================================================== */
+.stat-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--glass-shadow-lg);
+  border-color: rgba(37, 99, 235, 0.3);
+  background: var(--glass-bg-hover);
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  opacity: 0.6;
+}
+
+.stat-icon-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover .stat-icon-wrap {
+  transform: scale(1.08) rotate(2deg);
+}
+
+.stat-icon-blue {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.stat-icon-green {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
+}
+
+.stat-icon-yellow {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+}
+
+.stat-icon-purple {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  color: #8b5cf6;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+}
+
+.stat-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--admin-text-dark);
+  line-height: 1.1;
+  margin-top: 4px;
+  letter-spacing: -0.5px;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--admin-text-muted);
+}
+
+.stat-meta {
+  font-size: 0.78rem;
+  color: var(--admin-text-muted);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   Frosted Glass Admin Cards
+   ========================================================================== */
+.admin-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 26px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.admin-card:hover {
+  box-shadow: var(--glass-shadow-lg);
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* ==========================================================================
+   Modern Frosted Table
+   ========================================================================== */
+.admin-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  white-space: nowrap !important;
+}
+
+.admin-table th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--admin-text-muted);
+  background-color: rgba(248, 250, 252, 0.75);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  padding: 12px 16px;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+.admin-table th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.admin-table th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.admin-table td {
+  padding: 12px 16px;
+  vertical-align: middle !important;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+  background: transparent;
+  white-space: nowrap !important;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-table td * {
+  white-space: nowrap !important;
+}
+
+.admin-table tbody tr {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-table tbody tr:hover td {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-table tbody tr:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* ==========================================================================
+   Tech Glass Buttons
+   ========================================================================== */
+.btn-glass {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 10px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--admin-text-dark);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  border-color: rgba(37, 99, 235, 0.3);
+  color: var(--admin-accent);
+}
+
+.btn-glass:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Primary Glass Button */
+.btn-glass-primary {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+}
+
+.btn-glass-primary:hover {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Accent Glass Button (Blue) */
+.btn-glass-accent {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+}
+
+.btn-glass-accent:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+}
+
+/* Danger Glass Button */
+.btn-glass-danger {
+  background: rgba(254, 242, 242, 0.85);
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-glass-danger:hover {
+  background: #ef4444;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.3);
+}
+
+/* Shimmer Animation on CTAs */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-150%) skewX(-25deg);
+}
+
+.btn-shimmer:hover::before {
+  animation: glassShine 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Badges, Status Pills & Tags
+   ========================================================================== */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.status-pill.new {
+  background: rgba(219, 234, 254, 0.8);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.status-pill.replied {
+  background: rgba(209, 250, 229, 0.8);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.status-pill.active {
+  background: rgba(209, 250, 229, 0.8);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.status-pill.draft {
+  background: rgba(254, 243, 199, 0.8);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.status-pill.archived {
+  background: rgba(226, 232, 240, 0.8);
+  color: #475569;
+  border-color: rgba(100, 116, 139, 0.2);
+}
+
+/* Category Filter Chips */
+.filter-chip {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--glass-border-subtle);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  background: #ffffff;
+  color: var(--admin-text-dark);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.filter-chip.active {
+  background: var(--admin-primary);
+  color: #ffffff;
+  border-color: var(--admin-primary);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+}
+
+/* ==========================================================================
+   Form Controls (Glass Inputs)
+   ========================================================================== */
+.form-control-glass,
+.form-select-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  color: var(--admin-text-dark);
+  transition: all 0.25s ease;
+}
+
+.form-control-glass:focus,
+.form-select-glass:focus {
+  background: #ffffff;
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+/* ==========================================================================
+   Frosted Glass Modal
+   ========================================================================== */
+.modal-content.glass-modal {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.2);
+}
+
+.modal-backdrop.show {
+  opacity: 0.45;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ==========================================================================
+   Modern Tech Toast Notification
+   ========================================================================== */
+#adminToast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: rgba(15, 23, 42, 0.92) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #ffffff !important;
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+  font-size: 0.92rem;
+  z-index: 99999;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Image Upload Dropzone & Category Styles
+   ========================================================================== */
+.upload-dropzone {
+  border: 2px dashed #cbd5e1;
+  background: rgba(248, 250, 252, 0.7);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.upload-dropzone:hover, .upload-dropzone.dragover {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+}
+
+.upload-dropzone i {
+  font-size: 2rem;
+  color: #64748b;
+  display: block;
+  margin-bottom: 6px;
+  transition: color 0.2s ease;
+}
+
+.upload-dropzone:hover i, .upload-dropzone.dragover i {
+  color: #2563eb;
+}
+
+.preview-thumb-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.preview-thumb-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.category-chip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.category-chip-badge:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 768px) {
+  .admin-page-container {
+    padding: 20px 0 40px 0;
+  }
+  .stat-card {
+    padding: 18px;
+  }
+  .stat-value {
+    font-size: 1.75rem;
+  }
+}
+

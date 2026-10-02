@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banners & Offers Manager | Prosix Sports Admin</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Bootstrap & Admin Stylesheet -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg admin-navbar sticky-top">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="../assets/images/logo-black.png" alt="Prosix Sports" style="height: 38px;">
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 ms-1 small">PORTAL</span>
+      </a>
+
+      <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent">
+        <i class="bi bi-list fs-2 text-dark"></i>
+      </button>
+
+      <div class="collapse navbar-collapse admin-navbar-collapse" id="adminNavbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-lg-1">
+          <li class="nav-item">
+            <a class="admin-nav-link" href="index.html">
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="products.html">
+              <i class="bi bi-tag-fill"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link active" href="offers.html">
+              <i class="bi bi-images"></i>
+              <span>Banners & Offers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="admin-nav-link" href="messages.html">
+              <i class="bi bi-chat-dots-fill"></i>
+              <span>Inquiries</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex flex-wrap align-items-center gap-3 mt-3 mt-lg-0">
+          <div class="status-pill active shadow-sm">
+            <span class="live-dot"></span>
+            <span>Live Store Engine</span>
+          </div>
+          <a href="../user/index.html" class="btn-glass btn-sm" target="_blank">
+            <i class="bi bi-arrow-up-right-square"></i>
+            <span>Open Storefront</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="admin-page-container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
+
+      <!-- Page Header -->
+      <div class="admin-page-header">
+        <div>
+          <h3 class="fw-bold mb-1 text-dark">Storefront Banners & Special Offers</h3>
+          <p class="text-muted small mb-0">Add, edit, and delete hero banners, featured promotion packages, and special deal cards</p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="../user/index.html" target="_blank" class="btn-glass">
+            <i class="bi bi-eye"></i>
+            <span>View Live Home</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (3 Dedicated Sections) -->
+      <ul class="nav nav-pills mb-4 gap-2" id="offersTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="filter-chip active" id="hero-tab" data-bs-toggle="pill" data-bs-target="#hero-pane" type="button" role="tab">
+            <i class="bi bi-images me-1"></i> Main Hero Banners
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="filter-chip" id="featured-tab" data-bs-toggle="pill" data-bs-target="#featured-pane" type="button" role="tab">
+            <i class="bi bi-star-fill me-1"></i> Featured Deal Banners
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="filter-chip" id="deals-tab" data-bs-toggle="pill" data-bs-target="#deals-pane" type="button" role="tab">
+            <i class="bi bi-percent me-1"></i> Special Deal Cards
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="offersTabContent">
+
+        <!-- TAB 1: HERO CAROUSEL BANNERS -->
+        <div class="tab-pane fade show active" id="hero-pane" role="tabpanel">
+          <div class="admin-card animate-fade-in-up p-4 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+              <div>
+                <h5 class="fw-bold mb-1 text-dark">
+                  <i class="bi bi-images text-primary me-2"></i>Hero Carousel Banners
+                </h5>
+                <span class="text-muted small">Manage all rotating top banners. Click <strong>Edit</strong> or <strong>Delete</strong> on any banner card.</span>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold" onclick="openAddHeroBannerModal()">
+                <i class="bi bi-plus-lg me-1"></i> Add New Hero Banner
+              </button>
+            </div>
+
+            <!-- Slides Container -->
+            <div class="row g-4" id="heroSlidesContainer">
+              <div class="col-12 text-center py-4 text-muted">Loading hero banners...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: FEATURED DEAL BANNERS & SECTION HEADING -->
+        <div class="tab-pane fade" id="featured-pane" role="tabpanel">
+          
+          <!-- 1. Section Heading & Subtitle -->
+          <div class="admin-card animate-fade-in-up p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="fw-bold mb-1 text-dark">Section Header Text</h5>
+                <span class="text-muted small">The main headline and tagline shown above the special offers section</span>
+              </div>
+              <button class="btn-glass btn-glass-primary btn-sm btn-shimmer" onclick="saveSpecialHeadingOnly()">
+                <i class="bi bi-check2"></i> Save Header Text
+              </button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Section Main Title</label>
+                <input type="text" class="form-control form-control-glass" id="specialHeading" placeholder="e.g. SEASON SPECIAL OFFERS">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Section Subtitle</label>
+                <input type="text" class="form-control form-control-glass" id="specialSubheading" placeholder="e.g. Save up to 40% on select bulk team packages...">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Multiple Featured Deal Banners -->
+          <div class="admin-card animate-fade-in-up delay-1 p-4 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+              <div>
+                <h5 class="fw-bold mb-1 text-dark">
+                  <i class="bi bi-star-fill text-warning me-2"></i>Featured Deal Banners
+                </h5>
+                <span class="text-muted small">Manage featured team deals (e.g. Pro Team Starter Kit, Varsity Bundle). Click <strong>Edit</strong> or <strong>Delete</strong> on any card.</span>
+              </div>
+              <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold text-dark" onclick="openAddFeaturedBannerModal()">
+                <i class="bi bi-plus-lg me-1"></i> Add Featured Banner
+              </button>
+            </div>
+
+            <div class="row g-4" id="featuredBannersContainer">
+              <div class="col-12 text-center py-4 text-muted">Loading featured banners...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: SPECIAL DEAL CARDS -->
+        <div class="tab-pane fade" id="deals-pane" role="tabpanel">
+          <div class="admin-card animate-fade-in-up p-4 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+              <div>
+                <h5 class="fw-bold mb-1 text-dark">
+                  <i class="bi bi-percent text-danger me-2"></i>Special Deal Cards Grid
+                </h5>
+                <span class="text-muted small">Manage individual deal cards with badge tags, mockups, and links. Click <strong>Edit</strong> or <strong>Delete</strong> on any card.</span>
+              </div>
+              <button type="button" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold text-white" onclick="openAddDealModal()">
+                <i class="bi bi-plus-lg me-1"></i> Add New Deal Card
+              </button>
+            </div>
+
+            <div class="row g-4" id="dealCardsContainer">
+              <div class="col-12 text-center py-4 text-muted">Loading deal cards...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODALS FOR ADD & EDIT                      -->
+    <!-- ========================================== -->
+
+    <!-- MODAL 1: Add New Hero Banner -->
+    <div class="modal fade" id="addHeroBannerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-images text-primary me-2"></i>Add New Hero Carousel Banner
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="newHeroBannerForm" onsubmit="submitNewHeroBanner(event)">
+              <div class="row g-3">
+                <div class="col-12 col-md-7">
+                  <label class="form-label small fw-bold text-dark mb-1">Banner Background Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="newBannerBgPreview" src="" alt="Banner Preview" class="d-none w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
+                    <div id="newBannerBgPlaceholder" class="text-muted py-3">
+                      <i class="bi bi-cloud-arrow-up fs-2 text-primary d-block mb-1"></i>
+                      <span class="small fw-semibold">Click to upload banner image</span>
+                    </div>
+                    <input type="file" id="newBannerBgFile" accept="image/*" class="d-none" onchange="handleNewBannerBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('newBannerBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Choose Banner File
+                  </button>
+                  <input type="hidden" id="newBannerBgUrl" value="" required>
+                </div>
+
+                <div class="col-12 col-md-5">
+                  <label class="form-label small fw-bold text-dark mb-1">Athlete Cutout (Optional)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="newBannerAthletePreview" src="" alt="Athlete Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
+                    <div id="newBannerAthletePlaceholder" class="text-muted py-3">
+                      <i class="bi bi-person-bounding-box fs-2 text-secondary d-block mb-1"></i>
+                      <span class="small fw-semibold">Upload athlete PNG</span>
+                    </div>
+                    <input type="file" id="newBannerAthleteFile" accept="image/*" class="d-none" onchange="handleNewBannerAthleteUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('newBannerAthleteFile').click()">
+                    <i class="bi bi-person-plus me-1"></i> Choose Athlete Cutout
+                  </button>
+                  <input type="hidden" id="newBannerAthleteUrl" value="">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Slide Headline <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="newBannerTitle" placeholder="e.g. Play Big. Dream Bigger." required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Subtitle / Description</label>
+                  <textarea rows="2" class="form-control form-control-glass" id="newBannerSubtitle" placeholder="e.g. High-performance custom team jerseys..."></textarea>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">CTA Button Text</label>
+                  <input type="text" class="form-control form-control-glass" id="newBannerBtnText" value="Shop The Collection">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">CTA Button Link</label>
+                  <input type="text" class="form-control form-control-glass" id="newBannerBtnLink" value="catalogue.html">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="newBannerOrder" value="1" min="1">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="saveNewBannerBtn">
+                  <i class="bi bi-plus-circle me-1"></i> Add Hero Banner
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: Edit Existing Hero Banner -->
+    <div class="modal fade" id="editHeroBannerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-pencil-square text-primary me-2"></i>Edit Hero Banner #<span id="editHeroIdSpan"></span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="editHeroBannerForm" onsubmit="submitEditHeroBanner(event)">
+              <input type="hidden" id="editHeroId">
+              <div class="row g-3">
+                <div class="col-12 col-md-7">
+                  <label class="form-label small fw-bold text-dark mb-1">Banner Background Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                    <img id="editHeroBgPreview" src="" alt="Banner Preview" class="w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
+                    <input type="file" id="editHeroBgFile" accept="image/*" class="d-none" onchange="handleEditHeroBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('editHeroBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change Banner Image
+                  </button>
+                  <input type="hidden" id="editHeroBgUrl" required>
+                </div>
+
+                <div class="col-12 col-md-5">
+                  <label class="form-label small fw-bold text-dark mb-1">Athlete Cutout (Optional)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center;">
+                    <img id="editHeroAthletePreview" src="" alt="Athlete Preview" style="max-height: 120px; object-fit: contain;">
+                    <span id="editHeroAthletePlaceholder" class="text-muted small d-none">None attached</span>
+                    <input type="file" id="editHeroAthleteFile" accept="image/*" class="d-none" onchange="handleEditHeroAthleteUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('editHeroAthleteFile').click()">
+                    <i class="bi bi-person-plus me-1"></i> Change Athlete Cutout
+                  </button>
+                  <input type="hidden" id="editHeroAthleteUrl">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Slide Headline <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="editHeroTitle" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Subtitle / Description</label>
+                  <textarea rows="2" class="form-control form-control-glass" id="editHeroSubtitle"></textarea>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">CTA Button Text</label>
+                  <input type="text" class="form-control form-control-glass" id="editHeroBtnText">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">CTA Button Link</label>
+                  <input type="text" class="form-control form-control-glass" id="editHeroBtnLink">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="editHeroOrder" min="1">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="updateHeroBtn">
+                  <i class="bi bi-check2-circle me-1"></i> Update Hero Banner
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: Add New Featured Deal Banner -->
+    <div class="modal fade" id="addFeaturedBannerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-star-fill text-warning me-2"></i>Add New Featured Deal Banner
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="newFeaturedBannerForm" onsubmit="submitNewFeaturedBanner(event)">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Featured Deal Banner Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="newFeatBgPreview" src="" alt="Banner Preview" class="d-none w-100 rounded-2" style="max-height: 160px; object-fit: cover;">
+                    <div id="newFeatBgPlaceholder" class="text-muted py-3">
+                      <i class="bi bi-cloud-arrow-up fs-2 text-warning d-block mb-1"></i>
+                      <span class="small fw-semibold">Click to upload featured deal banner image</span>
+                    </div>
+                    <input type="file" id="newFeatBgFile" accept="image/*" class="d-none" onchange="handleNewFeatBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-warning btn-sm w-100 text-dark fw-bold" onclick="document.getElementById('newFeatBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Choose Banner File
+                  </button>
+                  <input type="hidden" id="newFeatBgUrl" value="" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Title <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="newFeatTitle" placeholder="e.g. PRO TEAM STARTER KIT" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Description</label>
+                  <textarea rows="2" class="form-control form-control-glass" id="newFeatDesc" placeholder="e.g. Includes home & away custom jerseys..."></textarea>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Button Text</label>
+                  <input type="text" class="form-control form-control-glass" id="newFeatBtnText" value="GET PACKAGE QUOTE">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Button Link URL</label>
+                  <input type="text" class="form-control form-control-glass" id="newFeatBtnLink" value="placeorder.html">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="newFeatOrder" value="1" min="1">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="saveNewFeatBtn">
+                  <i class="bi bi-plus-circle me-1"></i> Add Featured Banner
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: Edit Existing Featured Deal Banner -->
+    <div class="modal fade" id="editFeaturedBannerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-pencil-square text-warning me-2"></i>Edit Featured Deal Banner #<span id="editFeatIdSpan"></span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="editFeaturedBannerForm" onsubmit="submitEditFeaturedBanner(event)">
+              <input type="hidden" id="editFeatId">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Featured Banner Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                    <img id="editFeatBgPreview" src="" alt="Banner Preview" class="w-100 rounded-2" style="max-height: 160px; object-fit: cover;">
+                    <input type="file" id="editFeatBgFile" accept="image/*" class="d-none" onchange="handleEditFeatBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-warning btn-sm w-100 text-dark fw-bold" onclick="document.getElementById('editFeatBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change Banner Image
+                  </button>
+                  <input type="hidden" id="editFeatBgUrl" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Title <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="editFeatTitle" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Description</label>
+                  <textarea rows="2" class="form-control form-control-glass" id="editFeatDesc"></textarea>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Button Text</label>
+                  <input type="text" class="form-control form-control-glass" id="editFeatBtnText">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Button Link URL</label>
+                  <input type="text" class="form-control form-control-glass" id="editFeatBtnLink">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="editFeatOrder" min="1">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="updateFeatBtn">
+                  <i class="bi bi-check2-circle me-1"></i> Update Featured Banner
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 5: Add New Deal Card -->
+    <div class="modal fade" id="addDealModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-plus-circle text-danger me-2"></i>Add New Deal Card
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="newDealForm" onsubmit="submitNewDeal(event)">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                    <img id="newDealImgPreview" src="" alt="Deal Preview" class="d-none" style="height: 120px; object-fit: contain;">
+                    <div id="newDealImgPlaceholder" class="text-muted py-3">
+                      <i class="bi bi-image fs-2 text-danger d-block mb-1"></i>
+                      <span class="small fw-semibold">Click to upload uniform image</span>
+                    </div>
+                    <input type="file" id="newDealImgFile" accept="image/*" class="d-none" onchange="handleNewDealImgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="document.getElementById('newDealImgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Choose Deal Image
+                  </button>
+                  <input type="hidden" id="newDealImgUrl" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Badge Text (e.g. 25% OFF, HOT DEAL) <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="newDealBadge" placeholder="e.g. 25% OFF" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="newDealOrder" value="1" min="1">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Card Title / Product Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="newDealTitle" placeholder="e.g. Chargers Deal Jersey" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Product Details Link</label>
+                  <input type="text" class="form-control form-control-glass" id="newDealLink" value="catalogue.html">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="saveNewDealBtn">
+                  <i class="bi bi-plus-circle me-1"></i> Add Deal Card
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 6: Edit Existing Deal Card -->
+    <div class="modal fade" id="editDealModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <div class="modal-header border-bottom py-3 px-4 bg-light">
+            <h5 class="modal-title fw-bold text-dark">
+              <i class="bi bi-pencil-square text-danger me-2"></i>Edit Deal Card #<span id="editDealIdSpan"></span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="editDealForm" onsubmit="submitEditDeal(event)">
+              <input type="hidden" id="editDealId">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Deal Image <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                    <img id="editDealImgPreview" src="" alt="Deal Preview" style="height: 120px; object-fit: contain;">
+                    <input type="file" id="editDealImgFile" accept="image/*" class="d-none" onchange="handleEditDealImgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="document.getElementById('editDealImgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change Deal Image
+                  </button>
+                  <input type="hidden" id="editDealImgUrl" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Badge Text (e.g. 25% OFF, HOT DEAL) <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="editDealBadge" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Display Order</label>
+                  <input type="number" class="form-control form-control-glass" id="editDealOrder" min="1">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Card Title / Product Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-glass" id="editDealTitle" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-dark mb-1">Product Details Link</label>
+                  <input type="text" class="form-control form-control-glass" id="editDealLink">
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-glass btn-glass-primary px-4 fw-bold" id="updateDealBtn">
+                  <i class="bi bi-check2-circle me-1"></i> Update Deal Card
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    let storefrontData = {
+      hero: [],
+      special: {},
+      featured_banners: [],
+      deals: []
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadStorefrontOffers();
+    });
+
+    async function loadStorefrontOffers() {
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers`);
+        if (res.ok) {
+          storefrontData = await res.json();
+          renderHeroSlides();
+          renderFeaturedBanners();
+          renderSpecialHeading();
+          renderDealCards();
+        }
+      } catch (err) {
+        console.error('Error loading storefront data:', err);
+      }
+    }
+
+    // ==========================================
+    // 1. HERO CAROUSEL BANNERS (Render, Add, Edit, Delete)
+    // ==========================================
+    function renderHeroSlides() {
+      const container = document.getElementById('heroSlidesContainer');
+      if (!container) return;
+
+      const slides = storefrontData.hero || [];
+      if (slides.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center py-5 text-muted">
+            <i class="bi bi-images fs-1 d-block mb-2 text-secondary"></i>
+            <h6 class="fw-bold">No hero banners created yet</h6>
+            <p class="small mb-3">Click "+ Add New Hero Banner" to create your first banner.</p>
+            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="openAddHeroBannerModal()">
+              <i class="bi bi-plus-lg me-1"></i> Add First Banner
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      slides.forEach((s, idx) => {
+        const bannerSrc = s.banner_image.startsWith('/') ? '..' + s.banner_image : s.banner_image;
+        const athleteSrc = s.athlete_image ? (s.athlete_image.startsWith('/') ? '..' + s.athlete_image : s.athlete_image) : '';
+
+        html += `
+          <div class="col-12 col-md-6 col-xl-4" id="bannerCard_${s.id}">
+            <div class="admin-card h-100 p-3 position-relative shadow-sm border bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary px-2 py-1"><i class="bi bi-images me-1"></i> Banner #${idx + 1}</span>
+                  <span class="badge bg-light text-dark border">Order ${s.slide_order || idx + 1}</span>
+                </div>
+                <div class="d-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2 py-1 fw-bold" onclick="openEditHeroBannerModal(${s.id})" title="Edit Banner">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 fw-bold" onclick="deleteBannerSlide(${s.id})" title="Delete Banner">
+                    <i class="bi bi-trash me-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+
+              <!-- Banner Preview Thumbnail -->
+              <div class="position-relative rounded-3 overflow-hidden mb-3 border bg-light text-center" style="height: 140px;">
+                <img src="${bannerSrc}" alt="${s.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                ${athleteSrc ? `<img src="${athleteSrc}" alt="Athlete" style="position: absolute; right: 10px; bottom: 0; max-height: 110px; object-fit: contain;">` : ''}
+              </div>
+
+              <h6 class="fw-bold text-dark mb-1 text-truncate" title="${s.title}">${s.title}</h6>
+              <p class="text-muted small mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 38px;">${s.subtitle || 'No subtitle provided'}</p>
+
+              <div class="d-flex justify-content-between align-items-center pt-2 border-top small">
+                <span class="badge bg-secondary text-truncate" style="max-width: 130px;">
+                  <i class="bi bi-hand-index-thumb me-1"></i>${s.btn_text || 'Shop'}
+                </span>
+                <span class="text-muted text-truncate" style="max-width: 140px;">
+                  <i class="bi bi-link-45deg"></i> ${s.btn_link || 'catalogue.html'}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function openAddHeroBannerModal() {
+      const form = document.getElementById('newHeroBannerForm');
+      if (form) form.reset();
+
+      document.getElementById('newBannerBgUrl').value = '';
+      document.getElementById('newBannerBgPreview').classList.add('d-none');
+      document.getElementById('newBannerBgPlaceholder').classList.remove('d-none');
+
+      document.getElementById('newBannerAthleteUrl').value = '';
+      document.getElementById('newBannerAthletePreview').classList.add('d-none');
+      document.getElementById('newBannerAthletePlaceholder').classList.remove('d-none');
+
+      const nextOrder = (storefrontData.hero || []).length + 1;
+      document.getElementById('newBannerOrder').value = nextOrder;
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('addHeroBannerModal')).show();
+    }
+
+    function openEditHeroBannerModal(id) {
+      const banner = (storefrontData.hero || []).find(s => s.id === id);
+      if (!banner) return;
+
+      document.getElementById('editHeroId').value = banner.id;
+      document.getElementById('editHeroIdSpan').textContent = banner.id;
+      document.getElementById('editHeroTitle').value = banner.title || '';
+      document.getElementById('editHeroSubtitle').value = banner.subtitle || '';
+      document.getElementById('editHeroBtnText').value = banner.btn_text || 'Shop The Collection';
+      document.getElementById('editHeroBtnLink').value = banner.btn_link || 'catalogue.html';
+      document.getElementById('editHeroOrder').value = banner.slide_order || 1;
+
+      // Background preview
+      document.getElementById('editHeroBgUrl').value = banner.banner_image || '';
+      const bannerSrc = banner.banner_image.startsWith('/') ? '..' + banner.banner_image : banner.banner_image;
+      document.getElementById('editHeroBgPreview').src = bannerSrc;
+
+      // Athlete preview
+      const athleteSrc = banner.athlete_image ? (banner.athlete_image.startsWith('/') ? '..' + banner.athlete_image : banner.athlete_image) : '';
+      document.getElementById('editHeroAthleteUrl').value = banner.athlete_image || '';
+      const athPreview = document.getElementById('editHeroAthletePreview');
+      const athPlaceholder = document.getElementById('editHeroAthletePlaceholder');
+      if (athleteSrc) {
+        athPreview.src = athleteSrc;
+        athPreview.classList.remove('d-none');
+        athPlaceholder.classList.add('d-none');
+      } else {
+        athPreview.classList.add('d-none');
+        athPlaceholder.classList.remove('d-none');
+      }
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('editHeroBannerModal')).show();
+    }
+
+    async function handleNewBannerBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('newBannerBgPreview');
+      const placeholder = document.getElementById('newBannerBgPlaceholder');
+      const hiddenUrl = document.getElementById('newBannerBgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading banner image...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Banner image uploaded!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Banner upload failed: ' + err.message);
+      }
+    }
+
+    async function handleNewBannerAthleteUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('newBannerAthletePreview');
+      const placeholder = document.getElementById('newBannerAthletePlaceholder');
+      const hiddenUrl = document.getElementById('newBannerAthleteUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading athlete cutout...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Athlete cutout uploaded!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Cutout upload failed: ' + err.message);
+      }
+    }
+
+    async function handleEditHeroBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('editHeroBgPreview');
+      const hiddenUrl = document.getElementById('editHeroBgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => { preview.src = e.target.result; };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading new banner image...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Banner image updated!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function handleEditHeroAthleteUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('editHeroAthletePreview');
+      const placeholder = document.getElementById('editHeroAthletePlaceholder');
+      const hiddenUrl = document.getElementById('editHeroAthleteUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading athlete cutout...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Athlete cutout updated!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Cutout upload failed: ' + err.message);
+      }
+    }
+
+    async function submitNewHeroBanner(event) {
+      event.preventDefault();
+
+      const banner_image = document.getElementById('newBannerBgUrl').value.trim();
+      if (!banner_image) {
+        alert('Please choose and upload a banner background image first.');
+        return;
+      }
+
+      const payload = {
+        title: document.getElementById('newBannerTitle').value.trim(),
+        subtitle: document.getElementById('newBannerSubtitle').value.trim(),
+        btn_text: document.getElementById('newBannerBtnText').value.trim() || 'Shop The Collection',
+        btn_link: document.getElementById('newBannerBtnLink').value.trim() || 'catalogue.html',
+        banner_image: banner_image,
+        athlete_image: document.getElementById('newBannerAthleteUrl').value.trim(),
+        slide_order: parseInt(document.getElementById('newBannerOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('saveNewBannerBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Adding...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/hero`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('New Hero Banner added successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('addHeroBannerModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to add banner: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error adding banner: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Add Hero Banner';
+      }
+    }
+
+    async function submitEditHeroBanner(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('editHeroId').value;
+      const banner_image = document.getElementById('editHeroBgUrl').value.trim();
+      if (!banner_image) {
+        alert('Banner background image is required.');
+        return;
+      }
+
+      const payload = {
+        title: document.getElementById('editHeroTitle').value.trim(),
+        subtitle: document.getElementById('editHeroSubtitle').value.trim(),
+        btn_text: document.getElementById('editHeroBtnText').value.trim(),
+        btn_link: document.getElementById('editHeroBtnLink').value.trim(),
+        banner_image: banner_image,
+        athlete_image: document.getElementById('editHeroAthleteUrl').value.trim(),
+        slide_order: parseInt(document.getElementById('editHeroOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('updateHeroBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/hero/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('Hero Banner updated successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('editHeroBannerModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to update banner: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error updating banner: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Hero Banner';
+      }
+    }
+
+    async function deleteBannerSlide(id) {
+      if (!confirm('Are you sure you want to delete this hero banner?')) return;
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/hero/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          AdminApp.showAdminToast('Banner deleted successfully!', 'bi-trash-fill text-danger');
+          await loadStorefrontOffers();
+        } else {
+          alert('Failed to delete banner');
+        }
+      } catch (err) {
+        alert('Error deleting banner: ' + err.message);
+      }
+    }
+
+    // ==========================================
+    // 2. FEATURED DEAL BANNERS & SPECIAL HEADING
+    // ==========================================
+    function renderSpecialHeading() {
+      const s = storefrontData.special || {};
+      const headingInput = document.getElementById('specialHeading');
+      const subheadingInput = document.getElementById('specialSubheading');
+      if (headingInput) headingInput.value = s.heading || 'SEASON SPECIAL OFFERS';
+      if (subheadingInput) subheadingInput.value = s.subheading || '';
+    }
+
+    function renderFeaturedBanners() {
+      const container = document.getElementById('featuredBannersContainer');
+      if (!container) return;
+
+      const banners = storefrontData.featured_banners || [];
+      if (banners.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center py-5 text-muted">
+            <i class="bi bi-star fs-1 d-block mb-2 text-warning"></i>
+            <h6 class="fw-bold">No featured deal banners added yet</h6>
+            <p class="small mb-3">Click "+ Add Featured Banner" to create a featured team package banner.</p>
+            <button type="button" class="btn btn-warning btn-sm rounded-pill px-3 text-dark fw-bold" onclick="openAddFeaturedBannerModal()">
+              <i class="bi bi-plus-lg me-1"></i> Add First Featured Banner
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      banners.forEach((b, idx) => {
+        const bannerSrc = b.banner_image.startsWith('/') ? '..' + b.banner_image : b.banner_image;
+
+        html += `
+          <div class="col-12 col-md-6" id="featBannerCard_${b.id}">
+            <div class="admin-card h-100 p-3 position-relative shadow-sm border bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-warning text-dark px-2 py-1 fw-bold"><i class="bi bi-star-fill me-1"></i> Featured #${idx + 1}</span>
+                  <span class="badge bg-light text-dark border">Order ${b.banner_order || idx + 1}</span>
+                </div>
+                <div class="d-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2 py-1 fw-bold" onclick="openEditFeaturedBannerModal(${b.id})" title="Edit Featured Banner">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 fw-bold" onclick="deleteFeaturedBanner(${b.id})" title="Delete Featured Banner">
+                    <i class="bi bi-trash me-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+
+              <!-- Banner Preview Thumbnail -->
+              <div class="rounded-3 overflow-hidden mb-3 border bg-light text-center" style="height: 140px;">
+                <img src="${bannerSrc}" alt="${b.title}" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+
+              <h6 class="fw-bold text-dark mb-1 text-truncate" title="${b.title}">${b.title}</h6>
+              <p class="text-muted small mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 38px;">${b.description || 'No package details'}</p>
+
+              <div class="d-flex justify-content-between align-items-center pt-2 border-top small">
+                <span class="badge bg-dark text-truncate" style="max-width: 140px;">
+                  <i class="bi bi-tag-fill me-1"></i>${b.btn_text || 'GET QUOTE'}
+                </span>
+                <span class="text-muted text-truncate" style="max-width: 140px;">
+                  <i class="bi bi-link-45deg"></i> ${b.btn_link || 'placeorder.html'}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function openAddFeaturedBannerModal() {
+      const form = document.getElementById('newFeaturedBannerForm');
+      if (form) form.reset();
+
+      document.getElementById('newFeatBgUrl').value = '';
+      document.getElementById('newFeatBgPreview').classList.add('d-none');
+      document.getElementById('newFeatBgPlaceholder').classList.remove('d-none');
+
+      const nextOrder = (storefrontData.featured_banners || []).length + 1;
+      document.getElementById('newFeatOrder').value = nextOrder;
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('addFeaturedBannerModal')).show();
+    }
+
+    function openEditFeaturedBannerModal(id) {
+      const banner = (storefrontData.featured_banners || []).find(b => b.id === id);
+      if (!banner) return;
+
+      document.getElementById('editFeatId').value = banner.id;
+      document.getElementById('editFeatIdSpan').textContent = banner.id;
+      document.getElementById('editFeatTitle').value = banner.title || '';
+      document.getElementById('editFeatDesc').value = banner.description || '';
+      document.getElementById('editFeatBtnText').value = banner.btn_text || 'GET PACKAGE QUOTE';
+      document.getElementById('editFeatBtnLink').value = banner.btn_link || 'placeorder.html';
+      document.getElementById('editFeatOrder').value = banner.banner_order || 1;
+
+      document.getElementById('editFeatBgUrl').value = banner.banner_image || '';
+      const bannerSrc = banner.banner_image.startsWith('/') ? '..' + banner.banner_image : banner.banner_image;
+      document.getElementById('editFeatBgPreview').src = bannerSrc;
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('editFeaturedBannerModal')).show();
+    }
+
+    async function handleNewFeatBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('newFeatBgPreview');
+      const placeholder = document.getElementById('newFeatBgPlaceholder');
+      const hiddenUrl = document.getElementById('newFeatBgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading featured banner...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Featured banner image uploaded!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function handleEditFeatBgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('editFeatBgPreview');
+      const hiddenUrl = document.getElementById('editFeatBgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => { preview.src = e.target.result; };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading updated banner...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Banner image updated!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function submitNewFeaturedBanner(event) {
+      event.preventDefault();
+
+      const banner_image = document.getElementById('newFeatBgUrl').value.trim();
+      if (!banner_image) {
+        alert('Please choose and upload a featured banner image first.');
+        return;
+      }
+
+      const payload = {
+        title: document.getElementById('newFeatTitle').value.trim(),
+        description: document.getElementById('newFeatDesc').value.trim(),
+        btn_text: document.getElementById('newFeatBtnText').value.trim() || 'GET PACKAGE QUOTE',
+        btn_link: document.getElementById('newFeatBtnLink').value.trim() || 'placeorder.html',
+        banner_image: banner_image,
+        banner_order: parseInt(document.getElementById('newFeatOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('saveNewFeatBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Adding...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/featured-banners`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('New Featured Banner added successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('addFeaturedBannerModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to add banner: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error adding banner: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Add Featured Banner';
+      }
+    }
+
+    async function submitEditFeaturedBanner(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('editFeatId').value;
+      const banner_image = document.getElementById('editFeatBgUrl').value.trim();
+      if (!banner_image) {
+        alert('Banner image is required.');
+        return;
+      }
+
+      const payload = {
+        title: document.getElementById('editFeatTitle').value.trim(),
+        description: document.getElementById('editFeatDesc').value.trim(),
+        btn_text: document.getElementById('editFeatBtnText').value.trim(),
+        btn_link: document.getElementById('editFeatBtnLink').value.trim(),
+        banner_image: banner_image,
+        banner_order: parseInt(document.getElementById('editFeatOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('updateFeatBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/featured-banners/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('Featured Banner updated successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('editFeaturedBannerModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to update banner: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error updating banner: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Featured Banner';
+      }
+    }
+
+    async function deleteFeaturedBanner(id) {
+      if (!confirm('Are you sure you want to delete this featured banner?')) return;
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/featured-banners/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          AdminApp.showAdminToast('Featured banner deleted successfully!', 'bi-trash-fill text-danger');
+          await loadStorefrontOffers();
+        } else {
+          alert('Failed to delete banner');
+        }
+      } catch (err) {
+        alert('Error deleting banner: ' + err.message);
+      }
+    }
+
+    async function saveSpecialHeadingOnly() {
+      const payload = {
+        heading: document.getElementById('specialHeading').value.trim(),
+        subheading: document.getElementById('specialSubheading').value.trim()
+      };
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/special`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          AdminApp.showAdminToast('Special Offers header updated!', 'bi-check-circle-fill text-success');
+        } else {
+          alert('Save failed');
+        }
+      } catch (err) {
+        alert('Error saving header: ' + err.message);
+      }
+    }
+
+    // ==========================================
+    // 3. THE DEAL CARDS (Render, Add, Edit, Delete)
+    // ==========================================
+    function renderDealCards() {
+      const container = document.getElementById('dealCardsContainer');
+      if (!container) return;
+
+      const deals = storefrontData.deals || [];
+      if (deals.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center py-5 text-muted">
+            <i class="bi bi-percent fs-1 d-block mb-2 text-danger"></i>
+            <h6 class="fw-bold">No deal cards found</h6>
+            <p class="small mb-3">Click "+ Add New Deal Card" to create a deal item.</p>
+            <button type="button" class="btn btn-danger btn-sm rounded-pill px-3" onclick="openAddDealModal()">
+              <i class="bi bi-plus-lg me-1"></i> Add First Deal Card
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      deals.forEach((d, idx) => {
+        const imgSrc = d.image.startsWith('/') ? '..' + d.image : d.image;
+        html += `
+          <div class="col-12 col-md-6 col-xl-4" id="dealCard_${d.id}">
+            <div class="admin-card h-100 p-3 position-relative shadow-sm border bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-danger px-2 py-1 fw-bold fs-6">${d.badge}</span>
+                <div class="d-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2 py-1 fw-bold" onclick="openEditDealModal(${d.id})" title="Edit Deal">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 fw-bold" onclick="deleteDealCard(${d.id})" title="Delete Deal">
+                    <i class="bi bi-trash me-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+
+              <!-- Deal Image Preview -->
+              <div class="text-center p-3 bg-light rounded-3 border mb-3 position-relative" style="height: 140px; display: flex; align-items: center; justify-content: center;">
+                <img src="${imgSrc}" alt="${d.title}" style="max-height: 120px; max-width: 100%; object-fit: contain;">
+              </div>
+
+              <h6 class="fw-bold text-dark mb-1 text-truncate" title="${d.title}">${d.title}</h6>
+              <div class="d-flex justify-content-between align-items-center pt-2 border-top small text-muted">
+                <span>Order ${d.card_order || idx + 1}</span>
+                <span class="text-truncate" style="max-width: 150px;"><i class="bi bi-link-45deg"></i> ${d.link_url || 'catalogue.html'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function openAddDealModal() {
+      const form = document.getElementById('newDealForm');
+      if (form) form.reset();
+
+      document.getElementById('newDealImgUrl').value = '';
+      document.getElementById('newDealImgPreview').classList.add('d-none');
+      document.getElementById('newDealImgPlaceholder').classList.remove('d-none');
+
+      const nextOrder = (storefrontData.deals || []).length + 1;
+      document.getElementById('newDealOrder').value = nextOrder;
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('addDealModal')).show();
+    }
+
+    function openEditDealModal(id) {
+      const deal = (storefrontData.deals || []).find(d => d.id === id);
+      if (!deal) return;
+
+      document.getElementById('editDealId').value = deal.id;
+      document.getElementById('editDealIdSpan').textContent = deal.id;
+      document.getElementById('editDealBadge').value = deal.badge || '';
+      document.getElementById('editDealTitle').value = deal.title || '';
+      document.getElementById('editDealLink').value = deal.link_url || '';
+      document.getElementById('editDealOrder').value = deal.card_order || 1;
+
+      document.getElementById('editDealImgUrl').value = deal.image || '';
+      const imgSrc = deal.image.startsWith('/') ? '..' + deal.image : deal.image;
+      document.getElementById('editDealImgPreview').src = imgSrc;
+
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('editDealModal')).show();
+    }
+
+    async function handleNewDealImgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('newDealImgPreview');
+      const placeholder = document.getElementById('newDealImgPlaceholder');
+      const hiddenUrl = document.getElementById('newDealImgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading deal image...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Deal image uploaded!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function handleEditDealImgUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('editDealImgPreview');
+      const hiddenUrl = document.getElementById('editDealImgUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => { preview.src = e.target.result; };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading updated image...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('Image updated!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function submitNewDeal(event) {
+      event.preventDefault();
+
+      const image = document.getElementById('newDealImgUrl').value.trim();
+      if (!image) {
+        alert('Please choose and upload a deal image first.');
+        return;
+      }
+
+      const payload = {
+        badge: document.getElementById('newDealBadge').value.trim(),
+        title: document.getElementById('newDealTitle').value.trim(),
+        link_url: document.getElementById('newDealLink').value.trim() || 'catalogue.html',
+        image: image,
+        card_order: parseInt(document.getElementById('newDealOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('saveNewDealBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Adding...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/deals`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('New Deal Card added successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('addDealModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to add deal: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error adding deal: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Add Deal Card';
+      }
+    }
+
+    async function submitEditDeal(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('editDealId').value;
+      const image = document.getElementById('editDealImgUrl').value.trim();
+      if (!image) {
+        alert('Image is required.');
+        return;
+      }
+
+      const payload = {
+        badge: document.getElementById('editDealBadge').value.trim(),
+        title: document.getElementById('editDealTitle').value.trim(),
+        link_url: document.getElementById('editDealLink').value.trim(),
+        image: image,
+        card_order: parseInt(document.getElementById('editDealOrder').value, 10) || 1
+      };
+
+      const saveBtn = document.getElementById('updateDealBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/deals/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          AdminApp.showAdminToast('Deal Card updated successfully!', 'bi-check-circle-fill text-success');
+          bootstrap.Modal.getInstance(document.getElementById('editDealModal'))?.hide();
+          await loadStorefrontOffers();
+        } else {
+          const err = await res.json();
+          alert('Failed to update deal: ' + (err.error || 'Server error'));
+        }
+      } catch (err) {
+        alert('Error updating deal: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Deal Card';
+      }
+    }
+
+    async function deleteDealCard(id) {
+      if (!confirm('Are you sure you want to delete this deal card?')) return;
+
+      try {
+        const res = await fetch(`${AdminApp.API_BASE}/offers/deals/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          AdminApp.showAdminToast('Deal Card deleted successfully!', 'bi-trash-fill text-danger');
+          await loadStorefrontOffers();
+        } else {
+          alert('Failed to delete deal');
+        }
+      } catch (err) {
+        alert('Error deleting deal: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
