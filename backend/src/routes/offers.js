@@ -12,10 +12,10 @@ router.get('/', async (req, res) => {
       const dealsRes = await db.query('SELECT * FROM storefront_deal_cards WHERE is_active = true ORDER BY card_order ASC, id ASC');
 
       return res.json({
-        hero: heroRes.rows || db.fallbackStore.hero_slides,
+        hero: heroRes.rows || [],
         special: (offersRes.rows && offersRes.rows[0]) || db.fallbackStore.special_offers,
-        featured_banners: (featRes.rows && featRes.rows.length > 0) ? featRes.rows : db.fallbackStore.featured_banners,
-        deals: dealsRes.rows || db.fallbackStore.deal_cards
+        featured_banners: featRes.rows || [],
+        deals: dealsRes.rows || []
       });
     }
   } catch (err) {

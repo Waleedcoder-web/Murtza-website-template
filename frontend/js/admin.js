@@ -9,57 +9,12 @@ const AdminApp = {
   // Fallback initial data if server is started standalone
   mockData: {
     stats: {
-      totalProducts: 12,
-      activeCategories: 6,
-      totalInquiries: 4,
+      totalProducts: 0,
+      activeCategories: 5,
+      totalInquiries: 0,
       systemHealth: '100% Operational'
     },
-    inquiries: [
-      {
-        id: 1,
-        type: 'Contact Form',
-        name: 'Coach Sarah Jenkins',
-        email: 'sarah@velocity.com',
-        phone: '+1 (555) 882-1928',
-        sport: '7v7 Football',
-        subject: 'Bulk Re-order for Regional Tournament (35 sets)',
-        date: 'Today, 10:42 AM',
-        status: 'new'
-      },
-      {
-        id: 2,
-        type: 'Website Request',
-        name: 'David Ramirez',
-        email: 'david@westcoast.org',
-        phone: '+1 (555) 291-0492',
-        sport: 'Baseball',
-        subject: 'Dedicated Team Fan Store & Custom Roster Portal',
-        date: 'Yesterday, 3:15 PM',
-        status: 'new'
-      },
-      {
-        id: 3,
-        type: 'Quote Request',
-        name: 'Coach Marcus Clark',
-        email: 'marcus@raptors.com',
-        phone: '+1 (555) 431-8910',
-        sport: '7v7 Football',
-        subject: 'Sublimated Compression Shirts & Shorts Bundle',
-        date: 'Sep 28, 2026',
-        status: 'replied'
-      },
-      {
-        id: 4,
-        type: 'General Inquiry',
-        name: 'Elena Rostova',
-        email: 'elena@vanceathletics.org',
-        phone: '+1 (555) 762-3490',
-        sport: 'Track & Field',
-        subject: 'Custom Warm-Up Tracksuits with Sponsor Logos',
-        date: 'Sep 26, 2026',
-        status: 'replied'
-      }
-    ],
+    inquiries: [],
     products: []
   },
 
@@ -80,7 +35,7 @@ const AdminApp = {
       const res = await fetch(`${this.API_BASE}/contact`);
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) return data;
+        if (Array.isArray(data)) return data;
       }
     } catch (e) {
       console.warn('API error fetching inquiries', e);
@@ -93,10 +48,10 @@ const AdminApp = {
       const res = await fetch(`${this.API_BASE}/products`);
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           // Normalize image path: keep root-relative for HTTP, prefix .. only for local file://
           return data.map(p => {
-            let img = p.image || '/assets/images/sample-jersey-1.png';
+            let img = p.image || '';
             if (window.location.protocol === 'file:' && img.startsWith('/')) {
               img = '..' + img;
             }
@@ -107,7 +62,7 @@ const AdminApp = {
     } catch (e) {
       console.warn('API error fetching products', e);
     }
-    return this.mockData.products;
+    return [];
   },
 
   async createProduct(productData) {

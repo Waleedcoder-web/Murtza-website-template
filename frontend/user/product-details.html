@@ -95,20 +95,14 @@
       <div class="row g-5">
         <!-- Gallery Col -->
         <div class="col-lg-6">
-          <div class="p-4 bg-light rounded-4 text-center border mb-3">
-            <img id="mainProductImg" src="../assets/images/sample-jersey-1.png" alt="Jersey Design" style="max-height: 480px; width: auto; margin: 0 auto; object-fit: contain;">
-          </div>
-          <div class="d-flex gap-3 justify-content-center">
-            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-1.png'">
-              <img src="../assets/images/sample-jersey-1.png" style="width: 70px; height: 70px; object-fit: contain;">
-            </div>
-            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-2.png'">
-              <img src="../assets/images/sample-jersey-2.png" style="width: 70px; height: 70px; object-fit: contain;">
-            </div>
-            <div class="p-2 border rounded-3 bg-white cursor-pointer" onclick="document.getElementById('mainProductImg').src='assets/images/sample-jersey-3.png'">
-              <img src="../assets/images/sample-jersey-3.png" style="width: 70px; height: 70px; object-fit: contain;">
+          <div class="p-4 bg-light rounded-4 text-center border mb-3 d-flex align-items-center justify-content-center" style="min-height: 380px;">
+            <img id="mainProductImg" src="" alt="Product Design" style="max-height: 480px; width: auto; margin: 0 auto; object-fit: contain; display: none;">
+            <div id="noProductImgPlaceholder" class="text-muted p-5">
+              <i class="bi bi-image fs-1 d-block mb-2 text-secondary"></i>
+              <span>Loading product design...</span>
             </div>
           </div>
+          <div id="productThumbnailsRow" class="d-flex gap-3 justify-content-center"></div>
         </div>
 
         <!-- Details Info Col -->
@@ -285,12 +279,25 @@
               if (document.getElementById('detailPrice')) {
                 document.getElementById('detailPrice').textContent = `$${Number(product.price).toFixed(2)}`;
               }
-              let img = product.image || '/assets/images/sample-jersey-1.png';
+              let img = product.image || '';
               if (window.location.protocol === 'file:' && img.startsWith('/')) {
                 img = '..' + img;
               }
-              if (document.getElementById('mainProductImg')) {
-                document.getElementById('mainProductImg').src = img;
+              const mainImgEl = document.getElementById('mainProductImg');
+              const placeholderEl = document.getElementById('noProductImgPlaceholder');
+              if (img && mainImgEl) {
+                mainImgEl.src = img;
+                mainImgEl.style.display = 'block';
+                if (placeholderEl) placeholderEl.style.display = 'none';
+
+                const thumbRow = document.getElementById('productThumbnailsRow');
+                if (thumbRow) {
+                  thumbRow.innerHTML = `
+                    <div class="p-2 border rounded-3 bg-white cursor-pointer active border-dark">
+                      <img src="${img}" style="width: 70px; height: 70px; object-fit: contain;">
+                    </div>
+                  `;
+                }
               }
               const customizeLink = document.querySelector('a[href*="customizer.html"]');
               if (customizeLink) customizeLink.href = `customizer.html?id=${product.id}`;

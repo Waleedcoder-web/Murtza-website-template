@@ -71,60 +71,20 @@
 
   <!-- Hero Carousel -->
   <section class="hero-carousel">
-    <!-- Slide 1 -->
-    <div class="hero-slide active" style="background-image: url('assets/images/hero-banner-1.jpg');">
+    <!-- Default Clean Hero Banner -->
+    <div class="hero-slide active" style="background: linear-gradient(135deg, #0b0f19 0%, #172138 50%, #0d1322 100%);">
       <div class="hero-overlay">
         <div class="full-container">
           <div class="hero-grid">
             <div class="hero-content">
-              <h1 class="hero-title">Play Big. Dream Bigger. All Sports Here.</h1>
-              <p class="hero-subtitle">High-performance custom team jerseys, athletic wear & premium sports gear built to win.</p>
+              <h1 class="hero-title">Custom Team Uniforms & Apparel</h1>
+              <p class="hero-subtitle">High-performance athletic gear built for champions. Upload custom banners anytime from the Admin Panel.</p>
               <div>
                 <a href="catalogue.html" class="btn-hero">Shop The Collection</a>
               </div>
             </div>
             <div class="hero-athlete-wrap">
-              <img src="assets/images/hero-athlete-1.png" alt="Featured Athlete" class="hero-athlete-img">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="hero-slide" style="background-image: url('assets/images/hero-banner-2.jpg');">
-      <div class="hero-overlay">
-        <div class="full-container">
-          <div class="hero-grid">
-            <div class="hero-content">
-              <h1 class="hero-title">All Sports. One Ultimate Arena.</h1>
-              <p class="hero-subtitle">Elevate your team with sublimated fabrics, precision stitching, and custom roster customization.</p>
-              <div>
-                <a href="customizer.html" class="btn-hero">Start Customizer</a>
-              </div>
-            </div>
-            <div class="hero-athlete-wrap">
-              <img src="assets/images/hero-athlete-2.png" alt="Featured Athlete" class="hero-athlete-img">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 3 -->
-    <div class="hero-slide" style="background-image: url('assets/images/hero-banner-3.jpg');">
-      <div class="hero-overlay">
-        <div class="full-container">
-          <div class="hero-grid">
-            <div class="hero-content">
-              <h1 class="hero-title">Live The Game. Love Every Sport.</h1>
-              <p class="hero-subtitle">Trusted by thousands of schools, clubs, and competitive leagues worldwide.</p>
-              <div>
-                <a href="placeorder.html" class="btn-hero">Request Team Quote</a>
-              </div>
-            </div>
-            <div class="hero-athlete-wrap">
-              <img src="assets/images/hero-athlete-3.png" alt="Featured Athlete" class="hero-athlete-img">
+              <!-- Uploaded athlete images will render dynamically -->
             </div>
           </div>
         </div>
@@ -132,16 +92,14 @@
     </div>
 
     <!-- Controls -->
-    <div class="hero-controls">
+    <div class="hero-controls" style="display: none;">
       <button class="hero-ctrl-btn" id="heroPrevBtn"><i class="bi bi-chevron-left"></i></button>
       <button class="hero-ctrl-btn" id="heroNextBtn"><i class="bi bi-chevron-right"></i></button>
     </div>
 
     <!-- Dots -->
-    <div class="hero-dots">
+    <div class="hero-dots" style="display: none;">
       <button class="hero-dot active"></button>
-      <button class="hero-dot"></button>
-      <button class="hero-dot"></button>
     </div>
   </section>
 
@@ -202,57 +160,21 @@
       </div>
 
       <div class="deals-grid">
-        <div class="deal-main-banner">
-          <img id="featuredDealImg" src="assets/images/hero-banner-2.jpg" alt="Featured Team Deal">
+        <div class="deal-main-banner position-relative overflow-hidden rounded-3" style="background: linear-gradient(135deg, #1c2638 0%, #111827 100%); min-height: 380px;">
+          <img id="featuredDealImg" src="" alt="Featured Team Deal" style="display: none; width: 100%; height: 100%; object-fit: cover;">
           <div class="p-4 position-absolute bottom-0 text-white bg-dark bg-opacity-75 w-100">
-            <h3 id="featuredDealTitle" class="fw-bold fs-2 mb-1">PRO TEAM STARTER KIT</h3>
-            <p id="featuredDealDesc" class="mb-2">Includes home & away custom jerseys, team hoodies, and matching shorts.</p>
+            <h3 id="featuredDealTitle" class="fw-bold fs-2 mb-1">PRO TEAM PACKAGES</h3>
+            <p id="featuredDealDesc" class="mb-2">Upload featured package banners from the Admin Panel to display here.</p>
             <a id="featuredDealBtn" href="placeorder.html" class="btn btn-light btn-sm fw-bold px-3 rounded-pill">GET PACKAGE QUOTE</a>
           </div>
         </div>
 
         <div class="deals-sub-grid" id="dealsSubGrid">
-          <div class="deal-card">
-            <span class="deal-badge">25% OFF</span>
-            <img src="assets/images/sample-jersey-1.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=287" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
-          </div>
-          <div class="deal-card">
-            <span class="deal-badge">HOT DEAL</span>
-            <img src="assets/images/sample-jersey-2.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=288" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
-          </div>
-          <div class="deal-card">
-            <span class="deal-badge">30% OFF</span>
-            <img src="assets/images/sample-jersey-3.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=289" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
-          </div>
-          <div class="deal-card">
-            <span class="deal-badge">POPULAR</span>
-            <img src="assets/images/sample-jersey-5.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=291" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
-          </div>
-          <div class="deal-card">
-            <span class="deal-badge">SAVE $20</span>
-            <img src="assets/images/sample-jersey-6.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=296" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
-          </div>
-          <div class="deal-card">
-            <span class="deal-badge">BEST SELLER</span>
-            <img src="assets/images/sample-jersey-7.png" alt="Deal Jersey">
-            <div class="deal-overlay-btn">
-              <a href="product-details.html?id=297" class="btn btn-light btn-sm fw-bold rounded-pill">View Deal</a>
-            </div>
+          <div class="col-12 text-center py-5 text-muted d-flex flex-column align-items-center justify-content-center h-100 bg-light rounded-3 p-4">
+            <i class="bi bi-tag fs-1 text-secondary mb-2"></i>
+            <h6 class="fw-bold text-dark">No Deal Cards Added Yet</h6>
+            <p class="small text-muted mb-3">Upload your deal cards & discounts in the Admin Panel to feature them here.</p>
+            <a href="admin/offers.html" class="btn btn-dark btn-sm rounded-pill px-3">Add Deals in Admin</a>
           </div>
         </div>
       </div>
@@ -286,172 +208,12 @@
 
         <!-- Single Continuous Row Carousel Track -->
         <div class="products-carousel-track" id="trendingProductsTrack">
-          <!-- Card 0 (Peeking on left) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_288.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=288" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 1 (Bengals 23 - Matches Screenshot) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_290.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=290" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 2 (Team Name 2 Yellow - Matches Screenshot) -->
-          <div class="product-card" data-category="new">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_291.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=291" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 3 (Team Name 23 Teal/Cyan - Matches Screenshot) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_292.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=292" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 4 (Team Name 23 Green - Matches Screenshot) -->
-          <div class="product-card" data-category="new">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_293.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=293" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 5 (Team Name 23 Black/Grey Diamond - Peeking on right) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_294.png" alt="Football Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">FOOTBALL JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=294" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 6 (Chargers Jersey) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_287.png" alt="Chargers Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">CHARGERS JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=287" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 7 (Wolfpack Jersey) -->
-          <div class="product-card" data-category="new">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_289.png" alt="Wolfpack Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">WOLFPACK JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=289" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 8 (Patriots Jersey) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_296.png" alt="Patriots Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">PATRIOTS JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=296" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 9 (Hawks Jersey) -->
-          <div class="product-card" data-category="new">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_297.png" alt="Hawks Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">HAWKS JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=297" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 10 (Army Jersey) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_298.png" alt="Army Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">ARMY JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=298" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 11 (Vikings Jersey) -->
-          <div class="product-card" data-category="new">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_299.png" alt="Vikings Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">VIKINGS JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=299" class="btn-customize-full">Customize</a>
-            </div>
-          </div>
-
-          <!-- Card 12 (Ohio Jersey) -->
-          <div class="product-card" data-category="bestsellers">
-            <div class="product-card-inner">
-              <div class="product-img-wrap">
-                <img src="assets/images/thumbnail_302.png" alt="Ohio Jersey Designs" class="product-img">
-              </div>
-              <div class="product-info-row">
-                <span class="product-name">OHIO JERSEY DESIGNS</span>
-                </div>
-              <a href="user/customizer.html?id=302" class="btn-customize-full">Customize</a>
+          <div class="col-12 text-center py-5 w-100">
+            <div class="p-4 text-center">
+              <i class="bi bi-box-seam fs-1 text-muted d-block mb-3"></i>
+              <h5 class="fw-bold text-dark">No Trending Products Uploaded Yet</h5>
+              <p class="text-muted">Products published from the Admin Panel will appear here automatically.</p>
+              <a href="admin/products.html" class="btn btn-dark btn-sm rounded-pill px-4">Upload Products in Admin</a>
             </div>
           </div>
         </div>
@@ -695,7 +457,7 @@
     const USER_API_BASE = (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') ? 'http://localhost:5000/api' : '/api';
 
     function resolveAssetUrl(url) {
-      if (!url) return 'assets/images/sample-jersey-1.png';
+      if (!url) return '';
       if (window.location.protocol === 'file:') {
         return url.startsWith('/') ? ('.' + url) : url;
       }
@@ -843,12 +605,14 @@
       const controlsEl = carouselEl.querySelector('.hero-controls');
       if (controlsEl) {
         controlsEl.insertAdjacentHTML('beforebegin', slidesHtml);
+        controlsEl.style.display = heroList.length > 1 ? 'flex' : 'none';
       }
 
       // Update dots
       const dotsContainer = carouselEl.querySelector('.hero-dots');
       if (dotsContainer) {
         dotsContainer.innerHTML = dotsHtml;
+        dotsContainer.style.display = heroList.length > 1 ? 'flex' : 'none';
       }
 
       // Bind interactive controls

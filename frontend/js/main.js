@@ -325,16 +325,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('siteSearchInput');
   const searchResults = document.getElementById('searchResultsContainer');
 
-  const searchableProducts = [
-    { id: 287, name: 'Chargers Jersey Designs', price: 120, image: 'assets/images/sample-jersey-1.png' },
-    { id: 288, name: 'Football Jersey Designs', price: 120, image: 'assets/images/sample-jersey-2.png' },
-    { id: 289, name: 'Wolfpack Jersey Designs', price: 120, image: 'assets/images/sample-jersey-3.png' },
-    { id: 290, name: 'Patriots Jersey Designs', price: 120, image: 'assets/images/sample-jersey-4.png' },
-    { id: 291, name: 'Hawks Jersey Designs', price: 120, image: 'assets/images/sample-jersey-5.png' },
-    { id: 296, name: 'Army Jersey Designs', price: 120, image: 'assets/images/sample-jersey-6.png' },
-    { id: 297, name: 'Vikings Jersey Designs', price: 120, image: 'assets/images/sample-jersey-7.png' },
-    { id: 299, name: 'Bears Jersey Designs', price: 120, image: 'assets/images/sample-jersey-8.png' }
-  ];
+  let searchableProducts = [];
+  fetch('/api/products')
+    .then(r => r.ok ? r.json() : [])
+    .then(data => { if (Array.isArray(data)) searchableProducts = data; })
+    .catch(() => {});
 
   searchTriggers.forEach(btn => {
     btn.addEventListener('click', (e) => {
