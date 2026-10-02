@@ -88,6 +88,18 @@
         </div>
       </div>
 
+      <!-- Live Database Connection Banner -->
+      <div id="dbConnectionStatusBanner" class="alert d-flex align-items-center justify-content-between p-3 mb-4 rounded-3 border-0 shadow-sm" style="display: none !important; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);">
+        <div class="d-flex align-items-center gap-3">
+          <div id="dbStatusDot" style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div>
+          <div>
+            <div class="fw-bold text-dark small" id="dbStatusTitle">Checking Database Connection...</div>
+            <div class="text-muted" style="font-size: 0.78rem;" id="dbStatusDesc">Connecting to PostgreSQL / Neon...</div>
+          </div>
+        </div>
+        <span class="badge px-3 py-2 rounded-pill fw-bold" id="dbProviderBadge">PostgreSQL</span>
+      </div>
+
       <!-- Frosted Stat Cards Row -->
       <div class="row g-4 mb-4">
         <div class="col-12 col-sm-6 col-xl-3 animate-fade-in-up delay-1">
@@ -204,6 +216,35 @@
   <script src="../js/admin.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // 0. Live Health & Database Connectivity Check
+      try {
+        const health = await AdminApp.checkHealth();
+        const banner = document.getElementById('dbConnectionStatusBanner');
+        const dot = document.getElementById('dbStatusDot');
+        const title = document.getElementById('dbStatusTitle');
+        const desc = document.getElementById('dbStatusDesc');
+        const badge = document.getElementById('dbProviderBadge');
+
+        if (health && banner) {
+          banner.style.removeProperty('display');
+          if (health.database_connected) {
+            dot.style.background = '#10b981';
+            title.textContent = `Connected to ${health.provider}`;
+            desc.textContent = 'Tables verified & live database synchronization operational.';
+            badge.className = 'badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold border border-success-subtle';
+            badge.textContent = health.provider;
+          } else {
+            dot.style.background = '#ef4444';
+            title.textContent = 'PostgreSQL / Neon Disconnected';
+            desc.textContent = health.last_error ? `Notice: ${health.last_error}` : 'Running with local memory fallback.';
+            badge.className = 'badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold border border-danger-subtle';
+            badge.textContent = 'Fallback Mode';
+          }
+        }
+      } catch (e) {
+        console.warn('Could not run DB health check', e);
+      }
+
       // 1. Fetch & render KPIs
       const stats = await AdminApp.fetchStats();
       if (stats) {

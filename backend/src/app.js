@@ -14,6 +14,7 @@ const ordersRoute = require('./routes/orders');
 const artworkRoute = require('./routes/artwork');
 const contactRoute = require('./routes/contact');
 const statsRoute = require('./routes/stats');
+const db = require('./config/db');
 
 const app = express();
 
@@ -24,6 +25,32 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+// Middleware to ensure DB connection & schema are initialized on any API request
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') && !db.getIsConnected()) {
+    try {
+      await db.initDB();
+    } catch (e) {
+      console.warn('DB init middleware notice:', e.message);
+    }
+  }
+  next();
+});
+
+// Diagnostic / Health Endpoint
+app.use('/api/health', (req, res) => {
+  const isConn = db.getIsConnected();
+  const connStr = process.env.DATABASE_URL || process.env.POSTGRES_URL || '';
+  const isNeon = connStr.includes('neon.tech');
+  res.json({
+    status: 'ok',
+    database_connected: isConn,
+    provider: isNeon ? 'Neon PostgreSQL' : (connStr ? 'Remote PostgreSQL' : 'Local PostgreSQL / Fallback'),
+    last_error: db.getLastError(),
+    timestamp: new Date().toISOString()
+  });
+});
 
 // REST API Endpoints
 app.use('/api/products', productsRoute);

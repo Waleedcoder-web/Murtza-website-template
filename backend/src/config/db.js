@@ -5,20 +5,27 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-const poolConfig = connectionString
-  ? {
-      connectionString,
-      ssl: connectionString.includes('localhost') ? false : { rejectUnauthorized: false },
-      connectionTimeoutMillis: 5000
-    }
-  : {
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT, 10) || 5432,
-      database: process.env.DB_NAME || 'prosix_db',
-      user: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || '1234',
-      connectionTimeoutMillis: 3000
-    };
+
+let poolConfig;
+if (connectionString) {
+  const isLocalHost = connectionString.includes('localhost') || connectionString.includes('127.0.0.1');
+  poolConfig = {
+    connectionString,
+    ssl: isLocalHost ? false : { rejectUnauthorized: false },
+    connectionTimeoutMillis: 10000,
+    idleTimeoutMillis: 30000,
+    max: 10
+  };
+} else {
+  poolConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    database: process.env.DB_NAME || 'prosix_db',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || '1234',
+    connectionTimeoutMillis: 4000
+  };
+}
 
 const pool = new Pool(poolConfig);
 
@@ -191,14 +198,16 @@ ON CONFLICT (username) DO NOTHING;
 
 let isConnected = false;
 let initPromise = null;
+let lastConnectionError = null;
 
 async function initDB() {
-  if (initPromise) return initPromise;
+  if (initPromise && isConnected) return initPromise;
 
   initPromise = (async () => {
     try {
       const client = await pool.connect();
       isConnected = true;
+      lastConnectionError = null;
       console.log('✅ PostgreSQL connected to database successfully.');
 
       // Automatically create all tables and indexes if not created yet (Neon / Cloud / Local)
@@ -208,8 +217,10 @@ async function initDB() {
       client.release();
     } catch (err) {
       isConnected = false;
+      lastConnectionError = err.message;
       console.warn(`⚠️ PostgreSQL connection notice: ${err.message}`);
       console.warn('ℹ️ Running backend with local memory persistence fallback.');
+      initPromise = null; // Allow retry on subsequent calls
     }
   })();
 
@@ -218,8 +229,8 @@ async function initDB() {
 
 // Unified Query Helper (auto-ensures init before query)
 async function query(text, params) {
-  if (initPromise) {
-    await initPromise.catch(() => {});
+  if (!isConnected) {
+    await initDB().catch(() => {});
   }
   if (isConnected) {
     return pool.query(text, params);
@@ -233,5 +244,6 @@ module.exports = {
   query,
   fallbackStore,
   getIsConnected: () => isConnected,
+  getLastError: () => lastConnectionError,
   SCHEMA_SQL
 };

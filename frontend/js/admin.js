@@ -40,6 +40,18 @@ const AdminApp = {
     products: []
   },
 
+  async checkHealth() {
+    try {
+      const res = await fetch(`${this.API_BASE}/health`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn('Health check not reachable', e);
+    }
+    return null;
+  },
+
   async fetchStats() {
     try {
       const res = await fetch(`${this.API_BASE}/stats`);
