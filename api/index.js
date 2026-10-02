@@ -3,15 +3,12 @@ const db = require('../backend/src/config/db');
 
 let isDbInitialized = false;
 
-// Middleware to ensure DB connection is initialized once
+// Middleware to ensure Neon / PostgreSQL connection & tables are created automatically
 app.use(async (req, res, next) => {
-  if (!isDbInitialized) {
-    try {
-      await db.initDB();
-      isDbInitialized = true;
-    } catch (err) {
-      console.warn('DB initialization notice:', err.message);
-    }
+  try {
+    await db.initDB();
+  } catch (err) {
+    console.warn('DB initialization notice:', err.message);
   }
   next();
 });

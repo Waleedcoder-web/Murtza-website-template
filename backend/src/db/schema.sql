@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS storefront_deal_cards (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Indexes for performance
+-- Performance Indexes
 CREATE INDEX IF NOT EXISTS idx_products_sport ON products(sport);
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status);
@@ -120,4 +120,22 @@ CREATE INDEX IF NOT EXISTS idx_inquiries_type ON inquiries(type);
 CREATE INDEX IF NOT EXISTS idx_categories_name ON categories(name);
 CREATE INDEX IF NOT EXISTS idx_deal_cards_order ON storefront_deal_cards(card_order);
 CREATE INDEX IF NOT EXISTS idx_hero_order ON storefront_hero(slide_order);
+
+-- Initial Base Records (Safe on conflict)
+INSERT INTO storefront_offers (id, heading, subheading, featured_title, featured_desc, featured_btn_text, featured_btn_link, featured_image)
+VALUES (1, 'SEASON SPECIAL OFFERS', 'Save up to 40% on select bulk team packages and seasonal uniform designs', '', '', 'GET PACKAGE QUOTE', 'placeorder.html', '')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO categories (name, slug, description)
+VALUES 
+  ('Best Sellers', 'best-sellers', 'Top performing uniform sets'),
+  ('New Arrivals', 'new-arrivals', 'Latest uniform releases'),
+  ('Compression Wear', 'compression-wear', 'High-flex compression shirts & tights'),
+  ('Team Uniforms', 'team-uniforms', 'Custom team kits & practice uniforms'),
+  ('Outerwear & Warmups', 'outerwear-warmups', 'Sideline jackets, hoodies & tracksuits')
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO admin_users (username, email, password_hash, role)
+VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
+ON CONFLICT (username) DO NOTHING;
 
