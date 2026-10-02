@@ -3,8 +3,30 @@
  * Live Integration with PostgreSQL API & Products/Inquiries Management
  */
 
+function getApiBase() {
+  if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
+  const host = window.location.hostname || '';
+  const port = window.location.port || '';
+  const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+  if (isLocal && port && port !== '5000') return `http://${host}:5000/api`;
+  return '/api';
+}
+
+function resolveAssetUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+  const clean = url.startsWith('/') ? url : '/' + url;
+  if (window.location.protocol === 'file:') return 'http://localhost:5000' + clean;
+  const host = window.location.hostname || '';
+  const port = window.location.port || '';
+  const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+  if (isLocal && port && port !== '5000') return `http://${host}:5000` + clean;
+  return clean;
+}
+
 const AdminApp = {
-  API_BASE: (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000') ? 'http://localhost:5000/api' : '/api',
+  API_BASE: getApiBase(),
+  resolveAssetUrl: resolveAssetUrl,
 
   // Fallback initial data if server is started standalone
   mockData: {
@@ -49,14 +71,10 @@ const AdminApp = {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          // Normalize image path: keep root-relative for HTTP, prefix .. only for local file://
-          return data.map(p => {
-            let img = p.image || '';
-            if (window.location.protocol === 'file:' && img.startsWith('/')) {
-              img = '..' + img;
-            }
-            return { ...p, image: img };
-          });
+          return data.map(p => ({
+            ...p,
+            image: resolveAssetUrl(p.image)
+          }));
         }
       }
     } catch (e) {

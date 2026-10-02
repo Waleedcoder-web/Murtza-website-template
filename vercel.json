@@ -19,6 +19,18 @@
       "destination": "/frontend/admin/$1"
     },
     {
+      "source": "/user",
+      "destination": "/frontend/user/index.html"
+    },
+    {
+      "source": "/user/",
+      "destination": "/frontend/user/index.html"
+    },
+    {
+      "source": "/user/(.*)",
+      "destination": "/frontend/user/$1"
+    },
+    {
       "source": "/css/(.*)",
       "destination": "/frontend/css/$1"
     },

@@ -265,10 +265,17 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       tabBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const targetCategory = btn.dataset.tab;
+      const targetCategory = (btn.dataset.tab || 'all').toLowerCase();
 
-      productCards.forEach(card => {
-        if (targetCategory === 'all' || card.dataset.category === targetCategory) {
+      const currentCards = document.querySelectorAll('.products-carousel-track .product-card, .products-grid .product-card');
+      currentCards.forEach(card => {
+        const cardCategory = (card.dataset.category || '').toLowerCase();
+        const matches = targetCategory === 'all' ||
+          cardCategory.includes(targetCategory) ||
+          (targetCategory === 'new' && (cardCategory.includes('new') || cardCategory.includes('arrival'))) ||
+          (targetCategory === 'bestsellers' && (cardCategory.includes('best') || cardCategory.includes('seller')));
+
+        if (matches) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';

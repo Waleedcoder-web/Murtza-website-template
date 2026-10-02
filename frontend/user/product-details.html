@@ -261,12 +261,33 @@
       document.getElementById('productQtyInput').value = qty;
     }
 
+    function getApiBase() {
+      if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
+      const host = window.location.hostname || '';
+      const port = window.location.port || '';
+      const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+      if (isLocal && port && port !== '5000') return `http://${host}:5000/api`;
+      return '/api';
+    }
+
+    function resolveAssetUrl(url) {
+      if (!url) return '';
+      if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+      const clean = url.startsWith('/') ? url : '/' + url;
+      if (window.location.protocol === 'file:') return 'http://localhost:5000' + clean;
+      const host = window.location.hostname || '';
+      const port = window.location.port || '';
+      const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+      if (isLocal && port && port !== '5000') return `http://${host}:5000` + clean;
+      return clean;
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get('id');
       if (id) {
         try {
-          const res = await fetch(`/api/products/${id}`);
+          const res = await fetch(`${getApiBase()}/products/${id}`);
           if (res.ok) {
             const product = await res.json();
             if (product) {
@@ -279,10 +300,7 @@
               if (document.getElementById('detailPrice')) {
                 document.getElementById('detailPrice').textContent = `$${Number(product.price).toFixed(2)}`;
               }
-              let img = product.image || '';
-              if (window.location.protocol === 'file:' && img.startsWith('/')) {
-                img = '..' + img;
-              }
+              let img = resolveAssetUrl(product.image);
               const mainImgEl = document.getElementById('mainProductImg');
               const placeholderEl = document.getElementById('noProductImgPlaceholder');
               if (img && mainImgEl) {

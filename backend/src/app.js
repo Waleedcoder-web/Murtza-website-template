@@ -45,7 +45,10 @@ app.use('/assets', express.static(path.join(__dirname, '../../frontend/assets'))
 // Admin Portal Route (/admin)
 app.use('/admin', express.static(path.join(__dirname, '../../frontend/admin')));
 
-// User Storefront Route (/)
+// User Storefront Subpath Route (/user)
+app.use('/user', express.static(path.join(__dirname, '../../frontend/user')));
+
+// User Storefront Root Route (/)
 app.use('/', express.static(path.join(__dirname, '../../frontend/user')));
 
 module.exports = app;
