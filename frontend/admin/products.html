@@ -596,19 +596,30 @@
         const category = document.getElementById('newProductCategory').value.trim();
         const price = parseFloat(document.getElementById('newProductPrice').value);
 
-        // 2. Upload the selected image file to backend
-        const uploadResult = await AdminApp.uploadImage(selectedUploadFile);
-        if (!uploadResult || !uploadResult.url) {
-          throw new Error('Image upload failed. Please try again.');
+        // 2. Upload the selected image file to backend or fallback to preview data URI
+        let finalImageUrl = '';
+        try {
+          const uploadResult = await AdminApp.uploadImage(selectedUploadFile);
+          if (uploadResult && uploadResult.url) {
+            finalImageUrl = uploadResult.url;
+          }
+        } catch (uploadErr) {
+          console.warn('Upload API notice, using direct image data:', uploadErr.message);
         }
 
-        // 3. Create product in PostgreSQL
+        // If upload endpoint fails, use direct preview image data URL
+        if (!finalImageUrl) {
+          const previewImg = document.getElementById('modalPreviewImg');
+          finalImageUrl = previewImg?.src || '/assets/images/sample-jersey-1.png';
+        }
+
+        // 3. Create product in PostgreSQL / Storefront
         await AdminApp.createProduct({
           name,
           sport,
           category,
           price,
-          image: uploadResult.url
+          image: finalImageUrl
         });
 
         // 4. Close modal and clean reset

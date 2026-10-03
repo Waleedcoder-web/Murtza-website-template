@@ -5,8 +5,11 @@ const db = require('./config/db');
 
 const PORT = process.env.PORT || 5000;
 
-// Fallback route for SPA / direct file browsing
-app.get('*', (req, res) => {
+// Fallback route for SPA / direct file browsing (ignore /api requests)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
   if (req.path.startsWith('/admin')) {
     return res.sendFile(path.join(__dirname, '../../frontend/admin/index.html'));
   }
