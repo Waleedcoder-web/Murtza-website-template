@@ -581,29 +581,41 @@
       let dotsHtml = '';
 
       heroList.forEach((h, idx) => {
-        const banner = resolveAssetUrl(h.banner_image);
-        const secondImg = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
+        const img1 = resolveAssetUrl(h.banner_image);
+        const img2 = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
         const isActive = idx === 0 ? 'active' : '';
 
-        // Determine if secondImg or banner is the suit lineup or athlete cutout
         let suitsUrl = '';
         let athleteCutoutUrl = '';
+        let bgStyle = '';
 
-        if (secondImg) {
-          if (secondImg.includes('hero-athlete') || secondImg.includes('suit') || secondImg.includes('jersey') || secondImg.includes('sample')) {
-            suitsUrl = secondImg;
-          } else if (secondImg.includes('athlete') || secondImg.includes('player')) {
-            athleteCutoutUrl = secondImg;
+        if (img1 && img2) {
+          // If built-in template seed (hero-banner-*.jpg background + hero-athlete-*.png suits)
+          if (img1.includes('hero-banner') && img2.includes('hero-athlete')) {
+            bgStyle = `background-image: url('${img1}');`;
+            suitsUrl = img2;
+            athleteCutoutUrl = '';
+          } else if (img1.toLowerCase().includes('athlete') && !img2.toLowerCase().includes('athlete')) {
+            // Inverted upload
+            athleteCutoutUrl = img1;
+            suitsUrl = img2;
           } else {
-            suitsUrl = secondImg;
+            // Standard Admin upload:
+            // img2 (athlete_image) is the ATHLETE -> Grounded on the RIGHT!
+            // img1 (banner_image) is the SUIT / PRODUCT -> Contained on the LEFT!
+            athleteCutoutUrl = img2;
+            suitsUrl = img1;
+            bgStyle = ''; // Keep clean light background, do not stretch product image
           }
+        } else if (img1) {
+          if (img1.includes('hero-banner')) {
+            bgStyle = `background-image: url('${img1}');`;
+          } else {
+            suitsUrl = img1;
+          }
+        } else if (img2) {
+          athleteCutoutUrl = img2;
         }
-
-        if (banner && (banner.includes('hero-athlete') || banner.includes('suit') || banner.includes('jersey'))) {
-          suitsUrl = banner;
-        }
-
-        const bgStyle = banner && banner !== suitsUrl ? `background-image: url('${banner}');` : '';
 
         slidesHtml += `
           <div class="hero-slide ${isActive}" style="${bgStyle}">
