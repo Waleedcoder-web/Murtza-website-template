@@ -100,16 +100,6 @@
               </label>
             </div>
 
-            <hr>
-
-            <h5 class="fw-bold mb-3 text-uppercase">Price Range</h5>
-            <div class="d-flex align-items-center gap-2 mb-4">
-              <input type="number" class="form-control form-control-sm" placeholder="Min $" value="0">
-              <span>-</span>
-              <input type="number" class="form-control form-control-sm" placeholder="Max $" value="200">
-            </div>
-
-            <button class="btn btn-dark w-100 rounded-pill fw-bold" onclick="CartStore.showToast('Filters Applied!')">Apply Filter</button>
           </div>
         </div>
 
@@ -122,8 +112,6 @@
               <span class="small text-muted text-uppercase fw-bold">Sort By:</span>
               <select class="form-select form-select-sm" id="catalogueSortSelect" style="width: 180px;">
                 <option selected>Featured</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
                 <option>Newest Arrivals</option>
               </select>
             </div>
@@ -271,7 +259,6 @@
             <div class="product-img-wrap"><img src="${img}" alt="${p.name}"></div>
             <div class="product-info-row">
               <h5 class="product-name text-uppercase">${p.name}</h5>
-              <span class="product-price">$${Number(p.price).toFixed(2)}</span>
             </div>
             <div class="product-actions">
               <a href="product-details.html?id=${p.id}" class="btn-card-action btn-card-outline">View</a>
@@ -292,11 +279,7 @@
         filtered = filtered.filter(p => (p.sport || '').toLowerCase().includes(selectedSport.toLowerCase()));
       }
 
-      if (sortVal === 'Price: Low to High') {
-        filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-      } else if (sortVal === 'Price: High to Low') {
-        filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-      } else if (sortVal === 'Newest Arrivals') {
+      if (sortVal === 'Newest Arrivals') {
         filtered.sort((a, b) => b.id - a.id);
       }
 

@@ -120,8 +120,6 @@
             <span class="text-muted small fw-bold">(42 Verified Team Reviews)</span>
           </div>
 
-          <div class="fs-2 fw-bold text-black mb-4" id="detailPrice">$120.00</div>
-
           <p class="text-muted mb-4 lead">
             Engineered with ultra-breathable moisture-management poly-spandex mesh. Features 4-way stretch capability, heat-pressed flatlock seams, and fade-resistant full dye sublimation printing.
           </p>
@@ -296,9 +294,6 @@
               }
               if (document.getElementById('detailTitle')) {
                 document.getElementById('detailTitle').textContent = product.name.toUpperCase();
-              }
-              if (document.getElementById('detailPrice')) {
-                document.getElementById('detailPrice').textContent = `$${Number(product.price).toFixed(2)}`;
               }
               let img = resolveAssetUrl(product.image);
               const mainImgEl = document.getElementById('mainProductImg');

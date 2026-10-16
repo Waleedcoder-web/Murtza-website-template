@@ -133,7 +133,6 @@
                 <th>Product Title & SKU</th>
                 <th>Sport Category</th>
                 <th>Collection Tag</th>
-                <th>Unit Price</th>
                 <th>Store Status</th>
                 <th class="text-end">Actions</th>
               </tr>
@@ -222,13 +221,9 @@
 
         <form onsubmit="handleCreateProduct(event)">
           <div class="row g-3 mb-3">
-            <div class="col-md-8">
+            <div class="col-12">
               <label class="form-label small fw-bold text-dark">Design Name *</label>
               <input type="text" class="form-control form-control-glass" placeholder="e.g. TITANS SUB-PRO JERSEY" required id="newProductName">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label small fw-bold text-dark">Base Price ($ USD) *</label>
-              <input type="number" step="0.01" class="form-control form-control-glass" value="120.00" required id="newProductPrice">
             </div>
           </div>
 
@@ -533,9 +528,6 @@
               <span class="category-chip-badge text-nowrap">${p.category || 'General'}</span>
             </td>
             <td>
-              <strong class="text-dark">$${Number(p.price).toFixed(2)}</strong>
-            </td>
-            <td>
               <span class="status-pill active text-nowrap"><span class="live-dot" style="width:6px; height:6px;"></span> Live</span>
             </td>
             <td class="text-end">
@@ -594,7 +586,6 @@
         const name = document.getElementById('newProductName').value;
         const sport = document.getElementById('newProductSport').value;
         const category = document.getElementById('newProductCategory').value.trim();
-        const price = parseFloat(document.getElementById('newProductPrice').value);
 
         // 2. Upload the selected image file to backend or fallback to preview data URI
         let finalImageUrl = '';
@@ -618,7 +609,7 @@
           name,
           sport,
           category,
-          price,
+          price: 0,
           image: finalImageUrl
         });
 

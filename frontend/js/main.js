@@ -375,7 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="${p.image}" alt="${p.name}" style="width: 50px; height: 50px; object-fit: contain;">
             <div>
               <div class="fw-bold">${p.name}</div>
-              <div class="text-muted small">$${p.price.toFixed(2)}</div>
             </div>
           </div>
           <a href="product-details.html?id=${p.id}" class="btn btn-dark btn-sm rounded-pill px-3">View</a>

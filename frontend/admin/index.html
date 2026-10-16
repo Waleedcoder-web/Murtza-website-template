@@ -299,7 +299,7 @@
                 <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 2px;">
                 <div>
                   <div class="fw-bold text-dark small">${p.name}</div>
-                  <div class="text-muted" style="font-size: 0.75rem;">${p.sport} • <strong class="text-dark">$${Number(p.price).toFixed(2)}</strong></div>
+                  <div class="text-muted" style="font-size: 0.75rem;">${p.sport} • <span class="badge bg-light text-dark border px-2 py-0.5">${p.category || 'Uniform'}</span></div>
                 </div>
               </div>
               <a href="products.html" class="btn-glass btn-sm py-1 px-2 text-primary" title="Edit in Catalog">

@@ -34,12 +34,12 @@ router.get('/:id', async (req, res) => {
 // CREATE new product
 router.post('/', async (req, res) => {
   const { name, price, sport, category, image, type, sku, description } = req.body;
-  if (!name || !price) {
-    return res.status(400).json({ error: 'Name and price are required' });
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
   }
 
   const generatedSku = sku || `PRO-${Math.floor(100 + Math.random() * 900)}`;
-  const cleanPrice = parseFloat(price);
+  const cleanPrice = price !== undefined && price !== null && price !== '' ? parseFloat(price) : 0.00;
   const cleanSport = sport || '7v7 Football';
   const cleanCategory = category || 'New Arrivals';
   const cleanImage = image || '/assets/images/sample-jersey-1.png';
