@@ -220,36 +220,36 @@
           <div class="modal-body p-4">
             <form id="newHeroBannerForm" onsubmit="submitNewHeroBanner(event)">
               <div class="row g-3">
-                <div class="col-12 col-md-7">
-                  <label class="form-label small fw-bold text-dark mb-1">Banner Background / Athlete on Right <span class="text-danger">*</span></label>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Athlete Photo (Right Side) <span class="text-danger">*</span></label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                    <img id="newBannerBgPreview" src="" alt="Banner Preview" class="d-none w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
-                    <div id="newBannerBgPlaceholder" class="text-muted py-3">
-                      <i class="bi bi-cloud-arrow-up fs-2 text-primary d-block mb-1"></i>
-                      <span class="small fw-semibold">Click to upload banner (athlete on right)</span>
-                    </div>
-                    <input type="file" id="newBannerBgFile" accept="image/*" class="d-none" onchange="handleNewBannerBgUpload(event)">
-                  </div>
-                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('newBannerBgFile').click()">
-                    <i class="bi bi-upload me-1"></i> Choose Banner File
-                  </button>
-                  <input type="hidden" id="newBannerBgUrl" value="" required>
-                </div>
-
-                <div class="col-12 col-md-5">
-                  <label class="form-label small fw-bold text-dark mb-1">Suits / Jerseys Lineup on Left</label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                    <img id="newBannerAthletePreview" src="" alt="Suits Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
+                    <img id="newBannerAthletePreview" src="" alt="Athlete Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
                     <div id="newBannerAthletePlaceholder" class="text-muted py-3">
-                      <i class="bi bi-images fs-2 text-secondary d-block mb-1"></i>
-                      <span class="small fw-semibold">Upload suits image (auto fades left & right)</span>
+                      <i class="bi bi-person-badge fs-2 text-primary d-block mb-1"></i>
+                      <span class="small fw-semibold">Upload athlete photo (prints on right)</span>
                     </div>
                     <input type="file" id="newBannerAthleteFile" accept="image/*" class="d-none" onchange="handleNewBannerAthleteUpload(event)">
                   </div>
-                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('newBannerAthleteFile').click()">
-                    <i class="bi bi-upload me-1"></i> Choose Suits Image
+                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('newBannerAthleteFile').click()">
+                    <i class="bi bi-upload me-1"></i> Choose Athlete Photo
                   </button>
                   <input type="hidden" id="newBannerAthleteUrl" value="">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Suits / Product Image (Left Side - Optional)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="newBannerBgPreview" src="" alt="Product Preview" class="d-none w-100 rounded-2" style="max-height: 140px; object-fit: contain;">
+                    <div id="newBannerBgPlaceholder" class="text-muted py-3">
+                      <i class="bi bi-images fs-2 text-secondary d-block mb-1"></i>
+                      <span class="small fw-semibold">Upload suits / product (auto fades left & right)</span>
+                    </div>
+                    <input type="file" id="newBannerBgFile" accept="image/*" class="d-none" onchange="handleNewBannerBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('newBannerBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Choose Product Image
+                  </button>
+                  <input type="hidden" id="newBannerBgUrl" value="">
                 </div>
 
                 <div class="col-12">
@@ -303,29 +303,29 @@
             <form id="editHeroBannerForm" onsubmit="submitEditHeroBanner(event)">
               <input type="hidden" id="editHeroId">
               <div class="row g-3">
-                <div class="col-12 col-md-7">
-                  <label class="form-label small fw-bold text-dark mb-1">Banner Background / Athlete on Right <span class="text-danger">*</span></label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
-                    <img id="editHeroBgPreview" src="" alt="Banner Preview" class="w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
-                    <input type="file" id="editHeroBgFile" accept="image/*" class="d-none" onchange="handleEditHeroBgUpload(event)">
-                  </div>
-                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('editHeroBgFile').click()">
-                    <i class="bi bi-upload me-1"></i> Change Banner File
-                  </button>
-                  <input type="hidden" id="editHeroBgUrl" required>
-                </div>
-
-                <div class="col-12 col-md-5">
-                  <label class="form-label small fw-bold text-dark mb-1">Suits / Jerseys Lineup on Left</label>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Athlete Photo (Right Side) <span class="text-danger">*</span></label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center;">
-                    <img id="editHeroAthletePreview" src="" alt="Suits Preview" style="max-height: 120px; object-fit: contain;">
+                    <img id="editHeroAthletePreview" src="" alt="Athlete Preview" style="max-height: 120px; object-fit: contain;">
                     <span id="editHeroAthletePlaceholder" class="text-muted small d-none">None attached</span>
                     <input type="file" id="editHeroAthleteFile" accept="image/*" class="d-none" onchange="handleEditHeroAthleteUpload(event)">
                   </div>
-                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('editHeroAthleteFile').click()">
-                    <i class="bi bi-upload me-1"></i> Change Suits Image
+                  <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('editHeroAthleteFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change Athlete Photo
                   </button>
                   <input type="hidden" id="editHeroAthleteUrl">
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-bold text-dark mb-1">Suits / Product Image (Left Side - Optional)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                    <img id="editHeroBgPreview" src="" alt="Product Preview" class="w-100 rounded-2" style="max-height: 140px; object-fit: contain;">
+                    <input type="file" id="editHeroBgFile" accept="image/*" class="d-none" onchange="handleEditHeroBgUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('editHeroBgFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change Product Image
+                  </button>
+                  <input type="hidden" id="editHeroBgUrl">
                 </div>
 
                 <div class="col-12">
@@ -878,19 +878,21 @@
     async function submitNewHeroBanner(event) {
       event.preventDefault();
 
+      const athlete_image = document.getElementById('newBannerAthleteUrl').value.trim();
       const banner_image = document.getElementById('newBannerBgUrl').value.trim();
-      if (!banner_image) {
-        alert('Please choose and upload a banner background image first.');
+
+      if (!athlete_image && !banner_image) {
+        alert('Please choose and upload an athlete photo first.');
         return;
       }
 
       const payload = {
         title: document.getElementById('newBannerTitle').value.trim(),
         subtitle: document.getElementById('newBannerSubtitle').value.trim(),
-        btn_text: document.getElementById('newBannerBtnText').value.trim() || 'Shop The Collection',
+        btn_text: document.getElementById('newBannerBtnText').value.trim() || 'Shop Now',
         btn_link: document.getElementById('newBannerBtnLink').value.trim() || 'catalogue.html',
-        banner_image: banner_image,
-        athlete_image: document.getElementById('newBannerAthleteUrl').value.trim(),
+        banner_image: banner_image || athlete_image,
+        athlete_image: athlete_image || banner_image,
         slide_order: parseInt(document.getElementById('newBannerOrder').value, 10) || 1
       };
 
@@ -925,9 +927,11 @@
       event.preventDefault();
 
       const id = document.getElementById('editHeroId').value;
+      const athlete_image = document.getElementById('editHeroAthleteUrl').value.trim();
       const banner_image = document.getElementById('editHeroBgUrl').value.trim();
-      if (!banner_image) {
-        alert('Banner background image is required.');
+
+      if (!athlete_image && !banner_image) {
+        alert('Please upload an athlete photo or product image.');
         return;
       }
 
@@ -936,8 +940,8 @@
         subtitle: document.getElementById('editHeroSubtitle').value.trim(),
         btn_text: document.getElementById('editHeroBtnText').value.trim(),
         btn_link: document.getElementById('editHeroBtnLink').value.trim(),
-        banner_image: banner_image,
-        athlete_image: document.getElementById('editHeroAthleteUrl').value.trim(),
+        banner_image: banner_image || athlete_image,
+        athlete_image: athlete_image || banner_image,
         slide_order: parseInt(document.getElementById('editHeroOrder').value, 10) || 1
       };
 

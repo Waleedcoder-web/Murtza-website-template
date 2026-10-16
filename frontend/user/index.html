@@ -589,32 +589,27 @@
         let athleteCutoutUrl = '';
         let bgStyle = '';
 
-        if (img1 && img2) {
-          // If built-in template seed (hero-banner-*.jpg background + hero-athlete-*.png suits)
-          if (img1.includes('hero-banner') && img2.includes('hero-athlete')) {
+        if (img2) {
+          // If athlete image is uploaded separately, it ALWAYS goes to the right!
+          if (img1 && img1.includes('hero-banner') && img2.includes('hero-athlete')) {
             bgStyle = `background-image: url('${img1}');`;
             suitsUrl = img2;
             athleteCutoutUrl = '';
-          } else if (img1.toLowerCase().includes('athlete') && !img2.toLowerCase().includes('athlete')) {
-            // Inverted upload
-            athleteCutoutUrl = img1;
-            suitsUrl = img2;
           } else {
-            // Standard Admin upload:
-            // img2 (athlete_image) is the ATHLETE -> Grounded on the RIGHT!
-            // img1 (banner_image) is the SUIT / PRODUCT -> Contained on the LEFT!
-            athleteCutoutUrl = img2;
-            suitsUrl = img1;
-            bgStyle = ''; // Keep clean light background, do not stretch product image
+            athleteCutoutUrl = img2; // Always prints on RIGHT
+            if (img1 && img1 !== img2 && !img1.includes('hero-banner')) {
+              suitsUrl = img1; // Product/suits prints on LEFT
+            }
           }
         } else if (img1) {
           if (img1.includes('hero-banner')) {
             bgStyle = `background-image: url('${img1}');`;
-          } else {
+          } else if (img1.includes('suit') || img1.includes('jersey') || img1.includes('product')) {
             suitsUrl = img1;
+          } else {
+            // Single uploaded photo prints on RIGHT
+            athleteCutoutUrl = img1;
           }
-        } else if (img2) {
-          athleteCutoutUrl = img2;
         }
 
         slidesHtml += `
