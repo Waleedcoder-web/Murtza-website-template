@@ -296,9 +296,8 @@ img {
    ========================================================================== */
 .hero-carousel {
   position: relative;
-  height: 85vh;
-  min-height: 550px;
-  background: #111111;
+  min-height: clamp(520px, 75vh, 700px);
+  background: #f8fafc;
   overflow: hidden;
 }
 
@@ -309,91 +308,166 @@ img {
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-position: center;
+  background-position: right bottom;
+  background-repeat: no-repeat;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  transform: scale(1.02);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-slide.active {
   opacity: 1;
   visibility: visible;
+}
+
+/* Suits / Jersey Banner Image Layer:
+   Full containment so whole image is completely visible,
+   positioned on the left / lower center, with smooth fade-left and fade-right masks */
+.hero-suits-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 68%;
+  height: 90%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left bottom 15px;
+  z-index: 1;
+  pointer-events: none;
+  /* Dual horizontal fade: smooth fade on left edge and smooth fade on right edge */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 82%, transparent 100%);
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
+}
+
+.hero-slide.active .hero-suits-layer {
+  opacity: 1;
   transform: scale(1);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  background: transparent;
 }
 
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-start;
+  padding-top: clamp(35px, 6vh, 60px);
+  gap: 20px;
   height: 100%;
+  position: relative;
 }
 
 .hero-content {
-  padding-left: clamp(20px, 5vw, 90px);
+  padding-left: clamp(20px, 5vw, 80px);
+  z-index: 4;
+}
+
+/* Smooth Fade & Slide Animation when slide opens */
+.hero-title,
+.hero-subtitle,
+.btn-hero {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-slide.active .hero-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.15s;
+}
+
+.hero-slide.active .hero-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.hero-slide.active .btn-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.45s;
 }
 
 .hero-title {
-  font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
   font-weight: 900;
   font-style: italic;
-  line-height: 0.95;
+  line-height: 1.05;
   color: #000000;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   text-transform: uppercase;
+  letter-spacing: -0.5px;
 }
 
 .hero-subtitle {
-  font-size: 1.4rem;
-  color: #222222;
-  margin-bottom: 28px;
+  font-size: 1.3rem;
+  color: #333333;
+  margin-bottom: 24px;
   max-width: 520px;
+  font-weight: 500;
 }
 
 .btn-hero {
   display: inline-block;
   background: #000000;
   color: #ffffff !important;
-  font-size: 1.25rem;
-  font-weight: 700;
-  padding: 12px 36px;
-  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 12px 34px;
+  border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   border: 2px solid #000000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .btn-hero:hover {
   background: transparent;
   color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
+/* Athlete on the right - anchored cleanly to bottom without floating cutoffs */
 .hero-athlete-wrap {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   height: 100%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 48%;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .hero-athlete-img {
-  max-height: 70vh;
+  width: auto;
+  max-width: 100%;
+  max-height: 98%;
+  height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3));
-  animation: heroFloat 6s ease-in-out infinite;
+  object-position: bottom right;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.18));
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes heroFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+.hero-slide.active .hero-athlete-img {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .hero-controls {
@@ -409,15 +483,15 @@ img {
 
 .hero-ctrl-btn {
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #000000;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -431,7 +505,7 @@ img {
 
 .hero-dots {
   position: absolute;
-  bottom: 24px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

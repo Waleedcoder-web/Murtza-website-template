@@ -24,6 +24,7 @@
   .hero-grid {
     grid-template-columns: 1fr;
     text-align: center;
+    padding-top: 25px;
   }
   .hero-content {
     padding-left: 20px;
@@ -31,6 +32,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .hero-suits-layer {
+    width: 100%;
+    height: 75%;
+    background-position: center bottom;
+    opacity: 0.38 !important;
   }
   .hero-athlete-wrap {
     display: none;

@@ -71,20 +71,21 @@
 
   <!-- Hero Carousel -->
   <section class="hero-carousel">
-    <!-- Default Clean Hero Banner -->
-    <div class="hero-slide active" style="background: linear-gradient(135deg, #0b0f19 0%, #172138 50%, #0d1322 100%);">
+    <!-- Default Clean Hero Banner (Matches Reference Image) -->
+    <div class="hero-slide active" style="background-image: url('../assets/images/hero-banner-2.jpg');">
+      <div class="hero-suits-layer" style="background-image: url('../assets/images/hero-athlete-2.png');"></div>
       <div class="hero-overlay">
         <div class="full-container">
           <div class="hero-grid">
             <div class="hero-content">
-              <h1 class="hero-title">Custom Team Uniforms & Apparel</h1>
-              <p class="hero-subtitle">High-performance athletic gear built for champions. Upload custom banners anytime from the Admin Panel.</p>
+              <h1 class="hero-title">All Sports. One Ultimate Arena.</h1>
+              <p class="hero-subtitle">High-performance custom team uniforms & athletic apparel built for champions.</p>
               <div>
-                <a href="catalogue.html" class="btn-hero">Shop The Collection</a>
+                <a href="catalogue.html" class="btn-hero">Shop Now</a>
               </div>
             </div>
             <div class="hero-athlete-wrap">
-              <!-- Uploaded athlete images will render dynamically -->
+              <!-- Grounded athlete from background / cutout -->
             </div>
           </div>
         </div>
@@ -581,23 +582,44 @@
 
       heroList.forEach((h, idx) => {
         const banner = resolveAssetUrl(h.banner_image);
-        const athlete = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
+        const secondImg = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
         const isActive = idx === 0 ? 'active' : '';
 
+        // Determine if secondImg or banner is the suit lineup or athlete cutout
+        let suitsUrl = '';
+        let athleteCutoutUrl = '';
+
+        if (secondImg) {
+          if (secondImg.includes('hero-athlete') || secondImg.includes('suit') || secondImg.includes('jersey') || secondImg.includes('sample')) {
+            suitsUrl = secondImg;
+          } else if (secondImg.includes('athlete') || secondImg.includes('player')) {
+            athleteCutoutUrl = secondImg;
+          } else {
+            suitsUrl = secondImg;
+          }
+        }
+
+        if (banner && (banner.includes('hero-athlete') || banner.includes('suit') || banner.includes('jersey'))) {
+          suitsUrl = banner;
+        }
+
+        const bgStyle = banner && banner !== suitsUrl ? `background-image: url('${banner}');` : '';
+
         slidesHtml += `
-          <div class="hero-slide ${isActive}" style="background-image: url('${banner}');">
+          <div class="hero-slide ${isActive}" style="${bgStyle}">
+            ${suitsUrl ? `<div class="hero-suits-layer" style="background-image: url('${suitsUrl}');"></div>` : ''}
             <div class="hero-overlay">
               <div class="full-container">
                 <div class="hero-grid">
                   <div class="hero-content">
                     <h1 class="hero-title">${h.title || ''}</h1>
-                    <p class="hero-subtitle">${h.subtitle || ''}</p>
+                    ${h.subtitle ? `<p class="hero-subtitle">${h.subtitle}</p>` : ''}
                     <div>
-                      <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop The Collection'}</a>
+                      <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop Now'}</a>
                     </div>
                   </div>
                   <div class="hero-athlete-wrap">
-                    ${athlete ? `<img src="${athlete}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
+                    ${athleteCutoutUrl ? `<img src="${athleteCutoutUrl}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
                   </div>
                 </div>
               </div>

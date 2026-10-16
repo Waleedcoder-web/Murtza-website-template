@@ -221,12 +221,12 @@
             <form id="newHeroBannerForm" onsubmit="submitNewHeroBanner(event)">
               <div class="row g-3">
                 <div class="col-12 col-md-7">
-                  <label class="form-label small fw-bold text-dark mb-1">Banner Background Image <span class="text-danger">*</span></label>
+                  <label class="form-label small fw-bold text-dark mb-1">Banner Background / Athlete on Right <span class="text-danger">*</span></label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     <img id="newBannerBgPreview" src="" alt="Banner Preview" class="d-none w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
                     <div id="newBannerBgPlaceholder" class="text-muted py-3">
                       <i class="bi bi-cloud-arrow-up fs-2 text-primary d-block mb-1"></i>
-                      <span class="small fw-semibold">Click to upload banner image</span>
+                      <span class="small fw-semibold">Click to upload banner (athlete on right)</span>
                     </div>
                     <input type="file" id="newBannerBgFile" accept="image/*" class="d-none" onchange="handleNewBannerBgUpload(event)">
                   </div>
@@ -237,17 +237,17 @@
                 </div>
 
                 <div class="col-12 col-md-5">
-                  <label class="form-label small fw-bold text-dark mb-1">Athlete Cutout (Optional)</label>
+                  <label class="form-label small fw-bold text-dark mb-1">Suits / Jerseys Lineup on Left</label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                    <img id="newBannerAthletePreview" src="" alt="Athlete Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
+                    <img id="newBannerAthletePreview" src="" alt="Suits Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
                     <div id="newBannerAthletePlaceholder" class="text-muted py-3">
-                      <i class="bi bi-person-bounding-box fs-2 text-secondary d-block mb-1"></i>
-                      <span class="small fw-semibold">Upload athlete PNG</span>
+                      <i class="bi bi-images fs-2 text-secondary d-block mb-1"></i>
+                      <span class="small fw-semibold">Upload suits image (auto fades left & right)</span>
                     </div>
                     <input type="file" id="newBannerAthleteFile" accept="image/*" class="d-none" onchange="handleNewBannerAthleteUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('newBannerAthleteFile').click()">
-                    <i class="bi bi-person-plus me-1"></i> Choose Athlete Cutout
+                    <i class="bi bi-upload me-1"></i> Choose Suits Image
                   </button>
                   <input type="hidden" id="newBannerAthleteUrl" value="">
                 </div>
@@ -304,26 +304,26 @@
               <input type="hidden" id="editHeroId">
               <div class="row g-3">
                 <div class="col-12 col-md-7">
-                  <label class="form-label small fw-bold text-dark mb-1">Banner Background Image <span class="text-danger">*</span></label>
+                  <label class="form-label small fw-bold text-dark mb-1">Banner Background / Athlete on Right <span class="text-danger">*</span></label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
                     <img id="editHeroBgPreview" src="" alt="Banner Preview" class="w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
                     <input type="file" id="editHeroBgFile" accept="image/*" class="d-none" onchange="handleEditHeroBgUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('editHeroBgFile').click()">
-                    <i class="bi bi-upload me-1"></i> Change Banner Image
+                    <i class="bi bi-upload me-1"></i> Change Banner File
                   </button>
                   <input type="hidden" id="editHeroBgUrl" required>
                 </div>
 
                 <div class="col-12 col-md-5">
-                  <label class="form-label small fw-bold text-dark mb-1">Athlete Cutout (Optional)</label>
+                  <label class="form-label small fw-bold text-dark mb-1">Suits / Jerseys Lineup on Left</label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center;">
-                    <img id="editHeroAthletePreview" src="" alt="Athlete Preview" style="max-height: 120px; object-fit: contain;">
+                    <img id="editHeroAthletePreview" src="" alt="Suits Preview" style="max-height: 120px; object-fit: contain;">
                     <span id="editHeroAthletePlaceholder" class="text-muted small d-none">None attached</span>
                     <input type="file" id="editHeroAthleteFile" accept="image/*" class="d-none" onchange="handleEditHeroAthleteUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('editHeroAthleteFile').click()">
-                    <i class="bi bi-person-plus me-1"></i> Change Athlete Cutout
+                    <i class="bi bi-upload me-1"></i> Change Suits Image
                   </button>
                   <input type="hidden" id="editHeroAthleteUrl">
                 </div>
