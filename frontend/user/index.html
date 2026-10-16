@@ -71,9 +71,11 @@
 
   <!-- Hero Carousel -->
   <section class="hero-carousel">
-    <!-- Default Clean Hero Banner (Matches Reference Image) -->
     <div class="hero-slide active" style="background-image: url('../assets/images/hero-banner-2.jpg');">
       <div class="hero-suits-layer" style="background-image: url('../assets/images/hero-athlete-2.png');"></div>
+      <div class="hero-athlete-wrap">
+        <img src="../assets/images/hero-athlete-1.png" alt="Featured Athlete" class="hero-athlete-img">
+      </div>
       <div class="hero-overlay">
         <div class="full-container">
           <div class="hero-grid">
@@ -83,9 +85,6 @@
               <div>
                 <a href="catalogue.html" class="btn-hero">Shop Now</a>
               </div>
-            </div>
-            <div class="hero-athlete-wrap">
-              <!-- Grounded athlete from background / cutout -->
             </div>
           </div>
         </div>
@@ -590,24 +589,21 @@
         let bgStyle = '';
 
         if (img2) {
-          // If athlete image is uploaded separately, it ALWAYS goes to the right!
-          if (img1 && img1.includes('hero-banner') && img2.includes('hero-athlete')) {
-            bgStyle = `background-image: url('${img1}');`;
-            suitsUrl = img2;
-            athleteCutoutUrl = '';
-          } else {
-            athleteCutoutUrl = img2; // Always prints on RIGHT
-            if (img1 && img1 !== img2 && !img1.includes('hero-banner')) {
-              suitsUrl = img1; // Product/suits prints on LEFT
+          // Athlete photo ALWAYS renders on the right side
+          athleteCutoutUrl = img2;
+          if (img1 && img1 !== img2) {
+            if (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-')) {
+              bgStyle = `background-image: url('${img1}');`;
+            } else {
+              suitsUrl = img1; // Product / suit image on left
             }
           }
         } else if (img1) {
-          if (img1.includes('hero-banner')) {
+          if (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-')) {
             bgStyle = `background-image: url('${img1}');`;
           } else if (img1.includes('suit') || img1.includes('jersey') || img1.includes('product')) {
             suitsUrl = img1;
           } else {
-            // Single uploaded photo prints on RIGHT
             athleteCutoutUrl = img1;
           }
         }
@@ -615,6 +611,11 @@
         slidesHtml += `
           <div class="hero-slide ${isActive}" style="${bgStyle}">
             ${suitsUrl ? `<div class="hero-suits-layer" style="background-image: url('${suitsUrl}');"></div>` : ''}
+            ${athleteCutoutUrl ? `
+              <div class="hero-athlete-wrap">
+                <img src="${athleteCutoutUrl}" alt="Featured Athlete" class="hero-athlete-img">
+              </div>
+            ` : ''}
             <div class="hero-overlay">
               <div class="full-container">
                 <div class="hero-grid">
@@ -624,9 +625,6 @@
                     <div>
                       <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop Now'}</a>
                     </div>
-                  </div>
-                  <div class="hero-athlete-wrap">
-                    ${athleteCutoutUrl ? `<img src="${athleteCutoutUrl}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
                   </div>
                 </div>
               </div>
