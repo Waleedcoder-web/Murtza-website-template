@@ -322,16 +322,17 @@ img {
 
 /* Suits / Jersey Banner Image Layer:
    Full containment so whole image is completely visible,
-   positioned on the left / lower center, with smooth fade-left and fade-right masks */
+   positioned on lower left below headline, with smooth fade-left and fade-right masks */
 .hero-suits-layer {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 68%;
-  height: 90%;
+  bottom: 12px;
+  left: clamp(20px, 4vw, 70px);
+  width: clamp(280px, 46vw, 540px);
+  height: 56%;
+  max-height: 380px;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: left bottom 15px;
+  background-position: left bottom;
   z-index: 1;
   pointer-events: none;
   /* Dual horizontal fade: smooth fade on left edge and smooth fade on right edge */
@@ -359,7 +360,7 @@ img {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   align-items: flex-start;
-  padding-top: clamp(35px, 6vh, 60px);
+  padding-top: clamp(25px, 4vh, 45px);
   gap: 20px;
   height: 100%;
   position: relative;
@@ -367,6 +368,7 @@ img {
 
 .hero-content {
   padding-left: clamp(20px, 5vw, 80px);
+  max-width: 580px;
   z-index: 4;
 }
 
@@ -398,21 +400,21 @@ img {
 }
 
 .hero-title {
-  font-size: clamp(2.4rem, 4.2vw, 4rem);
+  font-size: clamp(2.2rem, 3.8vw, 3.6rem);
   font-weight: 900;
   font-style: italic;
   line-height: 1.05;
   color: #000000;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: -0.5px;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: #333333;
-  margin-bottom: 24px;
-  max-width: 520px;
+  margin-bottom: 20px;
+  max-width: 500px;
   font-weight: 500;
 }
 
@@ -420,7 +422,7 @@ img {
   display: inline-block;
   background: #000000;
   color: #ffffff !important;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   padding: 12px 34px;
   border-radius: 9999px;
@@ -438,29 +440,28 @@ img {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* Athlete on the right - cleanly contained inside banner frame with safe top/bottom/left/right closure */
+/* Athlete on the right - grounded, tall, filling the right side */
 .hero-athlete-wrap {
   position: absolute;
-  right: clamp(20px, 4vw, 60px);
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(280px, 38vw, 480px);
-  height: 86%;
+  right: clamp(15px, 3vw, 40px);
+  bottom: 0;
+  width: clamp(320px, 42vw, 550px);
+  height: 94%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
   z-index: 3;
   pointer-events: none;
 }
 
 .hero-athlete-img {
+  width: auto;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
   object-fit: contain;
-  object-position: center;
-  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.2));
+  object-position: bottom right;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.22));
   opacity: 0;
   transform: translateX(30px);
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
