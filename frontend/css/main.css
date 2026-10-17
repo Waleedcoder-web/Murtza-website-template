@@ -300,6 +300,8 @@ img {
   height: clamp(540px, 75vh, 720px);
   background: #f8fafc;
   overflow: hidden;
+  perspective: 1400px;
+  perspective-origin: center center;
 }
 
 .hero-slide {
@@ -313,17 +315,20 @@ img {
   background-repeat: no-repeat;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform: translate3d(0, 0, -60px) scale(0.97);
+  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.85s;
 }
 
 .hero-slide.active {
   opacity: 1;
   visibility: visible;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 /* Suits / Jersey Banner Image Layer:
    Full containment so whole image is completely visible,
-   positioned on lower left below headline, with smooth fade-left and fade-right masks */
+   positioned on lower left below headline, with smooth fade-left and fade-right masks and 3D depth */
 .hero-suits-layer {
   position: absolute;
   bottom: 12px;
@@ -334,19 +339,21 @@ img {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left bottom;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   /* Dual horizontal fade: smooth fade on left edge and smooth fade on right edge */
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 82%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 8%, black 82%, transparent 100%);
   opacity: 0;
-  transform: scale(0.98);
-  transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
+  transform-style: preserve-3d;
+  transform: translate3d(-30px, 16px, 20px) scale(0.95);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.18));
 }
 
 .hero-slide.active .hero-suits-layer {
   opacity: 1;
-  transform: scale(1);
+  transform: translate3d(0, 0, 20px) scale(1);
 }
 
 .hero-overlay {
@@ -369,32 +376,35 @@ img {
   max-width: 580px;
   z-index: 4;
   pointer-events: auto;
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease-out;
 }
 
-/* Smooth Fade & Slide Animation when slide opens */
+/* Smooth 3D Fade & Slide Animation when slide opens */
 .hero-title,
 .hero-subtitle,
 .btn-hero {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 22px, 35px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
 .hero-slide.active .hero-title {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 35px);
   transition-delay: 0.15s;
 }
 
 .hero-slide.active .hero-subtitle {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 35px);
   transition-delay: 0.3s;
 }
 
 .hero-slide.active .btn-hero {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 35px);
   transition-delay: 0.45s;
 }
 
@@ -439,7 +449,7 @@ img {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* Athlete on the right - grounded, tall, filling the right side */
+/* Athlete on the right - grounded, tall, filling the right side with 3D Pop */
 .hero-athlete-wrap {
   position: absolute;
   right: clamp(10px, 3vw, 50px);
@@ -451,6 +461,7 @@ img {
   justify-content: flex-end;
   z-index: 3;
   pointer-events: none;
+  transform-style: preserve-3d;
 }
 
 .hero-athlete-img {
@@ -460,15 +471,16 @@ img {
   max-height: 100%;
   object-fit: contain;
   object-position: bottom right;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.28));
   opacity: 0;
-  transform: translateX(30px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: perspective(1000px) rotateY(-8deg) translate3d(45px, 0, 50px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  will-change: transform, opacity;
 }
 
 .hero-slide.active .hero-athlete-img {
   opacity: 1;
-  transform: translateX(0);
+  transform: perspective(1000px) rotateY(0deg) translate3d(0, 0, 50px);
 }
 
 @media (max-width: 768px) {

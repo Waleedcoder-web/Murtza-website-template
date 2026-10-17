@@ -623,7 +623,7 @@
         }
 
         slidesHtml += `
-          <div class="hero-slide ${isActive}" style="${bgStyle}">
+          <div class="hero-slide" data-active="${isActive}" style="${bgStyle}">
             ${suitsUrl ? `<div class="hero-suits-layer" style="background-image: url('${suitsUrl}');"></div>` : ''}
             ${athleteCutoutUrl ? `
               <div class="hero-athlete-wrap">
@@ -668,6 +668,61 @@
 
       // Bind interactive controls
       bindHeroControls();
+
+      // Trigger smooth 3D entrance animation on load
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const slides = carouselEl.querySelectorAll('.hero-slide');
+          slides.forEach(s => {
+            if (s.dataset.active === 'active') s.classList.add('active');
+          });
+        }, 30);
+      });
+
+      // Initialize interactive 3D Mouse Parallax
+      initHero3DParallax();
+    }
+
+    function initHero3DParallax() {
+      const carousel = document.querySelector('.hero-carousel');
+      if (!carousel || carousel._parallaxBound) return;
+      carousel._parallaxBound = true;
+
+      carousel.addEventListener('mousemove', (e) => {
+        const rect = carousel.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const activeSlide = carousel.querySelector('.hero-slide.active');
+        if (!activeSlide) return;
+
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const suits = activeSlide.querySelector('.hero-suits-layer');
+        const content = activeSlide.querySelector('.hero-content');
+
+        if (athlete) {
+          athlete.style.transform = `perspective(1000px) rotateY(${x * -8}deg) rotateX(${y * 5}deg) translate3d(${x * 16}px, ${y * 10}px, 50px)`;
+        }
+        if (suits) {
+          suits.style.transform = `translate3d(${x * -12}px, ${y * -8}px, 20px) scale(1)`;
+        }
+        if (content) {
+          content.style.transform = `translate3d(${x * 8}px, ${y * 6}px, 35px)`;
+        }
+      });
+
+      carousel.addEventListener('mouseleave', () => {
+        const activeSlide = carousel.querySelector('.hero-slide.active');
+        if (!activeSlide) return;
+
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const suits = activeSlide.querySelector('.hero-suits-layer');
+        const content = activeSlide.querySelector('.hero-content');
+
+        if (athlete) athlete.style.transform = 'perspective(1000px) rotateY(0deg) translate3d(0, 0, 50px)';
+        if (suits) suits.style.transform = 'translate3d(0, 0, 20px) scale(1)';
+        if (content) content.style.transform = 'translate3d(0, 0, 35px)';
+      });
     }
 
     function bindHeroControls() {
@@ -712,7 +767,6 @@
         }
       }
 
-      showSlide(0);
       resetTimer();
     }
 
