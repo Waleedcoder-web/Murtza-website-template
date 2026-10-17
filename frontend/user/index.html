@@ -576,6 +576,20 @@
       const carouselEl = document.querySelector('.hero-carousel');
       if (!carouselEl || !Array.isArray(heroList) || heroList.length === 0) return;
 
+      // 1. Determine the suits / product image to display on the left across all carousel slides
+      let sharedSuitsUrl = '';
+      for (const h of heroList) {
+        const i1 = resolveAssetUrl(h.banner_image);
+        const i2 = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
+        if (i1 && i1 !== i2 && !i1.includes('hero-banner') && !i1.includes('background') && !i1.includes('bg-')) {
+          sharedSuitsUrl = i1;
+          break;
+        }
+      }
+      if (!sharedSuitsUrl) {
+        sharedSuitsUrl = resolveAssetUrl('../assets/images/hero-athlete-2.png');
+      }
+
       let slidesHtml = '';
       let dotsHtml = '';
 
@@ -591,21 +605,21 @@
         if (img2) {
           // Athlete photo ALWAYS renders on the right side
           athleteCutoutUrl = img2;
-          if (img1 && img1 !== img2) {
-            if (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-')) {
-              bgStyle = `background-image: url('${img1}');`;
-            } else {
-              suitsUrl = img1; // Product / suit image on left
-            }
-          }
-        } else if (img1) {
-          if (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-')) {
-            bgStyle = `background-image: url('${img1}');`;
-          } else if (img1.includes('suit') || img1.includes('jersey') || img1.includes('product')) {
-            suitsUrl = img1;
-          } else {
-            athleteCutoutUrl = img1;
-          }
+        } else if (img1 && !img1.includes('suit') && !img1.includes('jersey') && !img1.includes('product')) {
+          athleteCutoutUrl = img1;
+        }
+
+        // Left-side suits image: use this slide's own suits image if set, or display the shared suits image across the rest of the carousel
+        if (img1 && img1 !== img2 && !img1.includes('hero-banner') && !img1.includes('background') && !img1.includes('bg-')) {
+          suitsUrl = img1;
+        } else {
+          suitsUrl = sharedSuitsUrl;
+        }
+
+        if (img1 && (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-'))) {
+          bgStyle = `background-image: url('${img1}');`;
+        } else {
+          bgStyle = `background-image: url('${resolveAssetUrl('../assets/images/hero-banner-2.jpg')}');`;
         }
 
         slidesHtml += `

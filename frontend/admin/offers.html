@@ -669,8 +669,11 @@
       }
 
       let html = '';
+      const sharedSuit = slides.find(x => x.banner_image && x.banner_image !== x.athlete_image && !x.banner_image.includes('hero-banner'))?.banner_image || '/assets/images/hero-athlete-2.png';
+
       slides.forEach((s, idx) => {
-        const bannerSrc = s.banner_image.startsWith('/') ? '..' + s.banner_image : s.banner_image;
+        const rawSuit = (s.banner_image && s.banner_image !== s.athlete_image && !s.banner_image.includes('hero-banner')) ? s.banner_image : sharedSuit;
+        const bannerSrc = rawSuit.startsWith('/') ? '..' + rawSuit : rawSuit;
         const athleteSrc = s.athlete_image ? (s.athlete_image.startsWith('/') ? '..' + s.athlete_image : s.athlete_image) : '';
 
         html += `
@@ -720,9 +723,14 @@
       const form = document.getElementById('newHeroBannerForm');
       if (form) form.reset();
 
-      document.getElementById('newBannerBgUrl').value = '';
-      document.getElementById('newBannerBgPreview').classList.add('d-none');
-      document.getElementById('newBannerBgPlaceholder').classList.remove('d-none');
+      // Find the active suit image from existing banners
+      const activeSuit = (storefrontData.hero || []).find(s => s.banner_image && s.banner_image !== s.athlete_image && !s.banner_image.includes('hero-banner'))?.banner_image || '/assets/images/hero-athlete-2.png';
+
+      document.getElementById('newBannerBgUrl').value = activeSuit;
+      const previewImg = document.getElementById('newBannerBgPreview');
+      previewImg.src = activeSuit.startsWith('/') ? '..' + activeSuit : activeSuit;
+      previewImg.classList.remove('d-none');
+      document.getElementById('newBannerBgPlaceholder').classList.add('d-none');
 
       document.getElementById('newBannerAthleteUrl').value = '';
       document.getElementById('newBannerAthletePreview').classList.add('d-none');
@@ -879,11 +887,15 @@
       event.preventDefault();
 
       const athlete_image = document.getElementById('newBannerAthleteUrl').value.trim();
-      const banner_image = document.getElementById('newBannerBgUrl').value.trim();
+      let banner_image = document.getElementById('newBannerBgUrl').value.trim();
 
       if (!athlete_image && !banner_image) {
         alert('Please choose and upload an athlete photo first.');
         return;
+      }
+
+      if (!banner_image) {
+        banner_image = (storefrontData.hero || []).find(s => s.banner_image && s.banner_image !== s.athlete_image && !s.banner_image.includes('hero-banner'))?.banner_image || '/assets/images/hero-athlete-2.png';
       }
 
       const payload = {
@@ -891,7 +903,7 @@
         subtitle: document.getElementById('newBannerSubtitle').value.trim(),
         btn_text: document.getElementById('newBannerBtnText').value.trim() || 'Shop Now',
         btn_link: document.getElementById('newBannerBtnLink').value.trim() || 'catalogue.html',
-        banner_image: banner_image || athlete_image,
+        banner_image: banner_image,
         athlete_image: athlete_image || banner_image,
         slide_order: parseInt(document.getElementById('newBannerOrder').value, 10) || 1
       };
@@ -928,11 +940,15 @@
 
       const id = document.getElementById('editHeroId').value;
       const athlete_image = document.getElementById('editHeroAthleteUrl').value.trim();
-      const banner_image = document.getElementById('editHeroBgUrl').value.trim();
+      let banner_image = document.getElementById('editHeroBgUrl').value.trim();
 
       if (!athlete_image && !banner_image) {
         alert('Please upload an athlete photo or product image.');
         return;
+      }
+
+      if (!banner_image) {
+        banner_image = (storefrontData.hero || []).find(s => s.banner_image && s.banner_image !== s.athlete_image && !s.banner_image.includes('hero-banner'))?.banner_image || '/assets/images/hero-athlete-2.png';
       }
 
       const payload = {
@@ -940,7 +956,7 @@
         subtitle: document.getElementById('editHeroSubtitle').value.trim(),
         btn_text: document.getElementById('editHeroBtnText').value.trim(),
         btn_link: document.getElementById('editHeroBtnLink').value.trim(),
-        banner_image: banner_image || athlete_image,
+        banner_image: banner_image,
         athlete_image: athlete_image || banner_image,
         slide_order: parseInt(document.getElementById('editHeroOrder').value, 10) || 1
       };
