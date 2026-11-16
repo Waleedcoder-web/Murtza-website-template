@@ -71,7 +71,7 @@
 
   <!-- Hero 3D Parallax Carousel -->
   <section class="hero-carousel" id="heroCarousel3D">
-    <!-- Slide 1 (3D Sports Arena) -->
+    <!-- Slide 1 (3D Sports Arena - 7v7 / Compression) -->
     <div class="hero-slide active" data-index="0">
       <div class="hero-slide-left">
         <div class="hero-left-bg" style="background-image: url('assets/images/3d-stadium-bg.jpg');"></div>
@@ -92,15 +92,37 @@
       </div>
     </div>
 
-    <!-- 3D Controls (shown when > 1 slide) -->
-    <div class="hero-controls" style="display: none;">
+    <!-- Slide 2 (Championship Basketball Arena) -->
+    <div class="hero-slide" data-index="1">
+      <div class="hero-slide-left">
+        <div class="hero-left-bg" style="background-image: url('assets/images/3d-arena-bg-2.jpg');"></div>
+        <div class="hero-left-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-kicker" style="background: rgba(255, 180, 0, 0.15); color: #ffb400; border-color: rgba(255, 180, 0, 0.45);">ELITE BASKETBALL & TEAMWEAR</span>
+          <h1 class="hero-title">DOMINATE THE COURT</h1>
+          <p class="hero-subtitle">Championship-grade custom sublimated jerseys, ultra-breathable speed mesh, and zero-fade dynamic colorways.</p>
+        </div>
+      </div>
+      <!-- Middle-Ground 3D Uniforms Lineup -->
+      <div class="hero-lineup-wrap">
+        <img src="assets/images/hero-jerseys-lineup-2.png" alt="Custom Sublimated Basketball Uniforms Lineup" class="hero-lineup-img">
+      </div>
+      <div class="hero-slide-right">
+        <div class="hero-right-bg" style="background-image: url('assets/images/3d-arena-bg-2.jpg');"></div>
+        <img src="assets/images/hero-athlete-3d-2.png" alt="3D Basketball Pro Athlete" class="hero-athlete-img">
+      </div>
+    </div>
+
+    <!-- 3D Controls -->
+    <div class="hero-controls">
       <button class="hero-ctrl-btn" id="heroPrevBtn" aria-label="Previous Slide"><i class="bi bi-chevron-left"></i></button>
       <button class="hero-ctrl-btn" id="heroNextBtn" aria-label="Next Slide"><i class="bi bi-chevron-right"></i></button>
     </div>
 
-    <!-- 3D Progress Dots (shown when > 1 slide) -->
-    <div class="hero-dots" style="display: none;">
+    <!-- 3D Progress Dots -->
+    <div class="hero-dots">
       <button class="hero-dot active" data-slide="0"></button>
+      <button class="hero-dot" data-slide="1"></button>
     </div>
   </section>
 
