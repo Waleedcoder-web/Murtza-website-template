@@ -45,7 +45,7 @@
       z-index: 1;
     }
 
-    /* Rotating Glass Light Perimeter Beam */
+    /* Rotating White then Black Glass Light Perimeter Beam */
     .products-grid .product-card-inner::before {
       content: '';
       position: absolute;
@@ -55,14 +55,31 @@
       height: 300%;
       background: conic-gradient(
         from 0deg,
-        transparent 0deg,
-        transparent 250deg,
-        rgba(255, 255, 255, 0.3) 280deg,
-        rgba(56, 189, 248, 0.65) 310deg,
-        rgba(186, 230, 253, 0.95) 335deg,
-        #ffffff 350deg,
-        rgba(56, 189, 248, 0.85) 358deg,
-        transparent 360deg
+        #ffffff 0deg,
+        #ffffff 20deg,
+        #000000 45deg,
+        #111111 60deg,
+        transparent 75deg,
+        transparent 80deg,
+        #ffffff 90deg,
+        #ffffff 110deg,
+        #000000 135deg,
+        #111111 150deg,
+        transparent 165deg,
+        transparent 170deg,
+        #ffffff 180deg,
+        #ffffff 200deg,
+        #000000 225deg,
+        #111111 240deg,
+        transparent 255deg,
+        transparent 260deg,
+        #ffffff 270deg,
+        #ffffff 290deg,
+        #000000 315deg,
+        #111111 330deg,
+        transparent 345deg,
+        transparent 350deg,
+        #ffffff 360deg
       );
       animation: rotateGlassLight 4.5s linear infinite;
       z-index: 0;
@@ -101,10 +118,10 @@
       z-index: 2;
     }
 
-    /* Hover elevation & enhanced glowing aura */
+    /* Hover elevation & enhanced luxury monochrome aura */
     .products-grid .product-card:hover .product-card-inner {
       transform: translateY(-5px) !important;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1), 0 0 20px rgba(56, 189, 248, 0.25) !important;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15), 0 0 16px rgba(0, 0, 0, 0.12) !important;
     }
 
     @keyframes rotateGlassLight {
