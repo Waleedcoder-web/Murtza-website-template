@@ -88,8 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
   closeCartBtn?.addEventListener('click', closeCartDrawer);
 
   // ==========================================
-  // Hero Carousel
+  // Hero 3D Parallax Carousel Engine
   // ==========================================
+  const heroCarousel = document.getElementById('heroCarousel3D') || document.querySelector('.hero-carousel');
   const heroSlides = document.querySelectorAll('.hero-slide');
   const heroDots = document.querySelectorAll('.hero-dot');
   const heroPrev = document.getElementById('heroPrevBtn');
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showHeroSlide(prevIdx);
   }
 
-  if (heroSlides.length > 0) {
+  if (heroSlides.length > 1) {
     heroNext?.addEventListener('click', () => {
       nextHeroSlide();
       resetHeroTimer();
@@ -138,9 +139,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetHeroTimer() {
       clearInterval(heroTimer);
-      heroTimer = setInterval(nextHeroSlide, 5000);
+      heroTimer = setInterval(nextHeroSlide, 5500);
     }
     resetHeroTimer();
+  } else {
+    // Single slide: hide navigation arrows and dots
+    const heroControls = heroCarousel?.querySelector('.hero-controls');
+    const heroDotsWrap = heroCarousel?.querySelector('.hero-dots');
+    if (heroControls) heroControls.style.display = 'none';
+    if (heroDotsWrap) heroDotsWrap.style.display = 'none';
+  }
+
+    // ==========================================
+    // Real-Time 3D Mouse Parallax Depth Effect
+    // ==========================================
+    if (heroCarousel) {
+      heroCarousel.addEventListener('mousemove', (e) => {
+        const rect = heroCarousel.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const activeSlide = heroCarousel.querySelector('.hero-slide.active');
+        if (!activeSlide) return;
+
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const content = activeSlide.querySelector('.hero-content');
+        const bg = activeSlide.querySelector('.hero-left-bg');
+
+        // Athlete tilts and moves with prominent foreground 3D depth
+        if (athlete) {
+          const rotY = x * 14; // +/- 7 deg rotation
+          const rotX = -y * 8; // +/- 4 deg rotation
+          const transX = x * 35; // moves opposite/towards cursor
+          const transY = y * 20;
+          athlete.style.transform = `perspective(1200px) translate3d(${transX}px, ${transY}px, 110px) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+        }
+
+        // Text content floats smoothly at mid-depth
+        if (content) {
+          const transX = x * 18;
+          const transY = y * 12;
+          content.style.transform = `translate3d(${transX}px, ${transY}px, 60px)`;
+        }
+
+        // Background moves subtly in deep negative Z-space (parallax depth)
+        if (bg) {
+          const transX = -x * 25;
+          const transY = -y * 15;
+          bg.style.transform = `translate3d(${transX}px, ${transY}px, -40px) scale(1.08)`;
+        }
+      });
+
+      heroCarousel.addEventListener('mouseleave', () => {
+        const activeSlide = heroCarousel.querySelector('.hero-slide.active');
+        if (!activeSlide) return;
+
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const content = activeSlide.querySelector('.hero-content');
+        const bg = activeSlide.querySelector('.hero-left-bg');
+
+        if (athlete) {
+          athlete.style.transform = `perspective(1200px) translate3d(0, 0, 100px) rotateY(0deg) rotateX(0deg)`;
+          athlete.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          setTimeout(() => { athlete.style.transition = ''; }, 600);
+        }
+        if (content) {
+          content.style.transform = `translate3d(0, 0, 60px)`;
+          content.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          setTimeout(() => { content.style.transition = ''; }, 600);
+        }
+        if (bg) {
+          bg.style.transform = `translate3d(0, 0, -40px) scale(1.08)`;
+          bg.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          setTimeout(() => { bg.style.transition = ''; }, 600);
+        }
+      });
+    }
   }
 
   // ==========================================

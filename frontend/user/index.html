@@ -69,38 +69,40 @@
     </div>
   </div>
 
-  <!-- Hero Carousel -->
-  <section class="hero-carousel">
-    <div class="hero-slide active" style="background-image: url('../assets/images/hero-banner-2.jpg');">
-      <div class="hero-suits-layer" style="background-image: url('../assets/images/hero-athlete-2.png');"></div>
-      <div class="hero-athlete-wrap">
-        <div class="hero-athlete-backdrop" style="background-image: url('../assets/images/hero-athlete-1.png');"></div>
-        <img src="../assets/images/hero-athlete-1.png" alt="Featured Athlete" class="hero-athlete-img">
-      </div>
-      <div class="hero-overlay">
-        <div class="full-container">
-          <div class="hero-grid">
-            <div class="hero-content">
-              <h1 class="hero-title">All Sports. One Ultimate Arena.</h1>
-              <p class="hero-subtitle">High-performance custom team uniforms & athletic apparel built for champions.</p>
-              <div>
-                <a href="catalogue.html" class="btn-hero">Shop Now</a>
-              </div>
-            </div>
+  <!-- Hero 3D Parallax Carousel -->
+  <section class="hero-carousel" id="heroCarousel3D">
+    <!-- Slide 1 (3D Sports Arena) -->
+    <div class="hero-slide active" data-index="0">
+      <!-- Background: Cinematic 3D Stadium with Floodlights -->
+      <div class="hero-slide-left">
+        <div class="hero-left-bg" style="background-image: url('../assets/images/3d-stadium-bg.jpg');"></div>
+        <div class="hero-left-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-kicker">PROSIX 3D PERFORMANCE</span>
+          <h1 class="hero-title">NEXT-GEN 3D SPORT WEAR</h1>
+          <p class="hero-subtitle">Volumetric lighting, layered depth, and tournament-grade custom apparel engineered for champions.</p>
+          <div class="hero-btn-group">
+            <a href="catalogue.html" class="btn-hero">Explore Catalog</a>
+            <a href="customizer.html" class="btn-hero-outline">Customizer</a>
           </div>
         </div>
       </div>
+      <!-- Foreground: High-Impact 3D Sprinter Athlete Cutout -->
+      <div class="hero-slide-right">
+        <div class="hero-right-bg" style="background-image: url('../assets/images/3d-stadium-bg.jpg');"></div>
+        <img src="../assets/images/hero-athlete-3d-new.png" alt="3D Pro Athlete" class="hero-athlete-img">
+      </div>
     </div>
 
-    <!-- Controls -->
+    <!-- 3D Controls (shown when > 1 slide) -->
     <div class="hero-controls" style="display: none;">
-      <button class="hero-ctrl-btn" id="heroPrevBtn"><i class="bi bi-chevron-left"></i></button>
-      <button class="hero-ctrl-btn" id="heroNextBtn"><i class="bi bi-chevron-right"></i></button>
+      <button class="hero-ctrl-btn" id="heroPrevBtn" aria-label="Previous Slide"><i class="bi bi-chevron-left"></i></button>
+      <button class="hero-ctrl-btn" id="heroNextBtn" aria-label="Next Slide"><i class="bi bi-chevron-right"></i></button>
     </div>
 
-    <!-- Dots -->
+    <!-- 3D Progress Dots (shown when > 1 slide) -->
     <div class="hero-dots" style="display: none;">
-      <button class="hero-dot active"></button>
+      <button class="hero-dot active" data-slide="0"></button>
     </div>
   </section>
 
@@ -250,18 +252,15 @@
     <div class="full-container">
       <span class="section-ribbon">FEATURED REELS</span>
       <div class="reels-grid">
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
-          <img src="../assets/images/hero-banner-1.jpg" alt="Reel 1">
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1f2937 0%, #0b0f17 100%);">
           <div class="play-badge"><i class="bi bi-play-fill"></i></div>
           <div class="reel-caption">7v7 Championship Uniform Highlights</div>
         </div>
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
-          <img src="../assets/images/hero-banner-2.jpg" alt="Reel 2">
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e293b 0%, #0b0f17 100%);">
           <div class="play-badge"><i class="bi bi-play-fill"></i></div>
           <div class="reel-caption">Sublimation Printing & Factory Craftsmanship</div>
         </div>
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
-          <img src="../assets/images/hero-banner-3.jpg" alt="Reel 3">
+        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e1e2f 0%, #0b0f17 100%);">
           <div class="play-badge"><i class="bi bi-play-fill"></i></div>
           <div class="reel-caption">Game Day Athlete Fits & Reactions</div>
         </div>
@@ -337,8 +336,8 @@
       <span class="section-ribbon">OUR STORIES</span>
       <div class="stories-grid">
         <div class="story-card">
-          <div class="story-img-col">
-            <img src="../assets/images/hero-banner-1.jpg" alt="Story 1">
+          <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 200px;">
+            <i class="bi bi-palette text-light fs-1 opacity-75"></i>
           </div>
           <div class="story-content-col">
             <div class="story-date">OCTOBER 15, 2026 • 0 COMMENTS</div>
@@ -349,8 +348,8 @@
         </div>
 
         <div class="story-card">
-          <div class="story-img-col">
-            <img src="../assets/images/hero-banner-3.jpg" alt="Story 2">
+          <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e1e2f 0%, #0b0f17 100%); min-height: 200px;">
+            <i class="bi bi-printer text-light fs-1 opacity-75"></i>
           </div>
           <div class="story-content-col">
             <div class="story-date">NOVEMBER 02, 2026 • 0 COMMENTS</div>
@@ -577,73 +576,34 @@
       const carouselEl = document.querySelector('.hero-carousel');
       if (!carouselEl || !Array.isArray(heroList) || heroList.length === 0) return;
 
-      // 1. Determine the suits / product image to display on the left across all carousel slides
-      let sharedSuitsUrl = '';
-      for (const h of heroList) {
-        const i1 = resolveAssetUrl(h.banner_image);
-        const i2 = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
-        if (i1 && i1 !== i2 && !i1.includes('hero-banner') && !i1.includes('background') && !i1.includes('bg-')) {
-          sharedSuitsUrl = i1;
-          break;
-        }
-      }
-      if (!sharedSuitsUrl) {
-        sharedSuitsUrl = resolveAssetUrl('../assets/images/hero-athlete-2.png');
-      }
-
       let slidesHtml = '';
       let dotsHtml = '';
 
       heroList.forEach((h, idx) => {
-        const img1 = resolveAssetUrl(h.banner_image);
-        const img2 = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
+        // Image 1 (Left 70% Background Cover behind text)
+        const leftImg = h.banner_image ? resolveAssetUrl(h.banner_image) : resolveAssetUrl('../assets/images/3d-stadium-bg.jpg');
+        // Image 2 (Right 30% Athlete Cutout / Photo)
+        const athleteImg = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
         const isActive = idx === 0 ? 'active' : '';
 
-        let suitsUrl = '';
-        let athleteCutoutUrl = '';
-        let bgStyle = '';
-
-        if (img2) {
-          // Athlete photo ALWAYS renders on the right side
-          athleteCutoutUrl = img2;
-        } else if (img1 && !img1.includes('suit') && !img1.includes('jersey') && !img1.includes('product')) {
-          athleteCutoutUrl = img1;
-        }
-
-        // Left-side suits image: use this slide's own suits image if set, or display the shared suits image across the rest of the carousel
-        if (img1 && img1 !== img2 && !img1.includes('hero-banner') && !img1.includes('background') && !img1.includes('bg-')) {
-          suitsUrl = img1;
-        } else {
-          suitsUrl = sharedSuitsUrl;
-        }
-
-        if (img1 && (img1.includes('hero-banner') || img1.includes('background') || img1.includes('bg-'))) {
-          bgStyle = `background-image: url('${img1}');`;
-        } else {
-          bgStyle = `background-image: url('${resolveAssetUrl('../assets/images/hero-banner-2.jpg')}');`;
-        }
-
         slidesHtml += `
-          <div class="hero-slide" data-active="${isActive}" style="${bgStyle}">
-            ${suitsUrl ? `<div class="hero-suits-layer" style="background-image: url('${suitsUrl}');"></div>` : ''}
-            ${athleteCutoutUrl ? `
-              <div class="hero-athlete-wrap">
-                <div class="hero-athlete-backdrop" style="background-image: url('${athleteCutoutUrl}');"></div>
-                <img src="${athleteCutoutUrl}" alt="Featured Athlete" class="hero-athlete-img">
-              </div>
-            ` : ''}
-            <div class="hero-overlay">
-              <div class="full-container">
-                <div class="hero-grid">
-                  <div class="hero-content">
-                    <h1 class="hero-title">${h.title || ''}</h1>
-                    ${h.subtitle ? `<p class="hero-subtitle">${h.subtitle}</p>` : ''}
-                    <div>
-                      <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop Now'}</a>
-                    </div>
-                  </div>
+          <div class="hero-slide" data-active="${isActive}">
+            <!-- LEFT 70% SECTION: Covers entire 70% area with Image 1, text sits on top -->
+            <div class="hero-slide-left">
+              <div class="hero-left-bg" style="background-image: url('${leftImg}');"></div>
+              <div class="hero-left-overlay"></div>
+              <div class="hero-content">
+                <h1 class="hero-title">${h.title || ''}</h1>
+                ${h.subtitle ? `<p class="hero-subtitle">${h.subtitle}</p>` : ''}
+                <div>
+                  <a href="${h.btn_link || 'catalogue.html'}" class="btn-hero">${h.btn_text || 'Shop Now'}</a>
                 </div>
               </div>
+            </div>
+            <!-- RIGHT 30% SECTION: Dedicated to Image 2 (Athlete photo) grounded top-to-bottom -->
+            <div class="hero-slide-right">
+              <div class="hero-right-bg" style="background-image: url('${leftImg}');"></div>
+              ${athleteImg ? `<img src="${athleteImg}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
             </div>
           </div>
         `;
@@ -698,18 +658,22 @@
         const activeSlide = carousel.querySelector('.hero-slide.active');
         if (!activeSlide) return;
 
-        const athlete = activeSlide.querySelector('.hero-athlete-img');
-        const suits = activeSlide.querySelector('.hero-suits-layer');
+        const leftBg = activeSlide.querySelector('.hero-left-bg');
         const content = activeSlide.querySelector('.hero-content');
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const rightBg = activeSlide.querySelector('.hero-right-bg');
 
-        if (athlete) {
-          athlete.style.transform = `perspective(1000px) rotateY(${x * -8}deg) rotateX(${y * 5}deg) translate3d(${x * 16}px, ${y * 10}px, 50px)`;
-        }
-        if (suits) {
-          suits.style.transform = `translate3d(${x * -12}px, ${y * -8}px, 20px) scale(1)`;
+        if (leftBg) {
+          leftBg.style.transform = `translate3d(${x * -14}px, ${y * -8}px, 0px) scale(1.03)`;
         }
         if (content) {
-          content.style.transform = `translate3d(${x * 8}px, ${y * 6}px, 35px)`;
+          content.style.transform = `translate3d(${x * 14}px, ${y * 10}px, 40px)`;
+        }
+        if (athlete) {
+          athlete.style.transform = `perspective(1000px) rotateY(${x * -12}deg) rotateX(${y * 6}deg) translate3d(${x * 22}px, ${y * 12}px, 60px)`;
+        }
+        if (rightBg) {
+          rightBg.style.transform = `translate3d(${x * -10}px, ${y * -6}px, 0px) scale(1.15)`;
         }
       });
 
@@ -717,13 +681,15 @@
         const activeSlide = carousel.querySelector('.hero-slide.active');
         if (!activeSlide) return;
 
-        const athlete = activeSlide.querySelector('.hero-athlete-img');
-        const suits = activeSlide.querySelector('.hero-suits-layer');
+        const leftBg = activeSlide.querySelector('.hero-left-bg');
         const content = activeSlide.querySelector('.hero-content');
+        const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const rightBg = activeSlide.querySelector('.hero-right-bg');
 
-        if (athlete) athlete.style.transform = 'perspective(1000px) rotateY(0deg) translate3d(0, 0, 50px)';
-        if (suits) suits.style.transform = 'translate3d(0, 0, 20px) scale(1)';
-        if (content) content.style.transform = 'translate3d(0, 0, 35px)';
+        if (leftBg) leftBg.style.transform = 'translate3d(0, 0, 0) scale(1.02)';
+        if (content) content.style.transform = 'translate3d(0, 0, 40px)';
+        if (athlete) athlete.style.transform = 'perspective(1000px) rotateY(0deg) translate3d(0, 0, 60px)';
+        if (rightBg) rightBg.style.transform = 'scale(1.15)';
       });
     }
 

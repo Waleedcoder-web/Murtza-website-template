@@ -601,7 +601,7 @@
         // If upload endpoint fails, use direct preview image data URL
         if (!finalImageUrl) {
           const previewImg = document.getElementById('modalPreviewImg');
-          finalImageUrl = previewImg?.src || '/assets/images/sample-jersey-1.png';
+          finalImageUrl = previewImg?.src || '';
         }
 
         // 3. Create product in PostgreSQL / Storefront

@@ -35,7 +35,7 @@ const CartStore = {
         id: item.id,
         name: item.name,
         price: parseFloat(item.price) || 0,
-        image: item.image || 'assets/images/sample-jersey-1.png',
+        image: item.image || '',
         size: item.size || 'L',
         quantity: item.quantity || 1,
         type: item.type || 'product'

@@ -98,7 +98,7 @@ const AdminApp = {
   async createProduct(productData) {
     try {
       // Ensure backend receives standard absolute or relative image path
-      let payloadImage = productData.image || '/assets/images/sample-jersey-1.png';
+      let payloadImage = productData.image || '';
       if (payloadImage.startsWith('../')) {
         payloadImage = payloadImage.replace(/^\.\./, '');
       }
