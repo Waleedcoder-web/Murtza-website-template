@@ -244,50 +244,42 @@ document.addEventListener('DOMContentLoaded', () => {
   if (trendingTrack) {
     const getScrollStep = () => {
       const card = trendingTrack.querySelector('.product-card');
-      return card ? card.offsetWidth + 16 : 300;
+      return card ? card.offsetWidth + 16 : 296;
     };
-
-    // Initial position showing previous card slightly peeking on left like the authentic design
-    const initCarouselPosition = () => {
-      const card = trendingTrack.querySelector('.product-card');
-      if (card && trendingTrack.scrollLeft === 0) {
-        const peek = Math.max(50, Math.floor(card.offsetWidth * 0.25));
-        trendingTrack.scrollLeft = card.offsetWidth + 16 - peek;
-      }
-    };
-    setTimeout(initCarouselPosition, 150);
 
     let isAutoScrolling = true;
     let autoScrollInterval = null;
+    let scrollDirection = 1; // 1 = scrolling left-to-right (forward), -1 = opposite (backward)
 
-    const scrollNext = () => {
+    const doAutoScroll = () => {
+      if (!isAutoScrolling) return;
       const step = getScrollStep();
       const maxScroll = trendingTrack.scrollWidth - trendingTrack.clientWidth;
-      if (trendingTrack.scrollLeft >= maxScroll - 20) {
-        trendingTrack.scrollTo({ left: 0, behavior: 'smooth' });
+
+      if (scrollDirection > 0) {
+        // Moving from left to right
+        if (trendingTrack.scrollLeft >= maxScroll - 15) {
+          // Reached the end! Reverse to opposite direction (scroll backwards)
+          scrollDirection = -1;
+          trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
+        } else {
+          trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
+        }
       } else {
-        trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
+        // Moving in opposite direction (right to left)
+        if (trendingTrack.scrollLeft <= 15) {
+          // Reached the beginning! Reverse to opposite direction (scroll forwards)
+          scrollDirection = 1;
+          trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
+        } else {
+          trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
+        }
       }
     };
 
-    const scrollPrev = () => {
-      const step = getScrollStep();
-      if (trendingTrack.scrollLeft <= 20) {
-        const maxScroll = trendingTrack.scrollWidth - trendingTrack.clientWidth;
-        trendingTrack.scrollTo({ left: maxScroll, behavior: 'smooth' });
-      } else {
-        trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
-      }
-    };
-
-    // Auto-scroll 1 product to next every 2 seconds
     const startAutoScroll = () => {
       if (!autoScrollInterval) {
-        autoScrollInterval = setInterval(() => {
-          if (isAutoScrolling) {
-            scrollNext();
-          }
-        }, 2000);
+        autoScrollInterval = setInterval(doAutoScroll, 2000);
       }
     };
 
@@ -305,21 +297,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startAutoScroll();
 
-    // Pause on hover or touch, resume on leave
-    trendingTrack.addEventListener('mouseenter', () => { isAutoScrolling = false; });
-    trendingTrack.addEventListener('mouseleave', () => { isAutoScrolling = true; });
-    trendingTrack.addEventListener('touchstart', () => { isAutoScrolling = false; }, { passive: true });
-    trendingTrack.addEventListener('touchend', () => { isAutoScrolling = true; });
-
-    trendingNext?.addEventListener('click', () => {
-      scrollNext();
+    // Global and clickable button handlers
+    window.trendingScrollNext = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const step = getScrollStep();
+      const maxScroll = trendingTrack.scrollWidth - trendingTrack.clientWidth;
+      if (trendingTrack.scrollLeft >= maxScroll - 15) {
+        scrollDirection = -1;
+        trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
+      } else {
+        scrollDirection = 1;
+        trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
+      }
       resetAutoScroll();
-    });
+    };
 
-    trendingPrev?.addEventListener('click', () => {
-      scrollPrev();
+    window.trendingScrollPrev = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const step = getScrollStep();
+      if (trendingTrack.scrollLeft <= 15) {
+        scrollDirection = 1;
+        trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
+      } else {
+        scrollDirection = -1;
+        trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
+      }
       resetAutoScroll();
-    });
+    };
+
+    // Attach click listeners to navigation buttons
+    if (trendingNext) {
+      trendingNext.onclick = window.trendingScrollNext;
+      trendingNext.addEventListener('click', window.trendingScrollNext);
+    }
+
+    if (trendingPrev) {
+      trendingPrev.onclick = window.trendingScrollPrev;
+      trendingPrev.addEventListener('click', window.trendingScrollPrev);
+    }
+
+    // Pause on hover or touch over carousel container, resume on leave
+    const carouselOuter = trendingTrack.closest('.trending-carousel-outer') || trendingTrack;
+    carouselOuter.addEventListener('mouseenter', () => { isAutoScrolling = false; });
+    carouselOuter.addEventListener('mouseleave', () => { isAutoScrolling = true; });
+    carouselOuter.addEventListener('touchstart', () => { isAutoScrolling = false; }, { passive: true });
+    carouselOuter.addEventListener('touchend', () => { isAutoScrolling = true; });
 
     // Touch & swipe drag support
     let isDown = false;
