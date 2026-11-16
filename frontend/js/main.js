@@ -2,6 +2,35 @@
  * PROSIX SPORTS - MAIN INTERACTION SCRIPT (Vanilla JS)
  */
 
+// Global Trending Carousel Controls (Available immediately)
+window.trendingScrollNext = window.trendingScrollNext || function (e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const track = document.getElementById('trendingProductsTrack');
+  if (!track) return;
+  const card = track.querySelector('.product-card');
+  const step = card ? (card.offsetWidth + 16) : 300;
+  const maxScroll = track.scrollWidth - track.clientWidth;
+  if (maxScroll > 0 && track.scrollLeft >= maxScroll - 20) {
+    track.scrollTo({ left: 0, behavior: 'smooth' });
+  } else {
+    track.scrollBy({ left: step, behavior: 'smooth' });
+  }
+};
+
+window.trendingScrollPrev = window.trendingScrollPrev || function (e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const track = document.getElementById('trendingProductsTrack');
+  if (!track) return;
+  const card = track.querySelector('.product-card');
+  const step = card ? (card.offsetWidth + 16) : 300;
+  const maxScroll = track.scrollWidth - track.clientWidth;
+  if (track.scrollLeft <= 20 && maxScroll > 0) {
+    track.scrollTo({ left: maxScroll, behavior: 'smooth' });
+  } else {
+    track.scrollBy({ left: -step, behavior: 'smooth' });
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // Sticky Header & Back to Top
@@ -230,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
-  }
 
   // ==========================================
   // Trending Carousel Scroll & Tab Filtering
@@ -302,11 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e && e.preventDefault) e.preventDefault();
       const step = getScrollStep();
       const maxScroll = trendingTrack.scrollWidth - trendingTrack.clientWidth;
-      if (trendingTrack.scrollLeft >= maxScroll - 15) {
-        scrollDirection = -1;
-        trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
-      } else {
+      if (maxScroll > 0 && trendingTrack.scrollLeft >= maxScroll - 20) {
+        trendingTrack.scrollTo({ left: 0, behavior: 'smooth' });
         scrollDirection = 1;
+      } else {
         trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
       }
       resetAutoScroll();
@@ -315,11 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.trendingScrollPrev = (e) => {
       if (e && e.preventDefault) e.preventDefault();
       const step = getScrollStep();
-      if (trendingTrack.scrollLeft <= 15) {
-        scrollDirection = 1;
-        trendingTrack.scrollBy({ left: step, behavior: 'smooth' });
-      } else {
+      const maxScroll = trendingTrack.scrollWidth - trendingTrack.clientWidth;
+      if (trendingTrack.scrollLeft <= 20 && maxScroll > 0) {
+        trendingTrack.scrollTo({ left: maxScroll, behavior: 'smooth' });
         scrollDirection = -1;
+      } else {
         trendingTrack.scrollBy({ left: -step, behavior: 'smooth' });
       }
       resetAutoScroll();
@@ -336,12 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
       trendingPrev.addEventListener('click', window.trendingScrollPrev);
     }
 
-    // Pause on hover or touch over carousel container, resume on leave
-    const carouselOuter = trendingTrack.closest('.trending-carousel-outer') || trendingTrack;
-    carouselOuter.addEventListener('mouseenter', () => { isAutoScrolling = false; });
-    carouselOuter.addEventListener('mouseleave', () => { isAutoScrolling = true; });
-    carouselOuter.addEventListener('touchstart', () => { isAutoScrolling = false; }, { passive: true });
-    carouselOuter.addEventListener('touchend', () => { isAutoScrolling = true; });
+    // Pause only when hovering over product cards or touching/dragging, not entire outer container
+    trendingTrack.addEventListener('mouseenter', () => { isAutoScrolling = false; });
+    trendingTrack.addEventListener('mouseleave', () => { if (!isDown) isAutoScrolling = true; });
+    trendingTrack.addEventListener('touchstart', () => { isAutoScrolling = false; }, { passive: true });
+    trendingTrack.addEventListener('touchend', () => { isAutoScrolling = true; resetAutoScroll(); });
 
     // Touch & swipe drag support
     let isDown = false;
