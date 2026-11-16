@@ -26,20 +26,7 @@ const initialCategories = [
   { name: 'Compression Wear', slug: 'compression-wear', description: 'Padded and standard base layer compression gear' }
 ];
 
-const initialProducts = [
-  { sku: 'PRO-287', name: 'Chargers Jersey Designs', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-1.png', type: 'model', description: 'Pro sublimation moisture-wicking 7v7 football jersey.' },
-  { sku: 'PRO-288', name: 'Football Pro Designs', price: 120.00, sport: 'Football', category: 'New Arrivals', image: '/assets/images/sample-jersey-2.png', type: 'model', description: 'Heavyweight reinforced stitching tackle football jersey.' },
-  { sku: 'PRO-289', name: 'Wolfpack Jersey Designs', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-3.png', type: 'model', description: 'Custom aggressive mascot sublimation compression jersey.' },
-  { sku: 'PRO-290', name: 'Patriots Jersey Designs', price: 120.00, sport: 'Football', category: 'New Arrivals', image: '/assets/images/sample-jersey-4.png', type: 'model', description: 'Classic red, white and navy athletic football uniform.' },
-  { sku: 'PRO-291', name: 'Hawks Elite Designs', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-5.png', type: 'model', description: 'Elite breathable 4-way stretch speed jersey.' },
-  { sku: 'PRO-296', name: 'Army Camo Designs', price: 120.00, sport: 'Football', category: 'New Arrivals', image: '/assets/images/sample-jersey-6.png', type: 'model', description: 'Military camo pattern sublimated uniform with durable shoulder panels.' },
-  { sku: 'PRO-297', name: 'Vikings Jersey Designs', price: 120.00, sport: 'Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-7.png', type: 'model', description: 'Vibrant purple and gold game day performance jersey.' },
-  { sku: 'PRO-299', name: 'Bears Jersey Designs', price: 120.00, sport: 'Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-8.png', type: 'model', description: 'Traditional dark navy and orange sublimated football top.' },
-  { sku: 'PRO-302', name: 'Ohio Athletic Designs', price: 120.00, sport: 'Football', category: 'New Arrivals', image: '/assets/images/sample-jersey-9.png', type: 'model', description: 'High-contrast athletic scarlet and silver design.' },
-  { sku: 'PRO-324', name: 'Eagles Jersey Designs', price: 120.00, sport: 'Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-10.png', type: 'model', description: 'Midnight green and metallic silver sublimated jersey.' },
-  { sku: 'PRO-332', name: 'Broncos Jersey Designs', price: 120.00, sport: 'Football', category: 'Best Sellers', image: '/assets/images/sample-jersey-11.png', type: 'model', description: 'Dynamic orange swoosh and royal blue performance cut.' },
-  { sku: 'PRO-336', name: 'Seahawks Pro Designs', price: 120.00, sport: 'Football', category: 'New Arrivals', image: '/assets/images/sample-jersey-12.png', type: 'model', description: 'Action green accents with wolf grey and navy fabric.' }
-];
+const initialProducts = [];
 
 const initialInquiries = [
   {
@@ -203,53 +190,12 @@ async function initializeDatabase() {
       console.log(`ℹ️ Admin users table already has ${adminCount} rows.`);
     }
 
-    // 8. Seed Storefront Hero Slides
+    // 8. Storefront Hero Slides (Clean - managed via admin)
     const heroCountRes = await appClient.query('SELECT COUNT(*) FROM storefront_hero');
     const heroCount = parseInt(heroCountRes.rows[0].count, 10);
-    if (heroCount === 0) {
-      console.log('🌱 Seeding storefront hero slides...');
-      const initialHeroSlides = [
-        {
-          title: 'Play Big. Dream Bigger. All Sports Here.',
-          subtitle: 'High-performance custom team jerseys, athletic wear & premium sports gear built to win.',
-          btn_text: 'Shop The Collection',
-          btn_link: 'catalogue.html',
-          banner_image: '/assets/images/hero-banner-1.jpg',
-          athlete_image: '/assets/images/hero-athlete-1.png',
-          slide_order: 1
-        },
-        {
-          title: 'All Sports. One Ultimate Arena.',
-          subtitle: 'Elevate your team with sublimated fabrics, precision stitching, and custom roster customization.',
-          btn_text: 'Start Customizer',
-          btn_link: 'customizer.html',
-          banner_image: '/assets/images/hero-banner-2.jpg',
-          athlete_image: '/assets/images/hero-athlete-2.png',
-          slide_order: 2
-        },
-        {
-          title: 'Live The Game. Love Every Sport.',
-          subtitle: 'Trusted by thousands of schools, clubs, and competitive leagues worldwide.',
-          btn_text: 'Request Team Quote',
-          btn_link: 'placeorder.html',
-          banner_image: '/assets/images/hero-banner-3.jpg',
-          athlete_image: '/assets/images/hero-athlete-3.png',
-          slide_order: 3
-        }
-      ];
-      for (const h of initialHeroSlides) {
-        await appClient.query(
-          `INSERT INTO storefront_hero (title, subtitle, btn_text, btn_link, banner_image, athlete_image, slide_order)
-           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-          [h.title, h.subtitle, h.btn_text, h.btn_link, h.banner_image, h.athlete_image, h.slide_order]
-        );
-      }
-      console.log('✅ Seeded 3 hero slides.');
-    } else {
-      console.log(`ℹ️ Storefront hero table already has ${heroCount} rows.`);
-    }
+    console.log(`ℹ️ Storefront hero table has ${heroCount} rows.`);
 
-    // 9. Seed Storefront Season Special Offers
+    // 9. Seed Storefront Season Special Offers Heading (Without fake banners)
     const offersCountRes = await appClient.query('SELECT COUNT(*) FROM storefront_offers');
     const offersCount = parseInt(offersCountRes.rows[0].count, 10);
     if (offersCount === 0) {
@@ -260,11 +206,11 @@ async function initializeDatabase() {
         [
           'SEASON SPECIAL OFFERS',
           'Save up to 40% on select bulk team packages and seasonal uniform designs',
-          'PRO TEAM STARTER KIT',
-          'Includes home & away custom jerseys, team hoodies, and matching shorts.',
+          '',
+          '',
           'GET PACKAGE QUOTE',
           'placeorder.html',
-          '/assets/images/hero-banner-2.jpg'
+          ''
         ]
       );
       console.log('✅ Seeded Season Special Offers.');
@@ -272,30 +218,10 @@ async function initializeDatabase() {
       console.log(`ℹ️ Storefront offers table already has ${offersCount} rows.`);
     }
 
-    // 10. Seed Storefront Deal Cards
+    // 10. Storefront Deal Cards (Clean - managed via admin)
     const dealsCountRes = await appClient.query('SELECT COUNT(*) FROM storefront_deal_cards');
     const dealsCount = parseInt(dealsCountRes.rows[0].count, 10);
-    if (dealsCount === 0) {
-      console.log('🌱 Seeding 6 Special Deal Cards...');
-      const initialDealCards = [
-        { badge: '25% OFF', title: 'Chargers Deal Jersey', image: '/assets/images/sample-jersey-1.png', link_url: 'product-details.html?id=287', card_order: 1 },
-        { badge: 'HOT DEAL', title: 'Pro Football Red Deal', image: '/assets/images/sample-jersey-2.png', link_url: 'product-details.html?id=288', card_order: 2 },
-        { badge: '30% OFF', title: 'Wolfpack Aggressive Deal', image: '/assets/images/sample-jersey-3.png', link_url: 'product-details.html?id=289', card_order: 3 },
-        { badge: 'POPULAR', title: 'Hawks Cyan Speed Deal', image: '/assets/images/sample-jersey-5.png', link_url: 'product-details.html?id=291', card_order: 4 },
-        { badge: 'SAVE $20', title: 'Army Camo Reinforced Deal', image: '/assets/images/sample-jersey-6.png', link_url: 'product-details.html?id=296', card_order: 5 },
-        { badge: 'BEST SELLER', title: 'Vikings Purple Gold Deal', image: '/assets/images/sample-jersey-7.png', link_url: 'product-details.html?id=297', card_order: 6 }
-      ];
-      for (const d of initialDealCards) {
-        await appClient.query(
-          `INSERT INTO storefront_deal_cards (badge, title, image, link_url, card_order)
-           VALUES ($1, $2, $3, $4, $5)`,
-          [d.badge, d.title, d.image, d.link_url, d.card_order]
-        );
-      }
-      console.log('✅ Seeded 6 Special Deal Cards.');
-    } else {
-      console.log(`ℹ️ Storefront deal cards table already has ${dealsCount} rows.`);
-    }
+    console.log(`ℹ️ Storefront deal cards table has ${dealsCount} rows.`);
 
     console.log('🎉 Database initialization complete!');
     await appClient.end();

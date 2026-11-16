@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS products (
     price NUMERIC(10, 2) NOT NULL DEFAULT 120.00,
     sport VARCHAR(100) DEFAULT '7v7 Football',
     category VARCHAR(100) DEFAULT 'New Arrivals',
-    image TEXT DEFAULT '/assets/images/sample-jersey-1.png',
+    image TEXT DEFAULT '',
     description TEXT,
     sizes_available JSONB DEFAULT '["Youth S","Youth M","Youth L","Adult S","Adult M","Adult L","Adult XL","Adult 2XL","Adult 3XL"]',
     type VARCHAR(50) DEFAULT 'model',
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS storefront_hero (
     subtitle TEXT,
     btn_text VARCHAR(100) DEFAULT 'Shop The Collection',
     btn_link VARCHAR(255) DEFAULT 'catalogue.html',
-    banner_image TEXT DEFAULT '/assets/images/hero-banner-1.jpg',
-    athlete_image TEXT DEFAULT '/assets/images/hero-athlete-1.png',
+    banner_image TEXT DEFAULT '',
+    athlete_image TEXT DEFAULT '',
     slide_order INT DEFAULT 1,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS storefront_offers (
     featured_desc TEXT DEFAULT 'Includes home & away custom jerseys, team hoodies, and matching shorts.',
     featured_btn_text VARCHAR(100) DEFAULT 'GET PACKAGE QUOTE',
     featured_btn_link VARCHAR(255) DEFAULT 'placeorder.html',
-    featured_image TEXT DEFAULT '/assets/images/hero-banner-2.jpg',
+    featured_image TEXT DEFAULT '',
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS storefront_featured_banners (
     description TEXT DEFAULT 'Includes home & away custom jerseys, team hoodies, and matching shorts.',
     btn_text VARCHAR(100) DEFAULT 'GET PACKAGE QUOTE',
     btn_link VARCHAR(255) DEFAULT 'placeorder.html',
-    banner_image TEXT DEFAULT '/assets/images/hero-banner-2.jpg',
+    banner_image TEXT DEFAULT '',
     banner_order INT DEFAULT 1,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS storefront_deal_cards (
     badge VARCHAR(50) NOT NULL,
     title VARCHAR(255) DEFAULT 'Deal Jersey',
     image TEXT NOT NULL,
-    link_url VARCHAR(255) DEFAULT 'product-details.html?id=287',
+    link_url VARCHAR(255) DEFAULT 'catalogue.html',
     card_order INT DEFAULT 1,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

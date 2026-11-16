@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
   const cleanPrice = price !== undefined && price !== null && price !== '' ? parseFloat(price) : 0.00;
   const cleanSport = sport || '7v7 Football';
   const cleanCategory = category || 'New Arrivals';
-  const cleanImage = image || '/assets/images/sample-jersey-1.png';
+  const cleanImage = image || '';
   const cleanType = type || 'model';
   const cleanDesc = description || `${cleanSport} performance uniform.`;
 
