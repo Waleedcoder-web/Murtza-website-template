@@ -58,13 +58,19 @@ const fallbackStore = {
     { id: 1, username: 'admin', email: 'admin@prosixsports.com', role: 'superadmin', is_active: true }
   ],
   categories: [
-    { id: 1, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/products/rashguard-1.jpg', description: 'Sublimated high-flex compression shirts, rashguards & base layers', is_active: true, product_count: 8 },
-    { id: 2, name: '7v7 Football', slug: '7v7-football', image: '/assets/images/products/rashguard-3.jpg', description: 'Non-padded 7v7 tournament uniforms, soft-shell gear & practice jerseys', is_active: true, product_count: 5 },
-    { id: 3, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/products/rashguard-5.jpg', description: 'Top performing and most ordered uniform sets', is_active: true, product_count: 10 },
-    { id: 4, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/products/rashguard-2.jpg', description: 'Latest season releases and modern cuts', is_active: true, product_count: 10 },
-    { id: 5, name: 'Basketball Uniforms', slug: 'basketball-uniforms', image: '/assets/images/hero-athlete-3d-2.png', description: 'Elite basketball jerseys, reversible kits & speed-mesh shorts', is_active: true, product_count: 4 },
-    { id: 6, name: 'Training & Fitness', slug: 'training-fitness', image: '/assets/images/products/rashguard-4.jpg', description: 'High-durability gym wear, workout tees & cross-training gear', is_active: true, product_count: 6 },
-    { id: 7, name: 'Outerwear & Warmups', slug: 'outerwear-warmups', image: '/assets/images/products/rashguard-7.jpg', description: 'Sideline jackets, hoodies, and travel tracksuits', is_active: true, product_count: 3 }
+    { id: 1, name: '7v7 Football', slug: '7v7', image: '/assets/images/sport-7v7.png', description: 'Non-padded 7v7 tournament uniforms & practice compression gear', is_active: true, product_count: 5 },
+    { id: 2, name: 'Baseball', slug: 'baseball', image: '/assets/images/sport-baseball.png', description: 'Custom button-down & two-button sublimated baseball jerseys', is_active: true, product_count: 2 },
+    { id: 3, name: 'Basketball', slug: 'basketball', image: '/assets/images/sport-basketball.png', description: 'Championship basketball jerseys, reversible kits & speed-mesh shorts', is_active: true, product_count: 4 },
+    { id: 4, name: 'Cheer', slug: 'cheer', image: '/assets/images/sport-cheer.png', description: 'Cheerleading performance tops, skirts, warm-ups & sideline wear', is_active: true, product_count: 1 },
+    { id: 5, name: 'Ice Hockey', slug: 'hockey', image: '/assets/images/sport-hockey.png', description: 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', is_active: true, product_count: 1 },
+    { id: 6, name: 'Lacrosse', slug: 'lacrosse', image: '/assets/images/sport-lacrosse.png', description: 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', is_active: true, product_count: 1 },
+    { id: 7, name: 'Soccer', slug: 'soccer', image: '/assets/images/sport-soccer.png', description: 'Sublimated match soccer kits, goalie kits & training tops', is_active: true, product_count: 2 },
+    { id: 8, name: 'Track & Field', slug: 'track', image: '/assets/images/sport-track.png', description: 'Ultra-lightweight speed singlets, split shorts & running tights', is_active: true, product_count: 2 },
+    { id: 9, name: 'Volleyball', slug: 'volleyball', image: '/assets/images/sport-volleyball.png', description: 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', is_active: true, product_count: 2 },
+    { id: 10, name: 'Wrestling', slug: 'wrestling', image: '/assets/images/sport-wrestling.png', description: 'Custom sublimated wrestling singlets, compression tops & fight shorts', is_active: true, product_count: 3 },
+    { id: 11, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true, product_count: 8 },
+    { id: 12, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/sport-basketball.png', description: 'Top performing and most ordered uniform sets', is_active: true, product_count: 10 },
+    { id: 13, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/sport-soccer.png', description: 'Latest season releases and modern cuts', is_active: true, product_count: 10 }
   ],
   hero_slides: [],
   special_offers: {
@@ -209,16 +215,23 @@ ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO categories (name, slug, description, image)
 VALUES 
-  ('Compression Wear', 'compression-wear', 'Sublimated high-flex compression shirts, rashguards & base layers', '/assets/images/products/rashguard-1.jpg'),
-  ('7v7 Football', '7v7-football', 'Non-padded 7v7 tournament uniforms, soft-shell gear & practice jerseys', '/assets/images/products/rashguard-3.jpg'),
-  ('Best Sellers', 'best-sellers', 'Top performing and most ordered uniform sets', '/assets/images/products/rashguard-5.jpg'),
-  ('New Arrivals', 'new-arrivals', 'Latest season releases and modern cuts', '/assets/images/products/rashguard-2.jpg'),
-  ('Basketball Uniforms', 'basketball-uniforms', 'Elite basketball jerseys, reversible kits & speed-mesh shorts', '/assets/images/hero-athlete-3d-2.png'),
-  ('Training & Fitness', 'training-fitness', 'High-durability gym wear, workout tees & cross-training gear', '/assets/images/products/rashguard-4.jpg'),
-  ('Outerwear & Warmups', 'outerwear-warmups', 'Sideline jackets, hoodies & tracksuits', '/assets/images/products/rashguard-7.jpg')
+  ('7v7 Football', '7v7', 'Non-padded 7v7 tournament uniforms & practice compression gear', '/assets/images/sport-7v7.png'),
+  ('Baseball', 'baseball', 'Custom button-down & two-button sublimated baseball jerseys', '/assets/images/sport-baseball.png'),
+  ('Basketball', 'basketball', 'Championship basketball jerseys, reversible kits & speed-mesh shorts', '/assets/images/sport-basketball.png'),
+  ('Cheer', 'cheer', 'Cheerleading performance tops, skirts, warm-ups & sideline wear', '/assets/images/sport-cheer.png'),
+  ('Ice Hockey', 'hockey', 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', '/assets/images/sport-hockey.png'),
+  ('Lacrosse', 'lacrosse', 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', '/assets/images/sport-lacrosse.png'),
+  ('Soccer', 'soccer', 'Sublimated match soccer kits, goalie kits & training tops', '/assets/images/sport-soccer.png'),
+  ('Track & Field', 'track', 'Ultra-lightweight speed singlets, split shorts & running tights', '/assets/images/sport-track.png'),
+  ('Volleyball', 'volleyball', 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', '/assets/images/sport-volleyball.png'),
+  ('Wrestling', 'wrestling', 'Custom sublimated wrestling singlets, compression tops & fight shorts', '/assets/images/sport-wrestling.png'),
+  ('Compression Wear', 'compression-wear', 'High-flex compression shirts, rashguards & base layers', '/assets/images/sport-7v7.png'),
+  ('Best Sellers', 'best-sellers', 'Top performing and most ordered uniform sets', '/assets/images/sport-basketball.png'),
+  ('New Arrivals', 'new-arrivals', 'Latest season releases and modern cuts', '/assets/images/sport-soccer.png')
 ON CONFLICT (name) DO UPDATE SET 
   image = EXCLUDED.image,
-  description = EXCLUDED.description;
+  description = EXCLUDED.description,
+  slug = EXCLUDED.slug;
 
 INSERT INTO admin_users (username, email, password_hash, role)
 VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')

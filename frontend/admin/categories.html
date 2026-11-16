@@ -279,7 +279,7 @@
             <div class="row g-3 align-items-center">
               <div class="col-auto">
                 <div class="position-relative">
-                  <img id="catModalImgPreview" src="../assets/images/products/rashguard-1.jpg" alt="Preview" style="width: 76px; height: 76px; object-fit: contain; border-radius: 12px; border: 2px solid #000; background: #fff; padding: 2px;">
+                  <img id="catModalImgPreview" src="../assets/images/sport-7v7.png" alt="Preview" style="width: 76px; height: 76px; object-fit: contain; border-radius: 12px; border: 2px solid #000; background: #fff; padding: 4px;">
                 </div>
               </div>
               <div class="col">
@@ -289,15 +289,22 @@
                   </button>
                   <input type="file" id="catFileInput" accept="image/*" class="d-none" onchange="handleCatFileUpload(this)">
                 </div>
-                <input type="text" class="form-control form-control-glass form-control-sm mb-2" id="catImageUrlInput" placeholder="Image URL (e.g. /assets/images/products/rashguard-1.jpg)" oninput="updateCatImgPreview(this.value)">
+                <input type="text" class="form-control form-control-glass form-control-sm mb-2" id="catImageUrlInput" placeholder="Image URL (e.g. /assets/images/sport-7v7.png)" oninput="updateCatImgPreview(this.value)">
                 
                 <div class="d-flex gap-1 flex-wrap align-items-center">
-                  <span class="text-muted" style="font-size: 0.72rem;">Quick Presets:</span>
-                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/products/rashguard-1.jpg')">RG Blackout</span>
-                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/products/rashguard-2.jpg')">RG Royal</span>
-                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/products/rashguard-3.jpg')">RG Crimson</span>
-                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/products/rashguard-4.jpg')">RG Volt</span>
-                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/hero-athlete-3d-2.png')">Basketball 3D</span>
+                  <span class="text-muted" style="font-size: 0.72rem;">Sport Icons:</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-7v7.png')">7v7 Football</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-baseball.png')">Baseball</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-basketball.png')">Basketball</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-soccer.png')">Soccer</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-hockey.png')">Hockey</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-track.png')">Track</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-volleyball.png')">Volleyball</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-wrestling.png')">Wrestling</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-cheer.png')">Cheer</span>
+                  <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-lacrosse.png')">Lacrosse</span>
+                </div>
+              </div>
                   <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/hero-athlete-3d-new.png')">Football 3D</span>
                 </div>
               </div>
@@ -388,14 +395,14 @@
       }
 
       tbody.innerHTML = filtered.map(c => {
-        const imgUrl = AdminApp.resolveAssetUrl(c.image || '/assets/images/products/rashguard-1.jpg');
+        const imgUrl = AdminApp.resolveAssetUrl(c.image || '/assets/images/sport-7v7.png');
         const count = c.product_count !== undefined ? c.product_count : 0;
         const isActive = c.is_active !== false;
 
         return `
           <tr>
             <td>
-              <img src="${imgUrl}" alt="${c.name}" class="cat-thumb-img" onerror="this.src='../assets/images/products/rashguard-1.jpg'">
+              <img src="${imgUrl}" alt="${c.name}" class="cat-thumb-img" onerror="this.src='../assets/images/sport-7v7.png'">
             </td>
             <td>
               <div class="fw-bold text-dark">${c.name}</div>
@@ -460,7 +467,7 @@
     }
 
     function updateCatImgPreview(url) {
-      const resolved = AdminApp.resolveAssetUrl(url || '/assets/images/products/rashguard-1.jpg');
+      const resolved = AdminApp.resolveAssetUrl(url || '/assets/images/sport-7v7.png');
       document.getElementById('catModalImgPreview').src = resolved;
     }
 
@@ -490,8 +497,8 @@
       document.getElementById('editCategoryId').value = '';
       document.getElementById('catNameInput').value = '';
       document.getElementById('catSlugInput').value = '';
-      document.getElementById('catImageUrlInput').value = '/assets/images/products/rashguard-1.jpg';
-      updateCatImgPreview('/assets/images/products/rashguard-1.jpg');
+      document.getElementById('catImageUrlInput').value = '/assets/images/sport-7v7.png';
+      updateCatImgPreview('/assets/images/sport-7v7.png');
       document.getElementById('catDescInput').value = '';
       document.getElementById('catActiveSwitch').checked = true;
       categoryModalInstance.show();
@@ -505,8 +512,8 @@
       document.getElementById('editCategoryId').value = cat.id;
       document.getElementById('catNameInput').value = cat.name;
       document.getElementById('catSlugInput').value = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
-      document.getElementById('catImageUrlInput').value = cat.image || '/assets/images/products/rashguard-1.jpg';
-      updateCatImgPreview(cat.image || '/assets/images/products/rashguard-1.jpg');
+      document.getElementById('catImageUrlInput').value = cat.image || '/assets/images/sport-7v7.png';
+      updateCatImgPreview(cat.image || '/assets/images/sport-7v7.png');
       document.getElementById('catDescInput').value = cat.description || '';
       document.getElementById('catActiveSwitch').checked = cat.is_active !== false;
 
