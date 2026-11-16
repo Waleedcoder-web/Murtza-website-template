@@ -12,6 +12,91 @@
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    /* 4 Products Per Row Catalogue Grid */
+    .products-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 20px !important;
+      width: 100% !important;
+    }
+
+    .products-grid .product-card {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .products-grid .product-card-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .products-grid .product-img-wrap {
+      height: 220px !important;
+    }
+
+    @media (max-width: 1300px) {
+      .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+      .products-grid .product-img-wrap {
+        height: 180px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+    }
+
+    /* Directional Entrance Animations: 2 from Top, 2 from Left */
+    @keyframes fadeInFromTop {
+      0% {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInFromLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .card-fade-top {
+      opacity: 0;
+      animation: fadeInFromTop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .card-fade-left {
+      opacity: 0;
+      animation: fadeInFromLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
 </head>
 <body>
 
@@ -73,38 +158,19 @@
     <div class="full-container">
       <div class="row g-4">
         <!-- Sidebar Filters -->
-        <div class="col-lg-3">
-          <div class="p-4 bg-light rounded-4 border">
-            <h5 class="fw-bold mb-3 text-uppercase"><i class="bi bi-filter me-2"></i>Filter by Sport</h5>
-            <div class="d-flex flex-column gap-2 mb-4" id="sportFilterGroup">
+        <div class="col-xl-2 col-lg-3">
+          <div class="p-3 bg-light rounded-4 border">
+            <h5 class="fw-bold mb-3 text-uppercase" style="font-size: 0.95rem;"><i class="bi bi-filter me-2 text-primary"></i>Filter by Sport</h5>
+            <div class="d-flex flex-column gap-2 mb-2" id="sportFilterGroup">
               <label class="d-flex align-items-center gap-2 cursor-pointer">
                 <input type="radio" name="sportFilter" value="all" checked> All Sports
               </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="7v7"> 7v7 Football
-              </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="baseball"> Baseball
-              </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="basketball"> Basketball
-              </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="soccer"> Soccer
-              </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="volleyball"> Volleyball
-              </label>
-              <label class="d-flex align-items-center gap-2 cursor-pointer">
-                <input type="radio" name="sportFilter" value="track"> Track & Field
-              </label>
             </div>
-
           </div>
         </div>
 
-        <!-- Products Grid Area -->
-        <div class="col-lg-9">
+        <!-- Products Grid Area (4 Items Per Row) -->
+        <div class="col-xl-10 col-lg-9">
           <!-- Toolbar -->
           <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 pb-3 border-bottom">
             <span class="text-muted fw-bold" id="catalogueCountDisplay">Showing <strong class="text-dark">12</strong> of 48 Designs</span>
@@ -290,18 +356,23 @@
       }
 
       let html = '';
-      products.forEach(p => {
+      products.forEach((p, index) => {
         let img = resolveAssetUrl(p.image);
+        // In every row of 4: 2 fade from TOP, 2 fade from LEFT
+        const isFromTop = (index % 4 < 2);
+        const animClass = isFromTop ? 'card-fade-top' : 'card-fade-left';
+        const delay = ((index % 4) * 0.12).toFixed(2);
 
         html += `
-          <div class="product-card" data-sport="${p.sport || ''}">
-            <div class="product-img-wrap"><img src="${img}" alt="${p.name}"></div>
-            <div class="product-info-row">
-              <h5 class="product-name text-uppercase">${p.name}</h5>
-            </div>
-            <div class="product-actions">
-              <a href="product-details.html?id=${p.id}" class="btn-card-action btn-card-outline">View</a>
-              <a href="customizer.html?id=${p.id}" class="btn-card-action btn-card-dark">Customize</a>
+          <div class="product-card ${animClass}" style="animation-delay: ${delay}s;" data-sport="${p.sport || ''}">
+            <div class="product-card-inner">
+              <div class="product-img-wrap">
+                <img src="${img}" alt="${p.name}" class="product-img">
+              </div>
+              <div class="product-info-row">
+                <span class="product-name text-uppercase">${p.name}</span>
+              </div>
+              <a href="customizer.html?id=${p.id}" class="btn-customize-full">More Detail</a>
             </div>
           </div>
         `;
