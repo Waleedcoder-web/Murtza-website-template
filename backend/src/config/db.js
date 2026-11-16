@@ -6,28 +6,16 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
-let poolConfig;
+let pool = null;
 if (connectionString) {
-  const isLocalHost = connectionString.includes('localhost') || connectionString.includes('127.0.0.1');
-  poolConfig = {
+  pool = new Pool({
     connectionString,
-    ssl: isLocalHost ? false : { rejectUnauthorized: false },
+    ssl: { rejectUnauthorized: false },
     connectionTimeoutMillis: 10000,
     idleTimeoutMillis: 30000,
     max: 10
-  };
-} else {
-  poolConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
-    database: process.env.DB_NAME || 'prosix_db',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '1234',
-    connectionTimeoutMillis: 4000
-  };
+  });
 }
-
-const pool = new Pool(poolConfig);
 
 // Clean in-memory fallback store ready for user uploads
 const fallbackStore = {
@@ -267,6 +255,12 @@ let initPromise = null;
 let lastConnectionError = null;
 
 async function initDB() {
+  if (!pool) {
+    isConnected = false;
+    lastConnectionError = 'No DATABASE_URL set. Running in cloud fallback mode (Neon / Vercel ready).';
+    return;
+  }
+
   if (initPromise && isConnected) return initPromise;
 
   initPromise = (async () => {
@@ -274,18 +268,17 @@ async function initDB() {
       const client = await pool.connect();
       isConnected = true;
       lastConnectionError = null;
-      console.log('✅ PostgreSQL connected to database successfully.');
+      console.log('✅ Neon / Cloud PostgreSQL connected successfully.');
 
-      // Automatically create all tables and indexes if not created yet (Neon / Cloud / Local)
+      // Automatically create all tables and indexes if not created yet (Neon / Cloud)
       await client.query(SCHEMA_SQL);
-      console.log('✅ PostgreSQL schema verified & all tables automatically initialized in database.');
+      console.log('✅ Neon PostgreSQL schema verified & all tables automatically initialized.');
 
       client.release();
     } catch (err) {
       isConnected = false;
       lastConnectionError = err.message;
-      console.warn(`⚠️ PostgreSQL connection notice: ${err.message}`);
-      console.warn('ℹ️ Running backend with local memory persistence fallback.');
+      console.warn(`⚠️ Cloud Database notice: ${err.message}`);
       initPromise = null; // Allow retry on subsequent calls
     }
   })();
@@ -295,10 +288,11 @@ async function initDB() {
 
 // Unified Query Helper (auto-ensures init before query)
 async function query(text, params) {
+  if (!pool) return null;
   if (!isConnected) {
     await initDB().catch(() => {});
   }
-  if (isConnected) {
+  if (isConnected && pool) {
     return pool.query(text, params);
   }
   return null;

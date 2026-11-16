@@ -179,16 +179,55 @@
     let allCatalogueProducts = [];
 
     document.addEventListener('DOMContentLoaded', async () => {
-      await loadCatalogueProducts();
-
-      // Listen to sport radio filter change
-      document.querySelectorAll('input[name="sportFilter"]').forEach(radio => {
-        radio.addEventListener('change', () => filterCatalogue());
-      });
+      await Promise.all([loadCatalogueCategories(), loadCatalogueProducts()]);
 
       // Listen to sort change
       document.getElementById('catalogueSortSelect')?.addEventListener('change', () => filterCatalogue());
     });
+
+    async function loadCatalogueCategories() {
+      const filterGroup = document.getElementById('sportFilterGroup');
+      if (!filterGroup) return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const activeSportParam = (urlParams.get('sport') || 'all').toLowerCase();
+
+      try {
+        const res = await fetch(`${USER_API_BASE}/categories`);
+        if (res.ok) {
+          const cats = await res.json();
+          if (Array.isArray(cats) && cats.length > 0) {
+            let html = `
+              <label class="d-flex align-items-center gap-2 cursor-pointer">
+                <input type="radio" name="sportFilter" value="all" ${activeSportParam === 'all' ? 'checked' : ''}> All Sports
+              </label>
+            `;
+            cats.filter(c => c.is_active !== false).forEach(c => {
+              const val = (c.slug || c.name).toLowerCase();
+              const isChecked = activeSportParam === val || activeSportParam === c.name.toLowerCase();
+              html += `
+                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                  <input type="radio" name="sportFilter" value="${c.name}" ${isChecked ? 'checked' : ''}> ${c.name}
+                </label>
+              `;
+            });
+            filterGroup.innerHTML = html;
+
+            document.querySelectorAll('input[name="sportFilter"]').forEach(radio => {
+              radio.addEventListener('change', () => filterCatalogue());
+            });
+            filterCatalogue();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to load categories dynamically for catalogue', e);
+      }
+
+      document.querySelectorAll('input[name="sportFilter"]').forEach(radio => {
+        radio.addEventListener('change', () => filterCatalogue());
+      });
+    }
 
     function getApiBase() {
       if (window.location.protocol === 'file:') return 'http://localhost:5000/api';

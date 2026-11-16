@@ -520,4 +520,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if (searchResults) searchResults.innerHTML = html;
   });
+
+  // ==========================================
+  // Dynamic Storefront Categories Engine
+  // ==========================================
+  async function loadStorefrontCategories() {
+    const track = document.getElementById('sportsCategoryTrack') || document.querySelector('.sports-track');
+    if (!track) return;
+
+    try {
+      const isUserDir = window.location.pathname.includes('/user/');
+      const apiBase = isUserDir ? '../api' : '/api';
+      const res = await fetch(`${apiBase}/categories`);
+      if (!res.ok) return;
+
+      const categories = await res.json();
+      if (!Array.isArray(categories) || categories.length === 0) return;
+
+      const activeCategories = categories.filter(c => c.is_active !== false);
+      if (activeCategories.length === 0) return;
+
+      function resolveCategoryUrl(url) {
+        if (!url) return '';
+        if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+        const clean = url.replace(/^\.?\/?/, '');
+        return (isUserDir ? '../' : '') + clean;
+      }
+
+      const defaultIcon = resolveCategoryUrl('assets/images/sport-7v7.png');
+      const catalogueLink = isUserDir ? 'catalogue.html' : 'catalogue.html';
+
+      let cardsHtml = '';
+      activeCategories.forEach(c => {
+        const img = resolveCategoryUrl(c.image || 'assets/images/sport-7v7.png');
+        const sportSlug = encodeURIComponent(c.slug || c.name);
+        cardsHtml += `
+          <a href="${catalogueLink}?sport=${sportSlug}" class="sport-icon-card">
+            <div class="sport-icon-circle">
+              <img src="${img}" alt="${c.name}" onerror="this.src='${defaultIcon}'">
+            </div>
+            <span class="sport-name">${c.name}</span>
+          </a>
+        `;
+      });
+
+      track.innerHTML = cardsHtml;
+    } catch (e) {
+      console.warn('Error loading dynamic storefront categories', e);
+    }
+  }
+
+  loadStorefrontCategories();
 });
