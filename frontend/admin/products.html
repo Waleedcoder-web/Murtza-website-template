@@ -236,7 +236,7 @@
             <input type="text" class="form-control form-control-glass py-2" placeholder="e.g. TITANS SUB-PRO JERSEY" required id="newProductName">
           </div>
 
-          <!-- 2. Sport & Apparel Category (Dynamic from Neon Database) -->
+          <!-- 2. Sport & Apparel Category (Custom Glass Dropdown with Rounded Corners) -->
           <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center mb-1">
               <label class="form-label small fw-bold text-dark mb-0">
@@ -246,11 +246,30 @@
                 <i class="bi bi-gear-fill me-1"></i>Manage Categories
               </a>
             </div>
-            <select class="form-select category-select-modern" id="newProductCategorySelect" required>
-              <!-- Populated dynamically from Neon / PostgreSQL database categories -->
-              <option value="" disabled selected>Loading categories from database...</option>
-            </select>
-            <div class="form-text text-muted" style="font-size: 0.74rem;">Select category loaded live from database. Sets sport type and storefront filters.</div>
+
+            <!-- Custom Category Dropdown Wrap -->
+            <div class="custom-category-dropdown-wrap" id="customCategoryDropdownWrap">
+              <input type="hidden" id="newProductCategorySelect" value="" required>
+              
+              <!-- Trigger Pill -->
+              <div class="custom-category-trigger" id="customCategoryTrigger" onclick="toggleCategoryDropdown(event)">
+                <div class="d-flex align-items-center gap-2">
+                  <img id="customCatSelectedIcon" src="../assets/images/sport-7v7.png" class="cat-selected-icon" alt="">
+                  <div>
+                    <span id="customCatSelectedText" class="fw-bold text-dark">Select Category</span>
+                    <small class="text-muted d-block" id="customCatSelectedSub" style="font-size: 0.72rem;">Loaded live from database</small>
+                  </div>
+                </div>
+                <i class="bi bi-chevron-down cat-arrow-icon" id="customCatArrow"></i>
+              </div>
+
+              <!-- Opened Menu Panel (Smooth Rounded Corners, Glass Effect) -->
+              <div class="custom-category-menu" id="customCategoryMenu">
+                <!-- Dynamically populated from database categories with sport icons & checkmarks -->
+              </div>
+            </div>
+
+            <div class="form-text text-muted" style="font-size: 0.74rem;">Click to select category. Defines sport type and storefront filters.</div>
           </div>
 
           <!-- 3. Collection Tag (Optional) -->
@@ -332,25 +351,102 @@
     }
 
     function populateCategoriesUI() {
-      // 1. Populate Category dropdown for Add Product dynamically from Neon database
-      const catSelect = document.getElementById('newProductCategorySelect');
-      if (catSelect && categoriesList && categoriesList.length > 0) {
-        catSelect.innerHTML = categoriesList
-          .filter(c => c.is_active !== false)
-          .map((c, i) => `<option value="${c.name}" ${i === 0 ? 'selected' : ''}>${c.name}</option>`)
-          .join('');
+      const hiddenInput = document.getElementById('newProductCategorySelect');
+      const menu = document.getElementById('customCategoryMenu');
+      const selectedText = document.getElementById('customCatSelectedText');
+      const selectedIcon = document.getElementById('customCatSelectedIcon');
+      const selectedSub = document.getElementById('customCatSelectedSub');
+
+      if (!menu || !categoriesList || categoriesList.length === 0) return;
+
+      const activeCategories = categoriesList.filter(c => c.is_active !== false);
+      if (activeCategories.length === 0) return;
+
+      // Set default selected category if none selected
+      if (!hiddenInput.value) {
+        hiddenInput.value = activeCategories[0].name;
+        if (selectedText) selectedText.textContent = activeCategories[0].name;
+        if (selectedIcon) selectedIcon.src = AdminApp.resolveAssetUrl(activeCategories[0].image || '/assets/images/sport-7v7.png');
+        if (selectedSub) selectedSub.textContent = activeCategories[0].description || 'Sport category';
       }
+
+      // Populate custom rounded dropdown menu items
+      let itemsHtml = '';
+      activeCategories.forEach(c => {
+        const isSelected = hiddenInput.value === c.name;
+        const iconUrl = AdminApp.resolveAssetUrl(c.image || '/assets/images/sport-7v7.png');
+        itemsHtml += `
+          <div class="custom-category-item ${isSelected ? 'selected' : ''}" onclick="selectCustomCategory('${c.name.replace(/'/g, "\\'")}', '${iconUrl}', '${(c.description || '').replace(/'/g, "\\'")}')">
+            <div class="d-flex align-items-center">
+              <img src="${iconUrl}" alt="${c.name}" class="item-icon" onerror="this.src='../assets/images/sport-7v7.png'">
+              <div>
+                <div class="fw-bold text-dark small mb-0">${c.name}</div>
+                <small class="text-muted" style="font-size: 0.72rem;">${c.description || 'Sport apparel line'}</small>
+              </div>
+            </div>
+            ${isSelected ? '<i class="bi bi-check2-circle text-primary fs-5"></i>' : ''}
+          </div>
+        `;
+      });
+      menu.innerHTML = itemsHtml;
 
       // 2. Also populate filter chips dynamically
       const chipsContainer = document.getElementById('filterChipsContainer');
-      if (chipsContainer && categoriesList && categoriesList.length > 0) {
+      if (chipsContainer) {
         let chipsHtml = `<button class="filter-chip active" onclick="setCategoryFilter('all', this)">All Uniforms</button>`;
-        categoriesList.filter(c => c.is_active !== false).slice(0, 10).forEach(c => {
+        activeCategories.slice(0, 10).forEach(c => {
           chipsHtml += `<button class="filter-chip" onclick="setCategoryFilter('${c.name}', this)">${c.name}</button>`;
         });
         chipsContainer.innerHTML = chipsHtml;
       }
     }
+
+    function toggleCategoryDropdown(e) {
+      if (e) e.stopPropagation();
+      const trigger = document.getElementById('customCategoryTrigger');
+      const menu = document.getElementById('customCategoryMenu');
+      if (!menu || !trigger) return;
+
+      const isShow = menu.classList.contains('show');
+      if (isShow) {
+        menu.classList.remove('show');
+        trigger.classList.remove('active');
+      } else {
+        menu.classList.add('show');
+        trigger.classList.add('active');
+      }
+    }
+
+    function selectCustomCategory(name, iconUrl, description) {
+      const hiddenInput = document.getElementById('newProductCategorySelect');
+      const selectedText = document.getElementById('customCatSelectedText');
+      const selectedIcon = document.getElementById('customCatSelectedIcon');
+      const selectedSub = document.getElementById('customCatSelectedSub');
+      const trigger = document.getElementById('customCategoryTrigger');
+      const menu = document.getElementById('customCategoryMenu');
+
+      if (hiddenInput) hiddenInput.value = name;
+      if (selectedText) selectedText.textContent = name;
+      if (selectedIcon && iconUrl) selectedIcon.src = iconUrl;
+      if (selectedSub) selectedSub.textContent = description || 'Sport category';
+
+      if (menu) menu.classList.remove('show');
+      if (trigger) trigger.classList.remove('active');
+
+      // Update active state in menu items
+      populateCategoriesUI();
+    }
+
+    // Close custom dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const wrap = document.getElementById('customCategoryDropdownWrap');
+      const trigger = document.getElementById('customCategoryTrigger');
+      const menu = document.getElementById('customCategoryMenu');
+      if (wrap && !wrap.contains(e.target)) {
+        menu?.classList.remove('show');
+        trigger?.classList.remove('active');
+      }
+    });
 
     function pickCollectionTag(tag) {
       const input = document.getElementById('newProductCollectionTag');
