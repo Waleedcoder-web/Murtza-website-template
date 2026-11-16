@@ -1,9 +1,49 @@
 /**
- * PROSIX SPORTS - UNIFORM CUSTOMIZER ENGINE (Vanilla JS + SVG Render)
+ * PROSIX SPORTS - UNIFORM CUSTOMIZER STUDIO ENGINE
+ * Supports Dynamic Product Loading by ID, Real-time Color Tinting,
+ * Dual View (Realistic Product / Vector Schematic), and Roster Management.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const jerseySvg = document.getElementById('jerseyPreviewSvg');
+// Fallback catalog of 20 authentic Prosix rashguards/uniforms
+const FALLBACK_CUSTOMIZER_PRODUCTS = [
+  { id: 1, sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', sport: 'Compression Wear', category: 'Best Sellers', image: 'assets/images/products/rashguard-1.jpg', primaryColor: '#0a0a0a', secondaryColor: '#2b2b2b' },
+  { id: 2, sku: 'RG-002', name: 'Royal Cyan & Navy Compression Top', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-2.jpg', primaryColor: '#0055d4', secondaryColor: '#00d4ff' },
+  { id: 3, sku: 'RG-003', name: 'Crimson Velocity Armor Rashguard', sport: '7v7 Football', category: 'Best Sellers', image: 'assets/images/products/rashguard-3.jpg', primaryColor: '#b8001f', secondaryColor: '#1a1a1a' },
+  { id: 4, sku: 'RG-004', name: 'Volt Yellow Sprint Rashguard', sport: 'Training', category: 'New Arrivals', image: 'assets/images/products/rashguard-4.jpg', primaryColor: '#c8f500', secondaryColor: '#111111' },
+  { id: 5, sku: 'RG-005', name: 'Glacier White & Deep Navy Top', sport: 'Compression Wear', category: 'Best Sellers', image: 'assets/images/products/rashguard-5.jpg', primaryColor: '#ffffff', secondaryColor: '#002244' },
+  { id: 6, sku: 'RG-006', name: 'Hyper Sunset Orange Rashguard', sport: '7v7 Football', category: 'New Arrivals', image: 'assets/images/products/rashguard-6.jpg', primaryColor: '#ff5500', secondaryColor: '#222222' },
+  { id: 7, sku: 'RG-007', name: 'Emerald Matrix Honeycomb Top', sport: 'Training', category: 'Best Sellers', image: 'assets/images/products/rashguard-7.jpg', primaryColor: '#00a84f', secondaryColor: '#0a0a0a' },
+  { id: 8, sku: 'RG-008', name: 'Regal Purple Tournament Rashguard', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-8.jpg', primaryColor: '#5a189a', secondaryColor: '#ffd700' },
+  { id: 9, sku: 'RG-009', name: 'Desert Sand Tactical Camo Rashguard', sport: 'Training', category: 'Best Sellers', image: 'assets/images/products/rashguard-9.jpg', primaryColor: '#c2b280', secondaryColor: '#2b2b2b' },
+  { id: 10, sku: 'RG-010', name: 'Oceanic Teal & Mint Base Layer', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-10.jpg', primaryColor: '#008080', secondaryColor: '#98ff98' },
+  { id: 11, sku: 'RG-011', name: 'Solar Gold & Black Striker Top', sport: '7v7 Football', category: 'Best Sellers', image: 'assets/images/products/rashguard-11.jpg', primaryColor: '#ffb400', secondaryColor: '#000000' },
+  { id: 12, sku: 'RG-012', name: 'Bloodline Maroon Armor Rashguard', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-12.jpg', primaryColor: '#800000', secondaryColor: '#111111' },
+  { id: 13, sku: 'RG-013', name: 'Titanium Silver & Acid Lime Top', sport: 'Training', category: 'Best Sellers', image: 'assets/images/products/rashguard-13.jpg', primaryColor: '#8a8d91', secondaryColor: '#bfff00' },
+  { id: 14, sku: 'RG-014', name: 'Cobalt Blue Cross-Trainer Rashguard', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-14.jpg', primaryColor: '#0047ab', secondaryColor: '#ffffff' },
+  { id: 15, sku: 'RG-015', name: 'Shadow Charcoal & Red Speed Top', sport: '7v7 Football', category: 'Best Sellers', image: 'assets/images/products/rashguard-15.jpg', primaryColor: '#2c2c2c', secondaryColor: '#ff2222' },
+  { id: 16, sku: 'RG-016', name: 'Vortex Violet Performance Rashguard', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-16.jpg', primaryColor: '#7209b7', secondaryColor: '#f72585' },
+  { id: 17, sku: 'RG-017', name: 'Military Green Camo Tactical Top', sport: 'Training', category: 'Best Sellers', image: 'assets/images/products/rashguard-17.jpg', primaryColor: '#4b5320', secondaryColor: '#1c1c1c' },
+  { id: 18, sku: 'RG-018', name: 'Electric Cyan & Magenta Duo Rashguard', sport: '7v7 Football', category: 'New Arrivals', image: 'assets/images/products/rashguard-18.jpg', primaryColor: '#00e5ff', secondaryColor: '#ff007f' },
+  { id: 19, sku: 'RG-019', name: 'Pitch Black & Gold Foil Rashguard', sport: 'Compression Wear', category: 'Best Sellers', image: 'assets/images/products/rashguard-19.jpg', primaryColor: '#000000', secondaryColor: '#d4af37' },
+  { id: 20, sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-20.jpg', primaryColor: '#f8f9fa', secondaryColor: '#6c757d' }
+];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Elements
+  const selectedProductThumb = document.getElementById('selectedProductThumb');
+  const selectedProductName = document.getElementById('selectedProductName');
+  const selectedProductCategory = document.getElementById('selectedProductCategory');
+  const customizerProductImg = document.getElementById('customizerProductImg');
+  const productColorOverlay = document.getElementById('productColorOverlay');
+  const productRealLayer = document.getElementById('productRealLayer');
+  const productVectorLayer = document.getElementById('productVectorLayer');
+
+  // Real View Overlays
+  const realChestText = document.getElementById('realChestText');
+  const realNumberText = document.getElementById('realNumberText');
+  const realBackNameText = document.getElementById('realBackNameText');
+
+  // Vector SVG Elements
   const baseFill = document.getElementById('jerseyBase');
   const sleeveFill = document.getElementById('jerseySleeves');
   const collarFill = document.getElementById('jerseyCollar');
@@ -11,44 +51,178 @@ document.addEventListener('DOMContentLoaded', () => {
   const numberText = document.getElementById('jerseyNumberText');
   const backNameText = document.getElementById('jerseyBackNameText');
 
+  // Color Pickers
   const primaryColorPicker = document.getElementById('customPrimaryColor');
   const secondaryColorPicker = document.getElementById('customSecondaryColor');
   const textColorPicker = document.getElementById('customTextColor');
 
+  // Inputs
   const teamNameInput = document.getElementById('customTeamName');
   const playerNumberInput = document.getElementById('customPlayerNumber');
   const playerNameInput = document.getElementById('customPlayerName');
+  const fontSelect = document.getElementById('customFontSelect');
 
+  // View Controls
   const viewFrontBtn = document.getElementById('viewFrontBtn');
   const viewBackBtn = document.getElementById('viewBackBtn');
+  const modeRealBtn = document.getElementById('modeRealBtn');
+  const modeVectorBtn = document.getElementById('modeVectorBtn');
+
+  // Swatches
+  const primarySwatches = document.querySelectorAll('.primary-swatch');
+  const secondarySwatches = document.querySelectorAll('.secondary-swatch');
+  const textSwatches = document.querySelectorAll('.text-swatch');
+
+  // State
   let currentView = 'front';
+  let currentMode = 'real';
+  let activeProduct = null;
+  let allProducts = [];
 
+  function resolveAssetUrl(url) {
+    if (!url) return '';
+    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+    const isUserDir = window.location.pathname.includes('/user/') || window.location.pathname.endsWith('/user');
+    const clean = url.replace(/^\.?\/?/, '');
+    return (isUserDir ? '../' : '') + clean;
+  }
+
+  // 1. Fetch products list from API or Fallback
+  try {
+    const isUserDir = window.location.pathname.includes('/user/');
+    const apiBase = isUserDir ? '../api' : '/api';
+    const res = await fetch(`${apiBase}/products`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        allProducts = data;
+      }
+    }
+  } catch (e) {
+    console.warn('Could not fetch products from API, using fallback store', e);
+  }
+
+  if (allProducts.length === 0) {
+    allProducts = FALLBACK_CUSTOMIZER_PRODUCTS;
+  }
+
+  // 2. Determine Product from URL Param ?id=X
+  function findProductFromParam() {
+    const params = new URLSearchParams(window.location.search);
+    const idParam = params.get('id');
+
+    if (idParam) {
+      // Check numeric match on product id
+      let match = allProducts.find(p => String(p.id) === String(idParam));
+      if (match) return match;
+
+      // Check if id corresponds to 1-based index (e.g., id=1 -> first product)
+      const num = parseInt(idParam, 10);
+      if (!isNaN(num) && num >= 1 && num <= allProducts.length) {
+        return allProducts[num - 1];
+      }
+    }
+
+    return allProducts[0];
+  }
+
+  function selectProduct(product, updateUrl = true) {
+    if (!product) return;
+    activeProduct = product;
+
+    // Update Banner & Image
+    const resolvedImg = resolveAssetUrl(product.image);
+    if (selectedProductThumb) selectedProductThumb.src = resolvedImg;
+    if (selectedProductName) selectedProductName.textContent = product.name;
+    if (selectedProductCategory) selectedProductCategory.textContent = product.sport || product.category || 'Custom Apparel';
+    if (customizerProductImg) customizerProductImg.src = resolvedImg;
+
+    // If product has preset colors, apply them
+    if (product.primaryColor && primaryColorPicker) {
+      primaryColorPicker.value = product.primaryColor;
+    }
+    if (product.secondaryColor && secondaryColorPicker) {
+      secondaryColorPicker.value = product.secondaryColor;
+    }
+
+    if (updateUrl && history.replaceState) {
+      const url = new URL(window.location);
+      url.searchParams.set('id', product.id);
+      window.history.replaceState({}, '', url);
+    }
+
+    updateUniform();
+    highlightActiveProductCard(product.id);
+  }
+
+  // 3. Dynamic Live Uniform Update
   function updateUniform() {
-    if (baseFill) baseFill.setAttribute('fill', primaryColorPicker?.value || '#000000');
-    if (sleeveFill) sleeveFill.setAttribute('fill', secondaryColorPicker?.value || '#ff0000');
-    if (collarFill) collarFill.setAttribute('fill', secondaryColorPicker?.value || '#ff0000');
+    const primary = primaryColorPicker?.value || '#000000';
+    const secondary = secondaryColorPicker?.value || '#ff0000';
+    const textCol = textColorPicker?.value || '#ffffff';
+    const teamName = teamNameInput?.value.toUpperCase() || 'PROSIX';
+    const playerNum = playerNumberInput?.value || '07';
+    const playerName = playerNameInput?.value.toUpperCase() || 'CHAMPION';
+    const font = fontSelect?.value || "'Oswald', sans-serif";
 
-    const textColor = textColorPicker?.value || '#ffffff';
+    // A. Update Photo-Realistic Layer
+    if (productColorOverlay) {
+      productColorOverlay.style.backgroundColor = primary;
+      // Adjust opacity depending on dark/light values
+      productColorOverlay.style.opacity = primary === '#000000' || primary === '#0a0a0a' ? '0.35' : '0.65';
+    }
+
+    if (realChestText) {
+      realChestText.textContent = teamName;
+      realChestText.style.color = textCol;
+      realChestText.style.fontFamily = font;
+    }
+    if (realNumberText) {
+      realNumberText.textContent = playerNum;
+      realNumberText.style.color = textCol;
+    }
+    if (realBackNameText) {
+      realBackNameText.textContent = playerName;
+      realBackNameText.style.color = textCol;
+      realBackNameText.style.fontFamily = font;
+    }
+
+    // B. Update Vector SVG Layer
+    if (baseFill) baseFill.setAttribute('fill', primary);
+    if (sleeveFill) sleeveFill.setAttribute('fill', secondary);
+    if (collarFill) collarFill.setAttribute('fill', secondary);
+
     if (chestText) {
-      chestText.setAttribute('fill', textColor);
-      chestText.textContent = teamNameInput?.value.toUpperCase() || 'PROSIX';
+      chestText.setAttribute('fill', textCol);
+      chestText.textContent = teamName;
+      chestText.style.fontFamily = font;
     }
     if (numberText) {
-      numberText.setAttribute('fill', textColor);
-      numberText.textContent = playerNumberInput?.value || '07';
+      numberText.setAttribute('fill', textCol);
+      numberText.textContent = playerNum;
     }
     if (backNameText) {
-      backNameText.setAttribute('fill', textColor);
-      backNameText.textContent = playerNameInput?.value.toUpperCase() || 'CHAMPION';
+      backNameText.setAttribute('fill', textCol);
+      backNameText.textContent = playerName;
+      backNameText.style.fontFamily = font;
     }
   }
 
+  // 4. View Modes (Front vs Back)
   function setView(view) {
     currentView = view;
     viewFrontBtn?.classList.toggle('active', view === 'front');
     viewBackBtn?.classList.toggle('active', view === 'back');
 
     if (view === 'front') {
+      if (realChestText) realChestText.style.display = 'block';
+      if (realNumberText) {
+        realNumberText.style.display = 'block';
+        realNumberText.style.top = '58%';
+        realNumberText.style.fontSize = '4.5rem';
+      }
+      if (realBackNameText) realBackNameText.style.display = 'none';
+
       if (chestText) chestText.style.display = 'block';
       if (backNameText) backNameText.style.display = 'none';
       if (numberText) {
@@ -56,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
         numberText.setAttribute('font-size', '68');
       }
     } else {
+      if (realChestText) realChestText.style.display = 'none';
+      if (realNumberText) {
+        realNumberText.style.display = 'block';
+        realNumberText.style.top = '55%';
+        realNumberText.style.fontSize = '5.8rem';
+      }
+      if (realBackNameText) realBackNameText.style.display = 'block';
+
       if (chestText) chestText.style.display = 'none';
       if (backNameText) backNameText.style.display = 'block';
       if (numberText) {
@@ -65,24 +247,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // 5. Display Modes (Realistic Photo vs Vector Schematic)
+  function setMode(mode) {
+    currentMode = mode;
+    modeRealBtn?.classList.toggle('active', mode === 'real');
+    modeVectorBtn?.classList.toggle('active', mode === 'vector');
+
+    if (mode === 'real') {
+      if (productRealLayer) productRealLayer.classList.remove('d-none');
+      if (productVectorLayer) productVectorLayer.classList.add('d-none');
+    } else {
+      if (productRealLayer) productRealLayer.classList.add('d-none');
+      if (productVectorLayer) productVectorLayer.classList.remove('d-none');
+    }
+  }
+
   viewFrontBtn?.addEventListener('click', () => setView('front'));
   viewBackBtn?.addEventListener('click', () => setView('back'));
 
+  modeRealBtn?.addEventListener('click', () => setMode('real'));
+  modeVectorBtn?.addEventListener('click', () => setMode('vector'));
+
+  // Color Pickers Input
   primaryColorPicker?.addEventListener('input', updateUniform);
   secondaryColorPicker?.addEventListener('input', updateUniform);
   textColorPicker?.addEventListener('input', updateUniform);
 
+  // Text Inputs
   teamNameInput?.addEventListener('input', updateUniform);
   playerNumberInput?.addEventListener('input', updateUniform);
   playerNameInput?.addEventListener('input', updateUniform);
+  fontSelect?.addEventListener('change', updateUniform);
 
-  // Initial render
-  setView('front');
-  updateUniform();
+  // Swatches Click Handlers
+  primarySwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      const col = swatch.dataset.color;
+      if (col && primaryColorPicker) {
+        primaryColorPicker.value = col;
+        updateUniform();
+      }
+    });
+  });
 
-  // ==========================================
-  // Team Roster Management
-  // ==========================================
+  secondarySwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      const col = swatch.dataset.color;
+      if (col && secondaryColorPicker) {
+        secondaryColorPicker.value = col;
+        updateUniform();
+      }
+    });
+  });
+
+  textSwatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      const col = swatch.dataset.color;
+      if (col && textColorPicker) {
+        textColorPicker.value = col;
+        updateUniform();
+      }
+    });
+  });
+
+  // 6. Build Quick Product Switcher Carousel
+  const productSwitcherContainer = document.getElementById('customizerProductSwitcher');
+  if (productSwitcherContainer && allProducts.length > 0) {
+    let cardsHtml = '';
+    allProducts.forEach(p => {
+      const img = resolveAssetUrl(p.image);
+      cardsHtml += `
+        <div class="product-mini-select-card" data-id="${p.id}" style="cursor: pointer; min-width: 130px; text-align: center; padding: 8px; border: 2px solid #e9ecef; border-radius: 12px; transition: all 0.2s; background: #fff;">
+          <img src="${img}" alt="${p.name}" style="width: 100%; height: 95px; object-fit: contain; margin-bottom: 6px;">
+          <div class="fw-bold text-dark text-truncate small" style="font-size: 0.75rem;">${p.name}</div>
+          <span class="badge bg-light text-muted border text-uppercase" style="font-size: 0.65rem;">${p.sport || 'Pro'}</span>
+        </div>
+      `;
+    });
+    productSwitcherContainer.innerHTML = cardsHtml;
+
+    productSwitcherContainer.querySelectorAll('.product-mini-select-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const prod = allProducts.find(x => String(x.id) === String(id));
+        if (prod) selectProduct(prod, true);
+      });
+    });
+  }
+
+  function highlightActiveProductCard(id) {
+    if (!productSwitcherContainer) return;
+    productSwitcherContainer.querySelectorAll('.product-mini-select-card').forEach(c => {
+      const match = String(c.dataset.id) === String(id);
+      c.style.borderColor = match ? '#000000' : '#e9ecef';
+      c.style.transform = match ? 'translateY(-3px)' : 'none';
+      c.style.boxShadow = match ? '0 6px 16px rgba(0,0,0,0.12)' : 'none';
+    });
+  }
+
+  // 7. Team Roster Table Builder
   const rosterTableBody = document.getElementById('rosterTableBody');
   const addPlayerBtn = document.getElementById('addPlayerRowBtn');
   const totalCountEl = document.getElementById('rosterTotalCount');
@@ -104,15 +367,19 @@ document.addEventListener('DOMContentLoaded', () => {
       <td><input type="text" class="form-control form-control-sm player-num-val" value="${number}" placeholder="##" style="max-width: 80px;"></td>
       <td>
         <select class="form-select form-select-sm player-size-val">
-          <option ${size === 'S' ? 'selected' : ''}>S</option>
-          <option ${size === 'M' ? 'selected' : ''}>M</option>
-          <option ${size === 'L' ? 'selected' : ''}>L</option>
-          <option ${size === 'XL' ? 'selected' : ''}>XL</option>
-          <option ${size === '2XL' ? 'selected' : ''}>2XL</option>
+          <option ${size === 'Youth S' ? 'selected' : ''}>Youth S</option>
+          <option ${size === 'Youth M' ? 'selected' : ''}>Youth M</option>
+          <option ${size === 'Youth L' ? 'selected' : ''}>Youth L</option>
+          <option ${size === 'Adult S' ? 'selected' : ''}>Adult S</option>
+          <option ${size === 'Adult M' ? 'selected' : ''}>Adult M</option>
+          <option ${size === 'Adult L' ? 'selected' : ''}>Adult L</option>
+          <option ${size === 'Adult XL' ? 'selected' : ''}>Adult XL</option>
+          <option ${size === 'Adult 2XL' ? 'selected' : ''}>Adult 2XL</option>
+          <option ${size === 'Adult 3XL' ? 'selected' : ''}>Adult 3XL</option>
         </select>
       </td>
       <td class="text-center">
-        <button class="btn btn-outline-danger btn-sm p-1 delete-row-btn" type="button">
+        <button class="btn btn-outline-danger btn-sm p-1 delete-row-btn" type="button" title="Remove Player">
           <i class="bi bi-trash"></i>
         </button>
       </td>
@@ -129,29 +396,40 @@ document.addEventListener('DOMContentLoaded', () => {
     addRosterRow();
   });
 
-  // Default initial rows
   if (rosterTableBody && rosterTableBody.children.length === 0) {
-    addRosterRow('Captain', '01', 'L');
-    addRosterRow('Striker', '07', 'M');
-    addRosterRow('Defender', '10', 'XL');
+    addRosterRow('Captain', '01', 'Adult L');
+    addRosterRow('Striker', '07', 'Adult M');
+    addRosterRow('Defender', '10', 'Adult XL');
   }
 
-  // ==========================================
-  // Proceed to Place Order
-  // ==========================================
+  // 8. Order Submission
   const addCustomToCartBtn = document.getElementById('addCustomOrderToCartBtn');
   addCustomToCartBtn?.addEventListener('click', () => {
     const rows = rosterTableBody?.querySelectorAll('tr') || [];
     const count = Math.max(1, rows.length);
     const teamName = teamNameInput?.value || 'Custom Team';
+    const prodName = activeProduct ? activeProduct.name : 'Custom Sublimated Uniform';
 
     sessionStorage.setItem('customOrderTeam', teamName);
+    sessionStorage.setItem('customOrderProduct', prodName);
     sessionStorage.setItem('customOrderCount', count);
+    sessionStorage.setItem('customPrimaryColor', primaryColorPicker?.value || '#000000');
+    sessionStorage.setItem('customSecondaryColor', secondaryColorPicker?.value || '#ff0000');
+
     if (typeof CartStore !== 'undefined' && CartStore.showToast) {
-      CartStore.showToast(`Design saved for ${teamName}! Redirecting to team order form...`);
+      CartStore.showToast(`Custom team design saved for "${prodName}"! Proceeding to order form...`);
     }
+
+    const isUserDir = window.location.pathname.includes('/user/');
+    const targetUrl = isUserDir ? 'placeorder.html' : 'placeorder.html';
     setTimeout(() => {
-      window.location.href = 'placeorder.html';
-    }, 700);
+      window.location.href = targetUrl;
+    }, 600);
   });
+
+  // Initialize selected product
+  const initialProduct = findProductFromParam();
+  selectProduct(initialProduct, false);
+  setView('front');
+  setMode('real');
 });

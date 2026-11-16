@@ -119,40 +119,91 @@
   <section class="py-5 bg-white">
     <div class="container">
       <div class="row g-4">
-        <!-- SVG Stage Column -->
+        <!-- Stage Column -->
         <div class="col-lg-7">
-          <div class="customizer-stage">
-            <div class="view-toggle-btn-group">
-              <button class="view-btn active" id="viewFrontBtn">Front View</button>
-              <button class="view-btn" id="viewBackBtn">Back View</button>
+          <div class="customizer-stage position-relative">
+            <!-- Top Product Badge & View Controls Header -->
+            <div class="d-flex align-items-center justify-content-between w-100 mb-3 pb-3 border-bottom flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3">
+                <img id="selectedProductThumb" src="assets/images/products/rashguard-1.jpg" alt="Selected Product" style="width: 52px; height: 52px; object-fit: contain; border-radius: 10px; border: 2px solid #000; background: #fff; padding: 2px;">
+                <div>
+                  <span class="badge bg-danger text-uppercase px-2 py-1 mb-1" id="selectedProductCategory">Compression Wear</span>
+                  <h5 class="fw-black mb-0 text-dark text-uppercase tracking-wide" id="selectedProductName">Stealth Blackout Carbon Rashguard</h5>
+                </div>
+              </div>
+
+              <!-- View Toggles -->
+              <div class="d-flex gap-2 align-items-center flex-wrap">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-dark active" id="modeRealBtn">Photo Mode</button>
+                  <button type="button" class="btn btn-outline-dark" id="modeVectorBtn">Vector Mode</button>
+                </div>
+                <div class="view-toggle-btn-group position-static">
+                  <button class="view-btn active" id="viewFrontBtn" type="button">Front</button>
+                  <button class="view-btn" id="viewBackBtn" type="button">Back</button>
+                </div>
+              </div>
             </div>
 
-            <!-- Dynamic Interactive Jersey SVG -->
-            <svg id="jerseyPreviewSvg" viewBox="0 0 500 550" width="100%" height="450" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="jerseyShine" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
-                  <stop offset="50%" stop-color="#ffffff" stop-opacity="0.0" />
-                  <stop offset="100%" stop-color="#000000" stop-opacity="0.25" />
-                </linearGradient>
-              </defs>
+            <!-- Central Customizer Canvas / Interactive Canvas Area -->
+            <div class="position-relative d-flex align-items-center justify-content-center w-100" style="min-height: 460px; overflow: hidden;">
+              <!-- 1. Photo-Realistic Mode Layer -->
+              <div class="product-real-layer position-relative text-center w-100" id="productRealLayer">
+                <img id="customizerProductImg" src="assets/images/products/rashguard-1.jpg" alt="Uniform Preview" class="img-fluid" style="max-height: 440px; object-fit: contain; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.22)); transition: all 0.3s ease;">
+                
+                <!-- Dynamic Interactive Color Tint Overlay -->
+                <div id="productColorOverlay" class="position-absolute" style="top: 0; left: 50%; transform: translateX(-50%); width: 85%; height: 95%; pointer-events: none; mix-blend-mode: color; opacity: 0.6; transition: background-color 0.25s ease; border-radius: 20px;"></div>
+                
+                <!-- Emblazoned Front Chest Text -->
+                <div id="realChestText" class="position-absolute w-100 text-center fw-black" style="top: 38%; left: 50%; transform: translate(-50%, -50%); font-family: 'Oswald', sans-serif; font-size: 2.2rem; letter-spacing: 3px; color: #ffffff; text-shadow: 0 3px 10px rgba(0,0,0,0.9); pointer-events: none; text-transform: uppercase;">PROSIX</div>
+                
+                <!-- Emblazoned Player Number -->
+                <div id="realNumberText" class="position-absolute w-100 text-center fw-black" style="top: 58%; left: 50%; transform: translate(-50%, -50%); font-family: 'Impact', sans-serif; font-size: 4.6rem; color: #ffffff; text-shadow: 0 4px 14px rgba(0,0,0,0.9); pointer-events: none;">07</div>
+                
+                <!-- Emblazoned Back Player Name (Shown in Back View) -->
+                <div id="realBackNameText" class="position-absolute w-100 text-center fw-black" style="top: 32%; left: 50%; transform: translate(-50%, -50%); font-family: 'Oswald', sans-serif; font-size: 2rem; letter-spacing: 2px; color: #ffffff; text-shadow: 0 3px 10px rgba(0,0,0,0.9); pointer-events: none; text-transform: uppercase; display: none;">CHAMPION</div>
+              </div>
 
-              <!-- Sleeves / Shoulders -->
-              <path id="jerseySleeves" d="M 80,110 L 20,200 L 80,240 L 120,180 Z M 420,110 L 480,200 L 420,240 L 380,180 Z" fill="#ff0000" />
-              <!-- Jersey Body / Torso -->
-              <path id="jerseyBase" d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="#000000" />
-              <!-- Shading Overlay -->
-              <path d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="url(#jerseyShine)" />
-              <!-- Collar V-Neck -->
-              <polygon id="jerseyCollar" points="200,100 250,180 300,100 280,100 250,150 220,100" fill="#ff0000" />
+              <!-- 2. Dynamic Interactive Jersey SVG (Vector Mode Layer) -->
+              <div class="product-vector-layer d-none w-100 text-center" id="productVectorLayer">
+                <svg id="jerseyPreviewSvg" viewBox="0 0 500 550" width="100%" height="440" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="jerseyShine" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3" />
+                      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.0" />
+                      <stop offset="100%" stop-color="#000000" stop-opacity="0.35" />
+                    </linearGradient>
+                  </defs>
 
-              <!-- Front Chest Text -->
-              <text id="jerseyChestText" x="250" y="240" font-family="'Oswald', sans-serif" font-weight="900" font-size="40" fill="#ffffff" text-anchor="middle" letter-spacing="3">PROSIX</text>
-              <!-- Front/Back Player Number -->
-              <text id="jerseyNumberText" x="250" y="340" font-family="'Impact', sans-serif" font-weight="bold" font-size="75" fill="#ffffff" text-anchor="middle">07</text>
-              <!-- Back Player Name -->
-              <text id="jerseyBackNameText" x="250" y="200" font-family="'Oswald', sans-serif" font-weight="bold" font-size="34" fill="#ffffff" text-anchor="middle" style="display: none;">CHAMPION</text>
-            </svg>
+                  <!-- Sleeves / Raglan Accents -->
+                  <path id="jerseySleeves" d="M 80,110 L 20,200 L 80,240 L 120,180 Z M 420,110 L 480,200 L 420,240 L 380,180 Z" fill="#ff0000" />
+                  <!-- Jersey Body / Torso -->
+                  <path id="jerseyBase" d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="#000000" />
+                  <!-- Shading Overlay -->
+                  <path d="M 120,100 L 380,100 L 370,500 L 130,500 Z" fill="url(#jerseyShine)" />
+                  <!-- Collar V-Neck -->
+                  <polygon id="jerseyCollar" points="200,100 250,180 300,100 280,100 250,150 220,100" fill="#ff0000" />
+
+                  <!-- Front Chest Text -->
+                  <text id="jerseyChestText" x="250" y="240" font-family="'Oswald', sans-serif" font-weight="900" font-size="40" fill="#ffffff" text-anchor="middle" letter-spacing="3">PROSIX</text>
+                  <!-- Front/Back Player Number -->
+                  <text id="jerseyNumberText" x="250" y="340" font-family="'Impact', sans-serif" font-weight="bold" font-size="75" fill="#ffffff" text-anchor="middle">07</text>
+                  <!-- Back Player Name -->
+                  <text id="jerseyBackNameText" x="250" y="200" font-family="'Oswald', sans-serif" font-weight="bold" font-size="34" fill="#ffffff" text-anchor="middle" style="display: none;">CHAMPION</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Product Switcher Horizontal Strip -->
+          <div class="card border-0 shadow-sm p-3 rounded-4 mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold small text-uppercase text-muted"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Or Select Another Product to Customize:</span>
+              <small class="text-muted">20 Pro Styles</small>
+            </div>
+            <div class="d-flex gap-3 overflow-auto pb-2" id="customizerProductSwitcher" style="scrollbar-width: thin;">
+              <!-- Populated dynamically by customizer.js -->
+            </div>
           </div>
         </div>
 
@@ -161,13 +212,14 @@
           <div class="card border-0 shadow-sm p-4 rounded-4 mb-4">
             <h4 class="fw-bold mb-3 text-uppercase"><i class="bi bi-palette me-2"></i>Jersey Colorways</h4>
             
-            <div class="row g-3 mb-4">
+            <!-- Color Pickers Row -->
+            <div class="row g-3 mb-3">
               <div class="col-4 text-center">
                 <label class="small fw-bold d-block mb-1">Body Color</label>
                 <input type="color" class="color-swatch-picker" id="customPrimaryColor" value="#000000">
               </div>
               <div class="col-4 text-center">
-                <label class="small fw-bold d-block mb-1">Accent / Collar</label>
+                <label class="small fw-bold d-block mb-1">Sleeves / Accent</label>
                 <input type="color" class="color-swatch-picker" id="customSecondaryColor" value="#ff0000">
               </div>
               <div class="col-4 text-center">
@@ -176,6 +228,22 @@
               </div>
             </div>
 
+            <!-- Quick Color Preset Swatches -->
+            <div class="mb-4">
+              <label class="small fw-bold text-muted d-block mb-2 text-uppercase">Quick Color Presets:</label>
+              <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #0a0a0a;" data-color="#0a0a0a" title="Stealth Black"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #00d4ff;" data-color="#00d4ff" title="Royal Cyan"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #e60026;" data-color="#e60026" title="Crimson Red"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #39ff14;" data-color="#39ff14" title="Volt Neon"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #ffb400;" data-color="#ffb400" title="Championship Gold"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #ff5500;" data-color="#ff5500" title="Sunset Orange"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #7b2cbf;" data-color="#7b2cbf" title="Regal Purple"></button>
+                <button type="button" class="btn btn-sm p-0 rounded-circle primary-swatch border" style="width: 32px; height: 32px; background: #ffffff;" data-color="#ffffff" title="Pure White"></button>
+              </div>
+            </div>
+
+            <!-- Team & Numbering -->
             <h4 class="fw-bold mb-3 text-uppercase border-top pt-3"><i class="bi bi-type me-2"></i>Team & Numbering</h4>
             <div class="mb-3">
               <label class="form-label small fw-bold">Team Name on Chest</label>
@@ -188,9 +256,19 @@
                 <input type="text" class="form-control fw-bold" id="customPlayerNumber" value="07" maxlength="3">
               </div>
               <div class="col-6">
-                <label class="form-label small fw-bold">Sample Player Name</label>
+                <label class="form-label small fw-bold">Player Name (Back)</label>
                 <input type="text" class="form-control fw-bold" id="customPlayerName" value="CHAMPION">
               </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label small fw-bold">Typography Font</label>
+              <select class="form-select fw-bold" id="customFontSelect">
+                <option value="'Oswald', sans-serif" selected>Oswald Athletic Pro</option>
+                <option value="'Impact', sans-serif">Impact Block</option>
+                <option value="'Montserrat', sans-serif">Montserrat Modern</option>
+                <option value="Arial, sans-serif">Classic Collegiate</option>
+              </select>
             </div>
           </div>
         </div>
@@ -251,7 +329,7 @@
   <!-- Scripts -->
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/cart.js"></script>
-  <script src="js/customizer.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/customizer.js?v=2.5"></script>
+  <script src="js/main.js?v=2.5"></script>
 </body>
 </html>
