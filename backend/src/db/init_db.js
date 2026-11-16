@@ -26,7 +26,28 @@ const initialCategories = [
   { name: 'Compression Wear', slug: 'compression-wear', description: 'Padded and standard base layer compression gear' }
 ];
 
-const initialProducts = [];
+const initialProducts = [
+  { sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-1.jpg', type: 'model', description: 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.' },
+  { sku: 'RG-002', name: 'Royal Cyan & Navy Compression Top', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-2.jpg', type: 'model', description: 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.' },
+  { sku: 'RG-003', name: 'Crimson Velocity Armor Rashguard', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-3.jpg', type: 'model', description: 'Charcoal base with geometric crimson shoulder panels and reinforced seams.' },
+  { sku: 'RG-004', name: 'Volt Yellow Sprint Rashguard', price: 120.00, sport: 'Training', category: 'New Arrivals', image: '/assets/images/products/rashguard-4.jpg', type: 'model', description: 'High-visibility neon volt yellow accents with multi-directional stretch.' },
+  { sku: 'RG-005', name: 'Glacier White & Deep Navy Top', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-5.jpg', type: 'model', description: 'Frost white torso with deep navy sleeves and ice-blue contour stitch.' },
+  { sku: 'RG-006', name: 'Hyper Sunset Orange Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-6.jpg', type: 'model', description: 'Vibrant sunset orange with gunmetal velocity side panels.' },
+  { sku: 'RG-007', name: 'Emerald Matrix Honeycomb Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-7.jpg', type: 'model', description: 'Anthracite base with vibrant emerald green honeycomb matrix pattern.' },
+  { sku: 'RG-008', name: 'Regal Purple Tournament Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-8.jpg', type: 'model', description: 'Deep royal purple with metallic silver tournament contrast lines.' },
+  { sku: 'RG-009', name: 'Desert Sand Tactical Camo Rashguard', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-9.jpg', type: 'model', description: 'Sublimated tactical urban camo with reinforced elbow contours.' },
+  { sku: 'RG-010', name: 'Oceanic Teal & Mint Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-10.jpg', type: 'model', description: 'Dark teal with mint green gradient transitions and antimicrobial fabric.' },
+  { sku: 'RG-011', name: 'Solar Gold & Black Striker Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-11.jpg', type: 'model', description: 'Jet black with high-voltage solar gold sleeves and ergonomic panels.' },
+  { sku: 'RG-012', name: 'Bloodline Maroon Armor Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-12.jpg', type: 'model', description: 'Matte black with bloodline maroon panels and red flatlock stitching.' },
+  { sku: 'RG-013', name: 'Titanium Silver & Acid Lime Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-13.jpg', type: 'model', description: 'Titanium grey body with acid lime geometric speed ribbing.' },
+  { sku: 'RG-014', name: 'Cobalt Blue Cross-Trainer Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-14.jpg', type: 'model', description: 'Cobalt blue with crisp white athletic raglan sleeve contours.' },
+  { sku: 'RG-015', name: 'Shadow Charcoal & Red Speed Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-15.jpg', type: 'model', description: 'Dark charcoal with crimson speed streaks and ventilation mesh panels.' },
+  { sku: 'RG-016', name: 'Vortex Violet Performance Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-16.jpg', type: 'model', description: 'Vortex violet with radiant coral gradient accents.' },
+  { sku: 'RG-017', name: 'Military Green Camo Tactical Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-17.jpg', type: 'model', description: 'Obsidian black with military green camo sleeves and rugged flatlock seams.' },
+  { sku: 'RG-018', name: 'Electric Cyan & Magenta Duo Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-18.jpg', type: 'model', description: 'High-energy cyan and magenta contrast tournament compression wear.' },
+  { sku: 'RG-019', name: 'Pitch Black & Gold Foil Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-19.jpg', type: 'model', description: 'Championship gold foil geometric lines on premium ultra-stretch black spandex.' },
+  { sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-20.jpg', type: 'model', description: 'Clean frost white with steel grey technical stitching and moisture-wicking weave.' }
+];
 
 const initialInquiries = [
   {
