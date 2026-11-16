@@ -58,11 +58,13 @@ const fallbackStore = {
     { id: 1, username: 'admin', email: 'admin@prosixsports.com', role: 'superadmin', is_active: true }
   ],
   categories: [
-    { id: 1, name: 'Best Sellers', slug: 'best-sellers', description: 'Top performing and most ordered uniform sets', display_order: 1 },
-    { id: 2, name: 'New Arrivals', slug: 'new-arrivals', description: 'Latest season releases and modern cuts', display_order: 2 },
-    { id: 3, name: 'Compression Wear', slug: 'compression-wear', description: 'Sublimated high-flex compression shirts & tights', display_order: 3 },
-    { id: 4, name: 'Team Uniforms', slug: 'team-uniforms', description: 'Complete custom team kits and practice jerseys', display_order: 4 },
-    { id: 5, name: 'Outerwear & Warmups', slug: 'outerwear-warmups', description: 'Sideline jackets, hoodies, and travel tracksuits', display_order: 5 }
+    { id: 1, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/products/rashguard-1.jpg', description: 'Sublimated high-flex compression shirts, rashguards & base layers', is_active: true, product_count: 8 },
+    { id: 2, name: '7v7 Football', slug: '7v7-football', image: '/assets/images/products/rashguard-3.jpg', description: 'Non-padded 7v7 tournament uniforms, soft-shell gear & practice jerseys', is_active: true, product_count: 5 },
+    { id: 3, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/products/rashguard-5.jpg', description: 'Top performing and most ordered uniform sets', is_active: true, product_count: 10 },
+    { id: 4, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/products/rashguard-2.jpg', description: 'Latest season releases and modern cuts', is_active: true, product_count: 10 },
+    { id: 5, name: 'Basketball Uniforms', slug: 'basketball-uniforms', image: '/assets/images/hero-athlete-3d-2.png', description: 'Elite basketball jerseys, reversible kits & speed-mesh shorts', is_active: true, product_count: 4 },
+    { id: 6, name: 'Training & Fitness', slug: 'training-fitness', image: '/assets/images/products/rashguard-4.jpg', description: 'High-durability gym wear, workout tees & cross-training gear', is_active: true, product_count: 6 },
+    { id: 7, name: 'Outerwear & Warmups', slug: 'outerwear-warmups', image: '/assets/images/products/rashguard-7.jpg', description: 'Sideline jackets, hoodies, and travel tracksuits', is_active: true, product_count: 3 }
   ],
   hero_slides: [],
   special_offers: {
@@ -86,9 +88,11 @@ CREATE TABLE IF NOT EXISTS categories (
     name VARCHAR(100) UNIQUE NOT NULL,
     slug VARCHAR(100) UNIQUE NOT NULL,
     description TEXT,
+    image TEXT,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS image TEXT;
 
 -- 2. Products Table
 CREATE TABLE IF NOT EXISTS products (
@@ -203,14 +207,18 @@ INSERT INTO storefront_offers (id, heading, subheading, featured_title, featured
 VALUES (1, 'SEASON SPECIAL OFFERS', 'Save up to 40% on select bulk team packages and seasonal uniform designs', '', '', 'GET PACKAGE QUOTE', 'placeorder.html', '')
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO categories (name, slug, description)
+INSERT INTO categories (name, slug, description, image)
 VALUES 
-  ('Best Sellers', 'best-sellers', 'Top performing uniform sets'),
-  ('New Arrivals', 'new-arrivals', 'Latest uniform releases'),
-  ('Compression Wear', 'compression-wear', 'High-flex compression shirts & tights'),
-  ('Team Uniforms', 'team-uniforms', 'Custom team kits & practice uniforms'),
-  ('Outerwear & Warmups', 'outerwear-warmups', 'Sideline jackets, hoodies & tracksuits')
-ON CONFLICT (name) DO NOTHING;
+  ('Compression Wear', 'compression-wear', 'Sublimated high-flex compression shirts, rashguards & base layers', '/assets/images/products/rashguard-1.jpg'),
+  ('7v7 Football', '7v7-football', 'Non-padded 7v7 tournament uniforms, soft-shell gear & practice jerseys', '/assets/images/products/rashguard-3.jpg'),
+  ('Best Sellers', 'best-sellers', 'Top performing and most ordered uniform sets', '/assets/images/products/rashguard-5.jpg'),
+  ('New Arrivals', 'new-arrivals', 'Latest season releases and modern cuts', '/assets/images/products/rashguard-2.jpg'),
+  ('Basketball Uniforms', 'basketball-uniforms', 'Elite basketball jerseys, reversible kits & speed-mesh shorts', '/assets/images/hero-athlete-3d-2.png'),
+  ('Training & Fitness', 'training-fitness', 'High-durability gym wear, workout tees & cross-training gear', '/assets/images/products/rashguard-4.jpg'),
+  ('Outerwear & Warmups', 'outerwear-warmups', 'Sideline jackets, hoodies & tracksuits', '/assets/images/products/rashguard-7.jpg')
+ON CONFLICT (name) DO UPDATE SET 
+  image = EXCLUDED.image,
+  description = EXCLUDED.description;
 
 INSERT INTO admin_users (username, email, password_hash, role)
 VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')

@@ -188,6 +188,25 @@ const AdminApp = {
     return { id: Date.now(), ...categoryData, slug: categoryData.name.toLowerCase().replace(/\s+/g, '-') };
   },
 
+  async updateCategory(id, categoryData) {
+    try {
+      const res = await fetch(`${this.API_BASE}/categories/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(categoryData)
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        this.showAdminToast(`Category "${updated.name}" updated!`, 'bi-check-circle-fill text-success');
+        return updated;
+      }
+    } catch (e) {
+      console.error('API error updating category:', e);
+    }
+    this.showAdminToast('Category updated.', 'bi-check-circle-fill text-success');
+    return { id, ...categoryData };
+  },
+
   async deleteCategory(id) {
     try {
       const res = await fetch(`${this.API_BASE}/categories/${id}`, {

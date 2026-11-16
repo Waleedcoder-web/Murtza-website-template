@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     if (db.getIsConnected()) {
       const result = await db.query(
         `SELECT c.*, 
-          COALESCE(p_count.total_products, 0) as product_count
+          COALESCE(p_count.total_products, 0)::int as product_count
          FROM categories c
          LEFT JOIN (
            SELECT category, COUNT(*) as total_products 
@@ -40,26 +40,46 @@ router.get('/', async (req, res) => {
   return res.json(db.fallbackStore.categories || []);
 });
 
+// GET single category
+router.get('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  try {
+    if (db.getIsConnected()) {
+      const result = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+      if (result.rows.length > 0) return res.json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error('Error fetching category by ID:', err);
+  }
+
+  const cat = (db.fallbackStore.categories || []).find(c => c.id === id);
+  if (cat) return res.json(cat);
+  return res.status(404).json({ error: 'Category not found' });
+});
+
 // CREATE a category
 router.post('/', async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, image } = req.body;
   if (!name || !name.trim()) {
     return res.status(400).json({ error: 'Category name is required' });
   }
 
   const cleanName = name.trim();
   const slug = generateSlug(cleanName) || `cat-${Date.now()}`;
-  const cleanDesc = description ? description.trim() : null;
+  const cleanDesc = description ? description.trim() : '';
+  const cleanImage = image ? image.trim() : '/assets/images/products/rashguard-1.jpg';
 
   try {
     if (db.getIsConnected()) {
       const result = await db.query(
-        `INSERT INTO categories (name, slug, description)
-         VALUES ($1, $2, $3)
+        `INSERT INTO categories (name, slug, description, image, is_active)
+         VALUES ($1, $2, $3, $4, true)
          ON CONFLICT (name) DO UPDATE 
-         SET description = COALESCE(EXCLUDED.description, categories.description), is_active = true
+         SET description = EXCLUDED.description,
+             image = COALESCE(EXCLUDED.image, categories.image),
+             is_active = true
          RETURNING *`,
-        [cleanName, slug, cleanDesc]
+        [cleanName, slug, cleanDesc, cleanImage]
       );
       return res.status(201).json(result.rows[0]);
     }
@@ -74,12 +94,61 @@ router.post('/', async (req, res) => {
     name: cleanName,
     slug,
     description: cleanDesc,
-    display_order: cleanOrder,
+    image: cleanImage,
+    is_active: true,
     product_count: 0
   };
   db.fallbackStore.categories = db.fallbackStore.categories || [];
   db.fallbackStore.categories.push(newCat);
   return res.status(201).json(newCat);
+});
+
+// UPDATE a category
+router.put('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { name, description, image, is_active } = req.body;
+
+  const cleanName = name ? name.trim() : null;
+  const slug = cleanName ? generateSlug(cleanName) : null;
+  const cleanDesc = description !== undefined ? description.trim() : null;
+  const cleanImage = image !== undefined ? image.trim() : null;
+  const cleanActive = is_active !== undefined ? Boolean(is_active) : true;
+
+  try {
+    if (db.getIsConnected()) {
+      const result = await db.query(
+        `UPDATE categories 
+         SET name = COALESCE($1, name),
+             slug = COALESCE($2, slug),
+             description = COALESCE($3, description),
+             image = COALESCE($4, image),
+             is_active = $5
+         WHERE id = $6
+         RETURNING *`,
+        [cleanName, slug, cleanDesc, cleanImage, cleanActive, id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Category not found' });
+      }
+      return res.json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error('Error updating category in PostgreSQL:', err);
+    return res.status(500).json({ error: 'Failed to update category: ' + err.message });
+  }
+
+  // Fallback memory store
+  if (db.fallbackStore.categories) {
+    const cat = db.fallbackStore.categories.find(c => c.id === id);
+    if (cat) {
+      if (cleanName) { cat.name = cleanName; cat.slug = slug; }
+      if (cleanDesc !== null) cat.description = cleanDesc;
+      if (cleanImage !== null) cat.image = cleanImage;
+      if (is_active !== undefined) cat.is_active = cleanActive;
+      return res.json(cat);
+    }
+  }
+  return res.status(404).json({ error: 'Category not found' });
 });
 
 // DELETE a category
