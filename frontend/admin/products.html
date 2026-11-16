@@ -239,26 +239,23 @@
 
           <div class="row g-3 mb-3">
             <div class="col-md-6">
-              <label class="form-label small fw-bold text-dark">Sport Type *</label>
-              <select class="form-select form-select-glass" id="newProductSport">
-                <option value="7v7 Football">7v7 Football</option>
-                <option value="Football">Tackle Football</option>
-                <option value="Baseball">Baseball</option>
-                <option value="Basketball">Basketball</option>
-                <option value="Soccer">Soccer</option>
-                <option value="Hockey">Hockey</option>
-                <option value="Track & Field">Track & Field</option>
-                <option value="Volleyball">Volleyball</option>
-                <option value="Wrestling">Wrestling</option>
+              <label class="form-label small fw-bold text-dark"><i class="bi bi-tags-fill text-primary me-1"></i>Category *</label>
+              <select class="form-select form-select-glass" id="newProductCategorySelect" required>
+                <!-- Populated dynamically from Neon / PostgreSQL database categories -->
+                <option value="" disabled selected>Loading categories from database...</option>
               </select>
+              <div class="form-text text-muted" style="font-size: 0.74rem;">Loaded dynamically from Neon database.</div>
             </div>
             <div class="col-md-6">
-              <label class="form-label small fw-bold text-dark">Category (Text Input) *</label>
-              <input type="text" class="form-control form-control-glass" id="newProductCategory" list="categoriesDatalist" placeholder="Type category name (e.g. Compression Wear)..." required>
-              <datalist id="categoriesDatalist">
-                <!-- Dynamically populated from PostgreSQL categories -->
+              <label class="form-label small fw-bold text-dark"><i class="bi bi-collection-fill text-primary me-1"></i>Collection Tag (Optional)</label>
+              <input type="text" class="form-control form-control-glass" id="newProductCollectionTag" list="collectionTagsDatalist" placeholder="e.g. Best Sellers, New Arrivals, Trending">
+              <datalist id="collectionTagsDatalist">
+                <option value="Best Sellers">
+                <option value="New Arrivals">
+                <option value="Trending Now">
+                <option value="Featured Release">
               </datalist>
-              <div class="form-text text-muted" style="font-size: 0.76rem;">Type any custom category or pick from suggested database categories.</div>
+              <div class="form-text text-muted" style="font-size: 0.74rem;">Homepage carousel tab & filter tag.</div>
             </div>
           </div>
 
@@ -321,16 +318,23 @@
     }
 
     function populateCategoriesUI() {
-      // 1. Populate <datalist> for Add Product Category text input
-      const datalist = document.getElementById('categoriesDatalist');
-      if (datalist) {
-        datalist.innerHTML = categoriesList.map(c => `<option value="${c.name}">`).join('');
+      // 1. Populate Category dropdown for Add Product dynamically from Neon database
+      const catSelect = document.getElementById('newProductCategorySelect');
+      if (catSelect && categoriesList && categoriesList.length > 0) {
+        catSelect.innerHTML = categoriesList
+          .filter(c => c.is_active !== false)
+          .map((c, i) => `<option value="${c.name}" ${i === 0 ? 'selected' : ''}>${c.name}</option>`)
+          .join('');
       }
 
-      // 2. Set default category text if empty
-      const catInput = document.getElementById('newProductCategory');
-      if (catInput && !catInput.value && categoriesList.length > 0) {
-        catInput.value = categoriesList[0].name;
+      // 2. Also populate filter chips dynamically
+      const chipsContainer = document.getElementById('filterChipsContainer');
+      if (chipsContainer && categoriesList && categoriesList.length > 0) {
+        let chipsHtml = `<button class="filter-chip active" onclick="setCategoryFilter('all', this)">All Uniforms</button>`;
+        categoriesList.filter(c => c.is_active !== false).slice(0, 10).forEach(c => {
+          chipsHtml += `<button class="filter-chip" onclick="setCategoryFilter('${c.name}', this)">${c.name}</button>`;
+        });
+        chipsContainer.innerHTML = chipsHtml;
       }
     }
 
@@ -594,8 +598,8 @@
 
       try {
         const name = document.getElementById('newProductName').value;
-        const sport = document.getElementById('newProductSport').value;
-        const category = document.getElementById('newProductCategory').value.trim();
+        const category = document.getElementById('newProductCategorySelect').value;
+        const collectionTag = document.getElementById('newProductCollectionTag')?.value.trim() || 'New Arrivals';
 
         // 2. Upload the selected image file to backend or fallback to preview data URI
         let finalImageUrl = '';
@@ -617,8 +621,8 @@
         // 3. Create product in PostgreSQL / Storefront
         await AdminApp.createProduct({
           name,
-          sport,
-          category,
+          sport: category,
+          category: collectionTag,
           price: 0,
           image: finalImageUrl
         });
