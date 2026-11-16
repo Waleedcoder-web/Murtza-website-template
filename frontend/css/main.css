@@ -337,7 +337,8 @@ img {
   z-index: 2;
   transform-style: preserve-3d;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: clamp(35px, 6vh, 65px);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2%, black 86%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 2%, black 86%, transparent 100%);
 }
@@ -501,16 +502,17 @@ img {
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 
-/* MIDDLE-GROUND 3D LAYER: Rashguards / Uniforms Lineup in perspective */
+/* MIDDLE-GROUND 3D LAYER: Rashguards / Uniforms Lineup on left (opposite dummy) */
 .hero-lineup-wrap {
   position: absolute;
   bottom: 0;
-  left: 26%;
-  right: 14%;
-  height: 68%;
+  left: clamp(24px, 5vw, 80px);
+  right: auto;
+  width: clamp(340px, 48vw, 680px);
+  height: 56%;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   z-index: 3;
   transform-style: preserve-3d;
   pointer-events: none;
@@ -521,7 +523,7 @@ img {
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  object-position: bottom center;
+  object-position: bottom left;
   filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 25px rgba(57, 255, 20, 0.18));
   opacity: 0;
   transform: perspective(1000px) translate3d(0, 30px, 40px) scale(0.96);
@@ -653,9 +655,9 @@ img {
     width: 35%;
   }
   .hero-lineup-wrap {
-    left: 20%;
-    right: 10%;
-    height: 55%;
+    left: clamp(16px, 4vw, 40px);
+    width: 58%;
+    height: 52%;
   }
 }
 
@@ -665,10 +667,10 @@ img {
     height: 480px;
   }
   .hero-lineup-wrap {
-    left: 10%;
-    right: 5%;
-    height: 45%;
-    opacity: 0.85;
+    left: 12px;
+    width: 68%;
+    height: 44%;
+    opacity: 0.9;
   }
   .hero-slide-left {
     width: 100%;
