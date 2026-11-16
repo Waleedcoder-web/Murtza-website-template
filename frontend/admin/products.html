@@ -230,32 +230,46 @@
         </div>
 
         <form onsubmit="handleCreateProduct(event)">
-          <div class="row g-3 mb-3">
-            <div class="col-12">
-              <label class="form-label small fw-bold text-dark">Design Name *</label>
-              <input type="text" class="form-control form-control-glass" placeholder="e.g. TITANS SUB-PRO JERSEY" required id="newProductName">
-            </div>
+          <!-- 1. Design Title -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Design Name *</label>
+            <input type="text" class="form-control form-control-glass py-2" placeholder="e.g. TITANS SUB-PRO JERSEY" required id="newProductName">
           </div>
 
-          <div class="row g-3 mb-3">
-            <div class="col-md-6">
-              <label class="form-label small fw-bold text-dark"><i class="bi bi-tags-fill text-primary me-1"></i>Category *</label>
-              <select class="form-select form-select-glass" id="newProductCategorySelect" required>
-                <!-- Populated dynamically from Neon / PostgreSQL database categories -->
-                <option value="" disabled selected>Loading categories from database...</option>
-              </select>
-              <div class="form-text text-muted" style="font-size: 0.74rem;">Loaded dynamically from Neon database.</div>
+          <!-- 2. Sport & Apparel Category (Dynamic from Neon Database) -->
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label small fw-bold text-dark mb-0">
+                <i class="bi bi-tags-fill text-primary me-1"></i>Category *
+              </label>
+              <a href="categories.html" target="_blank" class="small text-decoration-none fw-bold text-primary" style="font-size: 0.76rem;">
+                <i class="bi bi-gear-fill me-1"></i>Manage Categories
+              </a>
             </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-bold text-dark"><i class="bi bi-collection-fill text-primary me-1"></i>Collection Tag (Optional)</label>
-              <input type="text" class="form-control form-control-glass" id="newProductCollectionTag" list="collectionTagsDatalist" placeholder="e.g. Best Sellers, New Arrivals, Trending">
-              <datalist id="collectionTagsDatalist">
-                <option value="Best Sellers">
-                <option value="New Arrivals">
-                <option value="Trending Now">
-                <option value="Featured Release">
-              </datalist>
-              <div class="form-text text-muted" style="font-size: 0.74rem;">Homepage carousel tab & filter tag.</div>
+            <select class="form-select category-select-modern" id="newProductCategorySelect" required>
+              <!-- Populated dynamically from Neon / PostgreSQL database categories -->
+              <option value="" disabled selected>Loading categories from database...</option>
+            </select>
+            <div class="form-text text-muted" style="font-size: 0.74rem;">Select category loaded live from database. Sets sport type and storefront filters.</div>
+          </div>
+
+          <!-- 3. Collection Tag (Optional) -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark mb-1">
+              <i class="bi bi-collection-fill text-primary me-1"></i>Collection Tag (Optional)
+            </label>
+            <input type="text" class="form-control form-control-glass py-2 mb-2" id="newProductCollectionTag" list="collectionTagsDatalist" placeholder="e.g. Best Sellers, New Arrivals, Trending Now">
+            <datalist id="collectionTagsDatalist">
+              <option value="Best Sellers">
+              <option value="New Arrivals">
+              <option value="Trending Now">
+              <option value="Featured Release">
+            </datalist>
+            <div class="d-flex gap-1 flex-wrap align-items-center">
+              <span class="text-muted" style="font-size: 0.72rem;">Quick Tags:</span>
+              <span class="collection-tag-pill" onclick="pickCollectionTag('Best Sellers')">+ Best Sellers</span>
+              <span class="collection-tag-pill" onclick="pickCollectionTag('New Arrivals')">+ New Arrivals</span>
+              <span class="collection-tag-pill" onclick="pickCollectionTag('Trending Now')">+ Trending Now</span>
             </div>
           </div>
 
@@ -336,6 +350,11 @@
         });
         chipsContainer.innerHTML = chipsHtml;
       }
+    }
+
+    function pickCollectionTag(tag) {
+      const input = document.getElementById('newProductCollectionTag');
+      if (input) input.value = tag;
     }
 
     // Modal Category Management
