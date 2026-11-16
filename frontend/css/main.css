@@ -501,6 +501,39 @@ img {
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 
+/* MIDDLE-GROUND 3D LAYER: Rashguards / Uniforms Lineup in perspective */
+.hero-lineup-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 26%;
+  right: 14%;
+  height: 68%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 3;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.hero-lineup-img {
+  max-height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 25px rgba(57, 255, 20, 0.18));
+  opacity: 0;
+  transform: perspective(1000px) translate3d(0, 30px, 40px) scale(0.96);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.25s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+  will-change: transform, opacity;
+}
+
+.hero-slide.active .hero-lineup-img {
+  opacity: 1;
+  transform: perspective(1000px) translate3d(0, 0, 40px) scale(1);
+}
+
 /* RIGHT 30% SECTION: Dedicated to Cutout Athlete grounded top-to-bottom */
 .hero-slide-right {
   position: absolute;
@@ -619,12 +652,23 @@ img {
   .hero-slide-right {
     width: 35%;
   }
+  .hero-lineup-wrap {
+    left: 20%;
+    right: 10%;
+    height: 55%;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-carousel {
     min-height: 480px;
     height: 480px;
+  }
+  .hero-lineup-wrap {
+    left: 10%;
+    right: 5%;
+    height: 45%;
+    opacity: 0.85;
   }
   .hero-slide-left {
     width: 100%;

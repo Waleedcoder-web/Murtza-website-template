@@ -163,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!activeSlide) return;
 
         const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const lineup = activeSlide.querySelector('.hero-lineup-img');
         const content = activeSlide.querySelector('.hero-content');
         const bg = activeSlide.querySelector('.hero-left-bg');
 
@@ -173,6 +174,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const transX = x * 35; // moves opposite/towards cursor
           const transY = y * 20;
           athlete.style.transform = `perspective(1200px) translate3d(${transX}px, ${transY}px, 110px) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+        }
+
+        // Middle-ground Uniforms Lineup floats with intermediate 3D depth
+        if (lineup) {
+          const transX = x * 22;
+          const transY = y * 14;
+          const rotY = x * 7;
+          lineup.style.transform = `perspective(1000px) translate3d(${transX}px, ${transY}px, 45px) rotateY(${rotY}deg)`;
         }
 
         // Text content floats smoothly at mid-depth
@@ -195,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!activeSlide) return;
 
         const athlete = activeSlide.querySelector('.hero-athlete-img');
+        const lineup = activeSlide.querySelector('.hero-lineup-img');
         const content = activeSlide.querySelector('.hero-content');
         const bg = activeSlide.querySelector('.hero-left-bg');
 
@@ -202,6 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
           athlete.style.transform = `perspective(1200px) translate3d(0, 0, 100px) rotateY(0deg) rotateX(0deg)`;
           athlete.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
           setTimeout(() => { athlete.style.transition = ''; }, 600);
+        }
+        if (lineup) {
+          lineup.style.transform = `perspective(1000px) translate3d(0, 0, 40px) rotateY(0deg)`;
+          lineup.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+          setTimeout(() => { lineup.style.transition = ''; }, 600);
         }
         if (content) {
           content.style.transform = `translate3d(0, 0, 60px)`;
