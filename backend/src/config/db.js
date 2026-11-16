@@ -215,6 +215,30 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO admin_users (username, email, password_hash, role)
 VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
 ON CONFLICT (username) DO NOTHING;
+
+INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
+VALUES 
+  ('Stealth Blackout Carbon Rashguard', 'RG-001', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-1.jpg', 'model', 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', true, true),
+  ('Royal Cyan & Navy Compression Top', 'RG-002', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-2.jpg', 'model', 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.', true, true),
+  ('Crimson Velocity Armor Rashguard', 'RG-003', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-3.jpg', 'model', 'Charcoal base with geometric crimson shoulder panels and reinforced seams.', true, true),
+  ('Volt Yellow Sprint Rashguard', 'RG-004', 120.00, 'Training', 'New Arrivals', '/assets/images/products/rashguard-4.jpg', 'model', 'High-visibility neon volt yellow accents with multi-directional stretch.', true, true),
+  ('Glacier White & Deep Navy Top', 'RG-005', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-5.jpg', 'model', 'Frost white torso with deep navy sleeves and ice-blue contour stitch.', true, true),
+  ('Hyper Sunset Orange Rashguard', 'RG-006', 120.00, '7v7 Football', 'New Arrivals', '/assets/images/products/rashguard-6.jpg', 'model', 'Vibrant sunset orange with gunmetal velocity side panels.', true, true),
+  ('Emerald Matrix Honeycomb Top', 'RG-007', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-7.jpg', 'model', 'Anthracite base with vibrant emerald green honeycomb matrix pattern.', true, true),
+  ('Regal Purple Tournament Rashguard', 'RG-008', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-8.jpg', 'model', 'Deep royal purple with metallic silver tournament contrast lines.', true, true),
+  ('Desert Sand Tactical Camo Rashguard', 'RG-009', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-9.jpg', 'model', 'Sublimated tactical urban camo with reinforced elbow contours.', true, true),
+  ('Oceanic Teal & Mint Base Layer', 'RG-010', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-10.jpg', 'model', 'Dark teal with mint green gradient transitions and antimicrobial fabric.', true, true),
+  ('Solar Gold & Black Striker Top', 'RG-011', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-11.jpg', 'model', 'Jet black with high-voltage solar gold sleeves and ergonomic panels.', true, true),
+  ('Bloodline Maroon Armor Rashguard', 'RG-012', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-12.jpg', 'model', 'Matte black with bloodline maroon panels and red flatlock stitching.', true, true),
+  ('Titanium Silver & Acid Lime Top', 'RG-013', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-13.jpg', 'model', 'Titanium grey body with acid lime geometric speed ribbing.', true, true),
+  ('Cobalt Blue Cross-Trainer Rashguard', 'RG-014', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-14.jpg', 'model', 'Cobalt blue with crisp white athletic raglan sleeve contours.', true, true),
+  ('Shadow Charcoal & Red Speed Top', 'RG-015', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-15.jpg', 'model', 'Dark charcoal with crimson speed streaks and ventilation mesh panels.', true, true),
+  ('Vortex Violet Performance Rashguard', 'RG-016', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-16.jpg', 'model', 'Vortex violet with radiant coral gradient accents.', true, true),
+  ('Military Green Camo Tactical Top', 'RG-017', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-17.jpg', 'model', 'Obsidian black with military green camo sleeves and rugged flatlock seams.', true, true),
+  ('Electric Cyan & Magenta Duo Rashguard', 'RG-018', 120.00, '7v7 Football', 'New Arrivals', '/assets/images/products/rashguard-18.jpg', 'model', 'High-energy cyan and magenta contrast tournament compression wear.', true, true),
+  ('Pitch Black & Gold Foil Rashguard', 'RG-019', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-19.jpg', 'model', 'Championship gold foil geometric lines on premium ultra-stretch black spandex.', true, true),
+  ('Pure Frost Minimalist Base Layer', 'RG-020', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-20.jpg', 'model', 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', true, true)
+ON CONFLICT (sku) DO NOTHING;
 `;
 
 let isConnected = false;

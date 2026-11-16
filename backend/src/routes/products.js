@@ -2,6 +2,52 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
+// SEED 20 RASHGUARD PRODUCTS (Cloud & Local)
+router.all('/seed', async (req, res) => {
+  const seedItems = [
+    { sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-1.jpg', desc: 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.' },
+    { sku: 'RG-002', name: 'Royal Cyan & Navy Compression Top', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-2.jpg', desc: 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.' },
+    { sku: 'RG-003', name: 'Crimson Velocity Armor Rashguard', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-3.jpg', desc: 'Charcoal base with geometric crimson shoulder panels and reinforced seams.' },
+    { sku: 'RG-004', name: 'Volt Yellow Sprint Rashguard', price: 120.00, sport: 'Training', category: 'New Arrivals', image: '/assets/images/products/rashguard-4.jpg', desc: 'High-visibility neon volt yellow accents with multi-directional stretch.' },
+    { sku: 'RG-005', name: 'Glacier White & Deep Navy Top', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-5.jpg', desc: 'Frost white torso with deep navy sleeves and ice-blue contour stitch.' },
+    { sku: 'RG-006', name: 'Hyper Sunset Orange Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-6.jpg', desc: 'Vibrant sunset orange with gunmetal velocity side panels.' },
+    { sku: 'RG-007', name: 'Emerald Matrix Honeycomb Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-7.jpg', desc: 'Anthracite base with vibrant emerald green honeycomb matrix pattern.' },
+    { sku: 'RG-008', name: 'Regal Purple Tournament Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-8.jpg', desc: 'Deep royal purple with metallic silver tournament contrast lines.' },
+    { sku: 'RG-009', name: 'Desert Sand Tactical Camo Rashguard', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-9.jpg', desc: 'Sublimated tactical urban camo with reinforced elbow contours.' },
+    { sku: 'RG-010', name: 'Oceanic Teal & Mint Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-10.jpg', desc: 'Dark teal with mint green gradient transitions and antimicrobial fabric.' },
+    { sku: 'RG-011', name: 'Solar Gold & Black Striker Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-11.jpg', desc: 'Jet black with high-voltage solar gold sleeves and ergonomic panels.' },
+    { sku: 'RG-012', name: 'Bloodline Maroon Armor Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-12.jpg', desc: 'Matte black with bloodline maroon panels and red flatlock stitching.' },
+    { sku: 'RG-013', name: 'Titanium Silver & Acid Lime Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-13.jpg', desc: 'Titanium grey body with acid lime geometric speed ribbing.' },
+    { sku: 'RG-014', name: 'Cobalt Blue Cross-Trainer Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-14.jpg', desc: 'Cobalt blue with crisp white athletic raglan sleeve contours.' },
+    { sku: 'RG-015', name: 'Shadow Charcoal & Red Speed Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-15.jpg', desc: 'Dark charcoal with crimson speed streaks and ventilation mesh panels.' },
+    { sku: 'RG-016', name: 'Vortex Violet Performance Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-16.jpg', desc: 'Vortex violet with radiant coral gradient accents.' },
+    { sku: 'RG-017', name: 'Military Green Camo Tactical Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-17.jpg', desc: 'Obsidian black with military green camo sleeves and rugged flatlock seams.' },
+    { sku: 'RG-018', name: 'Electric Cyan & Magenta Duo Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-18.jpg', desc: 'High-energy cyan and magenta contrast tournament compression wear.' },
+    { sku: 'RG-019', name: 'Pitch Black & Gold Foil Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-19.jpg', desc: 'Championship gold foil geometric lines on premium ultra-stretch black spandex.' },
+    { sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-20.jpg', desc: 'Clean frost white with steel grey technical stitching and moisture-wicking weave.' }
+  ];
+
+  try {
+    if (db.getIsConnected()) {
+      for (const p of seedItems) {
+        await db.query(
+          `INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
+           VALUES ($1, $2, $3, $4, $5, $6, 'model', $7, true, true)
+           ON CONFLICT (sku) DO NOTHING`,
+          [p.name, p.sku, p.price, p.sport, p.category, p.image, p.desc]
+        );
+      }
+      const countRes = await db.query('SELECT COUNT(*) FROM products');
+      return res.json({ success: true, count: parseInt(countRes.rows[0].count, 10), message: 'All 20 rashguards seeded into database successfully!' });
+    }
+  } catch (err) {
+    console.error('Error seeding products:', err);
+    return res.status(500).json({ error: err.message });
+  }
+
+  return res.json({ success: true, count: db.fallbackStore.products.length, message: 'Products in local fallback store.' });
+});
+
 // GET all products (newest first)
 router.get('/', async (req, res) => {
   try {
