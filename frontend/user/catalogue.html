@@ -35,101 +35,135 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: rgba(226, 232, 240, 0.8) !important;
-      border: none !important;
+      background: #ffffff !important;
+      border: 1.8px solid #000000 !important;
       border-radius: 14px !important;
       padding: 12px 12px 14px 12px !important;
       overflow: hidden !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
       transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
       z-index: 1;
     }
 
-    /* Rotating White then Black Glass Light Perimeter Beam */
+    /* Aati-Jaati White Glass Light: Sweeping from Bottom-Left Corner to Top-Right Corner */
     .products-grid .product-card-inner::before {
       content: '';
       position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
-      background: conic-gradient(
-        from 0deg,
-        #ffffff 0deg,
-        #ffffff 20deg,
-        #000000 45deg,
-        #111111 60deg,
-        transparent 75deg,
-        transparent 80deg,
-        #ffffff 90deg,
-        #ffffff 110deg,
-        #000000 135deg,
-        #111111 150deg,
-        transparent 165deg,
-        transparent 170deg,
-        #ffffff 180deg,
-        #ffffff 200deg,
-        #000000 225deg,
-        #111111 240deg,
-        transparent 255deg,
-        transparent 260deg,
-        #ffffff 270deg,
-        #ffffff 290deg,
-        #000000 315deg,
-        #111111 330deg,
-        transparent 345deg,
-        transparent 350deg,
-        #ffffff 360deg
+      top: -60%;
+      left: -60%;
+      width: 220%;
+      height: 220%;
+      background: linear-gradient(
+        45deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.2) 43%,
+        rgba(255, 255, 255, 0.85) 48%,
+        #ffffff 50%,
+        rgba(255, 255, 255, 0.85) 52%,
+        rgba(255, 255, 255, 0.2) 57%,
+        transparent 62%
       );
-      animation: rotateGlassLight 4.5s linear infinite;
-      z-index: 0;
+      transform: translate(-75%, 75%);
+      animation: glassLightSweep 4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
       pointer-events: none;
+      z-index: 3;
+      mix-blend-mode: screen;
     }
 
-    /* Stagger beam animation so cards don't rotate in lockstep */
-    .products-grid .product-card:nth-child(4n+1) .product-card-inner::before {
-      animation-delay: 0s;
-    }
-    .products-grid .product-card:nth-child(4n+2) .product-card-inner::before {
-      animation-delay: -1.12s;
-    }
-    .products-grid .product-card:nth-child(4n+3) .product-card-inner::before {
-      animation-delay: -2.25s;
-    }
-    .products-grid .product-card:nth-child(4n+4) .product-card-inner::before {
-      animation-delay: -3.37s;
-    }
-
-    /* Sleek Inner Mask leaving a precise 1.8px glass border */
+    /* Diagonal Corner Gleam on Bottom-Left & Top-Right Corners */
     .products-grid .product-card-inner::after {
       content: '';
       position: absolute;
-      inset: 1.8px;
-      background: #ffffff;
-      border-radius: 12.2px;
-      z-index: 1;
+      inset: -1.8px;
+      border-radius: 14px;
+      padding: 1.8px;
+      background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.4) 12%,
+        transparent 28%,
+        transparent 72%,
+        rgba(255, 255, 255, 0.4) 88%,
+        rgba(255, 255, 255, 0.95) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      animation: cornerGleamPulse 4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
       pointer-events: none;
-      transition: background 0.3s ease;
+      z-index: 4;
     }
 
-    /* All card content sits safely above the mask and beam */
+    /* Stagger animation across cards so light waves gracefully */
+    .products-grid .product-card:nth-child(4n+1) .product-card-inner::before,
+    .products-grid .product-card:nth-child(4n+1) .product-card-inner::after {
+      animation-delay: 0s;
+    }
+    .products-grid .product-card:nth-child(4n+2) .product-card-inner::before,
+    .products-grid .product-card:nth-child(4n+2) .product-card-inner::after {
+      animation-delay: 1s;
+    }
+    .products-grid .product-card:nth-child(4n+3) .product-card-inner::before,
+    .products-grid .product-card:nth-child(4n+3) .product-card-inner::after {
+      animation-delay: 2s;
+    }
+    .products-grid .product-card:nth-child(4n+4) .product-card-inner::before,
+    .products-grid .product-card:nth-child(4n+4) .product-card-inner::after {
+      animation-delay: 3s;
+    }
+
+    /* All card content sits comfortably above */
     .products-grid .product-card-inner > * {
       position: relative;
       z-index: 2;
     }
 
-    /* Hover elevation & enhanced luxury monochrome aura */
+    /* Hover elevation & bold black aura */
     .products-grid .product-card:hover .product-card-inner {
       transform: translateY(-5px) !important;
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15), 0 0 16px rgba(0, 0, 0, 0.12) !important;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16), 0 0 12px rgba(0, 0, 0, 0.12) !important;
     }
 
-    @keyframes rotateGlassLight {
+    /* Sweep Animation: Sweeps across from Bottom-Left to Top-Right, then pauses */
+    @keyframes glassLightSweep {
       0% {
-        transform: rotate(0deg);
+        transform: translate(-75%, 75%);
+        opacity: 0;
+      }
+      8% {
+        opacity: 1;
+      }
+      45% {
+        transform: translate(75%, -75%);
+        opacity: 1;
+      }
+      55% {
+        transform: translate(75%, -75%);
+        opacity: 0;
       }
       100% {
-        transform: rotate(360deg);
+        transform: translate(75%, -75%);
+        opacity: 0;
+      }
+    }
+
+    /* Corner pulse timing matching the sweep entry & exit */
+    @keyframes cornerGleamPulse {
+      0% {
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      42% {
+        opacity: 1;
+      }
+      52% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 0;
       }
     }
 
