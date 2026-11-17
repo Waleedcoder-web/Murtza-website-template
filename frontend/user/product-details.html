@@ -149,23 +149,11 @@
             <span class="text-muted small fw-bold">(Championship Proven Quality)</span>
           </div>
 
-          <!-- Price & Estimated Total -->
-          <div class="p-3 bg-light rounded-3 border mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-              <span class="text-muted small d-block">Unit Price:</span>
-              <span class="fs-3 fw-bold text-dark" id="detailPrice">$120.00</span>
-            </div>
-            <div class="text-end">
-              <span class="text-muted small d-block">Estimated Total:</span>
-              <span class="fs-3 fw-bold text-success" id="detailTotalEstimate">$120.00</span>
-            </div>
-          </div>
-
           <p class="text-muted mb-4" id="detailDescription" style="line-height: 1.6;">
             Engineered with ultra-breathable moisture-management poly-spandex mesh. Features 4-way stretch capability, heat-pressed flatlock seams, and fade-resistant full dye sublimation printing.
           </p>
 
-          <!-- Select Size -->
+          <!-- Select Size & Size Chart Link -->
           <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <label class="fw-bold mb-0 text-uppercase small">Select Size:</label>
@@ -179,6 +167,34 @@
               <button type="button" class="size-badge-btn" onclick="selectSize(this, '2XL')">2XL</button>
               <button type="button" class="size-badge-btn" onclick="selectSize(this, '3XL')">3XL</button>
             </div>
+
+            <!-- Size Chart Guide Option Placed Right Underneath Select Size -->
+            <div class="mt-2">
+              <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1" data-bs-toggle="collapse" data-bs-target="#sizeChartCollapse" aria-expanded="false" style="font-size: 0.82rem;">
+                <i class="bi bi-rulers"></i> View Size Chart Guide <i class="bi bi-chevron-down"></i>
+              </button>
+              <div class="collapse mt-2" id="sizeChartCollapse">
+                <div class="card card-body p-3 border rounded-3 bg-white shadow-sm">
+                  <h6 class="fw-bold mb-2 small text-uppercase"><i class="bi bi-info-circle me-1"></i>Unisex Athletic Size Chart (Inches)</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered text-center mb-0" style="font-size: 0.8rem;">
+                      <thead class="table-dark">
+                        <tr><th>Size</th><th>Chest (in)</th><th>Length (in)</th><th>Sleeve (in)</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td><strong>S</strong></td><td>36 - 38</td><td>28</td><td>15</td></tr>
+                        <tr><td><strong>M</strong></td><td>39 - 41</td><td>29</td><td>16</td></tr>
+                        <tr><td><strong>L</strong></td><td>42 - 44</td><td>30</td><td>17</td></tr>
+                        <tr><td><strong>XL</strong></td><td>45 - 47</td><td>31</td><td>18</td></tr>
+                        <tr><td><strong>2XL</strong></td><td>48 - 50</td><td>32</td><td>19</td></tr>
+                        <tr><td><strong>3XL</strong></td><td>51 - 53</td><td>33</td><td>20</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <small class="text-muted mt-2 d-block" style="font-size: 0.75rem;">* Fits true to size with multi-directional athletic stretch.</small>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Quantity -->
@@ -190,26 +206,18 @@
                 <input type="text" class="form-control text-center fw-bold" id="productQtyInput" value="1" readonly>
                 <button class="btn btn-outline-dark" type="button" onclick="adjustQty(1)">+</button>
               </div>
-              <span class="text-muted small">Bulk team discount applies on orders over 15 units.</span>
+              <span class="text-muted small">Bulk team discount applies on bulk orders.</span>
             </div>
           </div>
 
-          <!-- Quick Action Buttons: Direct WhatsApp Confirmation & Team Order -->
-          <div class="d-flex flex-column gap-2 mb-4">
-            <a id="whatsappOrderBtn" href="#" target="_blank" class="btn btn-whatsapp-order btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+          <!-- Primary WhatsApp Order Action Button -->
+          <div class="mb-4">
+            <a id="whatsappOrderBtn" href="#" target="_blank" class="btn btn-whatsapp-order btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase w-100 d-flex align-items-center justify-content-center gap-2">
               <i class="bi bi-whatsapp fs-4"></i> Confirm Order on WhatsApp
             </a>
-            <div class="d-flex gap-2">
-              <a id="placeTeamOrderBtn" href="placeorder.html" class="btn btn-dark btn-lg flex-grow-1 py-3 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-file-earmark-check"></i> Place Team Order
-              </a>
-              <a id="customizeLink" href="customizer.html" class="btn btn-outline-dark btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-palette"></i> Customize
-              </a>
-            </div>
           </div>
 
-          <!-- Order Inquiry Form (Sends direct inquiry to admin database + WhatsApp) -->
+          <!-- Direct Order Confirmation Inquiry Form -->
           <div class="inquiry-box-card p-4 mt-4">
             <h5 class="fw-bold mb-1 text-uppercase"><i class="bi bi-envelope-paper me-2 text-dark"></i>Direct Order Confirmation Inquiry</h5>
             <p class="text-muted small mb-3">Send your details to the admin for instant confirmation, digital mockups, and bulk pricing.</p>
@@ -223,19 +231,14 @@
                   <input type="tel" class="form-control" id="inqPhone" placeholder="WhatsApp / Phone Number *" required>
                 </div>
               </div>
-              <div class="row g-2 mb-2">
-                <div class="col-md-6">
-                  <input type="email" class="form-control" id="inqEmail" placeholder="Email Address">
-                </div>
-                <div class="col-md-6">
-                  <input type="text" class="form-control" id="inqTeam" placeholder="Team / Organization Name">
-                </div>
+              <div class="mb-2">
+                <input type="email" class="form-control" id="inqEmail" placeholder="Email Address (Optional)">
               </div>
               <div class="mb-3">
                 <textarea class="form-control" id="inqNotes" rows="2" placeholder="Custom color preferences, sponsor logos, or deadline..."></textarea>
               </div>
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-uppercase flex-grow-1" id="inquirySubmitBtn">
+                <button type="submit" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-uppercase w-100" id="inquirySubmitBtn">
                   <i class="bi bi-send me-1"></i> Submit Order Inquiry
                 </button>
               </div>
@@ -252,7 +255,6 @@
       <div class="mt-5 pt-4 border-top">
         <ul class="nav nav-tabs mb-4">
           <li class="nav-item"><a class="nav-link active fw-bold" href="#features" data-bs-toggle="tab">Features & Fabric</a></li>
-          <li class="nav-item"><a class="nav-link fw-bold" href="#size-chart" data-bs-toggle="tab">Size Chart</a></li>
           <li class="nav-item"><a class="nav-link fw-bold" href="#shipping" data-bs-toggle="tab">Shipping & Turnaround</a></li>
         </ul>
         <div class="tab-content p-2">
@@ -265,24 +267,6 @@
               <li><strong>Athletic Cut:</strong> Ergonomically curved raglan sleeves and multi-directional stretch for unrestricted motion.</li>
               <li><strong>Reinforced Seams:</strong> 6-thread flatlock ergonomic stitching built for high-contact athletics.</li>
             </ul>
-          </div>
-          <div class="tab-pane fade" id="size-chart">
-            <h4 class="fw-bold mb-3">Unisex Athletic Size Chart (Inches)</h4>
-            <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead class="table-dark">
-                  <tr><th>Size</th><th>Chest (in)</th><th>Length (in)</th><th>Sleeve (in)</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Small (S)</td><td>36 - 38</td><td>28</td><td>15</td></tr>
-                  <tr><td>Medium (M)</td><td>39 - 41</td><td>29</td><td>16</td></tr>
-                  <tr><td>Large (L)</td><td>42 - 44</td><td>30</td><td>17</td></tr>
-                  <tr><td>X-Large (XL)</td><td>45 - 47</td><td>31</td><td>18</td></tr>
-                  <tr><td>2X-Large (2XL)</td><td>48 - 50</td><td>32</td><td>19</td></tr>
-                  <tr><td>3X-Large (3XL)</td><td>51 - 53</td><td>33</td><td>20</td></tr>
-                </tbody>
-              </table>
-            </div>
           </div>
           <div class="tab-pane fade" id="shipping">
             <h4 class="fw-bold mb-3">Turnaround Time & Global Shipping</h4>
@@ -331,40 +315,21 @@
 
     function updateOrderUrls() {
       if (!currentProduct) return;
-      const unitPrice = Number(currentProduct.price) || 120;
-      const total = (unitPrice * qty).toFixed(2);
 
-      const totalEl = document.getElementById('detailTotalEstimate');
-      if (totalEl) totalEl.textContent = `$${total}`;
-
-      // 1. WhatsApp Instant Confirmation URL
+      // WhatsApp Instant Confirmation URL
       const waText = `Hello Prosix Sports! I want to confirm an order / inquiry:
 • Product: ${currentProduct.name}
 • SKU: ${currentProduct.sku || 'PRO-' + currentProduct.id}
 • Sport: ${currentProduct.sport || 'Custom'}
 • Size: ${selectedSize}
 • Quantity: ${qty} units
-• Unit Price: $${unitPrice}
-• Estimated Total: $${total}
 • Page Link: ${window.location.href}
 
-Please let me know how to proceed with the team order and artwork approval.`;
+Please provide team pricing and guide me on how to proceed with the order confirmation.`;
 
       const waBtn = document.getElementById('whatsappOrderBtn');
       if (waBtn) {
         waBtn.href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waText)}`;
-      }
-
-      // 2. Place Order URL
-      const placeBtn = document.getElementById('placeTeamOrderBtn');
-      if (placeBtn) {
-        placeBtn.href = `placeorder.html?product=${encodeURIComponent(currentProduct.name)}&id=${currentProduct.id}&size=${selectedSize}&qty=${qty}`;
-      }
-
-      // 3. Customize URL
-      const customBtn = document.getElementById('customizeLink');
-      if (customBtn) {
-        customBtn.href = `customizer.html?id=${currentProduct.id}&size=${selectedSize}&qty=${qty}`;
       }
     }
 
@@ -376,7 +341,6 @@ Please let me know how to proceed with the team order and artwork approval.`;
       const name = document.getElementById('inqName').value.trim();
       const phone = document.getElementById('inqPhone').value.trim();
       const email = document.getElementById('inqEmail').value.trim();
-      const team = document.getElementById('inqTeam').value.trim();
       const notes = document.getElementById('inqNotes').value.trim();
 
       if (!name || !phone) return;
@@ -389,7 +353,7 @@ Please let me know how to proceed with the team order and artwork approval.`;
         email: email || 'inquiry@prosixsports.com',
         phone: phone,
         subject: `Order Inquiry: ${currentProduct ? currentProduct.name : 'Custom Jersey'} (Qty: ${qty}, Size: ${selectedSize})`,
-        message: `Team: ${team || 'N/A'}\nProduct: ${currentProduct ? currentProduct.name : ''} (ID: ${currentProduct ? currentProduct.id : ''})\nSize: ${selectedSize}\nQuantity: ${qty}\nNotes: ${notes}`
+        message: `Product: ${currentProduct ? currentProduct.name : ''} (ID: ${currentProduct ? currentProduct.id : ''})\nSize: ${selectedSize}\nQuantity: ${qty}\nNotes: ${notes}`
       };
 
       try {
@@ -412,7 +376,6 @@ Please let me know how to proceed with the team order and artwork approval.`;
       setTimeout(() => {
         const fullWaText = `Hello Prosix Sports! I just submitted an order inquiry on your website:
 • Name: ${name}
-• Team: ${team || 'N/A'}
 • Product: ${currentProduct ? currentProduct.name : ''}
 • Size: ${selectedSize}
 • Quantity: ${qty}
@@ -467,9 +430,6 @@ Please confirm my order details!`;
             }
             if (document.getElementById('detailSku')) {
               document.getElementById('detailSku').textContent = `SKU: ${product.sku || 'PRO-' + product.id}`;
-            }
-            if (document.getElementById('detailPrice')) {
-              document.getElementById('detailPrice').textContent = `$${Number(product.price || 120).toFixed(2)}`;
             }
             if (product.description && document.getElementById('detailDescription')) {
               document.getElementById('detailDescription').textContent = product.description;
