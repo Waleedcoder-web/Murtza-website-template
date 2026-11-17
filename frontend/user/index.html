@@ -1058,9 +1058,13 @@
       });
 
       function resetTimer() {
-        if (window._heroTimer) clearInterval(window._heroTimer);
+        if (window._heroTimer) clearTimeout(window._heroTimer);
         if (slides.length > 1) {
-          window._heroTimer = setInterval(nextSlide, 5000);
+          const delay = currentIdx === 0 ? 2150 : 4500;
+          window._heroTimer = setTimeout(() => {
+            nextSlide();
+            resetTimer();
+          }, delay);
         }
       }
 

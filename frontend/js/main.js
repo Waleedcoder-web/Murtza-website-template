@@ -136,6 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.classList.toggle('active', i === index);
     });
     currentHeroIdx = index;
+
+    // When transitioning to Slide 1 (index 0), trigger fresh 2s 360° spin
+    if (index === 0 && window.triggerTurntableSpin) {
+      window.triggerTurntableSpin();
+    }
   }
 
   function nextHeroSlide() {
@@ -148,29 +153,40 @@ document.addEventListener('DOMContentLoaded', () => {
     showHeroSlide(prevIdx);
   }
 
+  function scheduleHeroSlideTransition() {
+    clearTimeout(heroTimer);
+    if (window._turntablePaused) return;
+
+    // Slide 1 has a 2.0s 360° rotation: advance to Slide 2 right after 2.1s!
+    // Slide 2 (basketball arena) stays for 4.5s then returns to Slide 1.
+    const delay = currentHeroIdx === 0 ? 2150 : 4500;
+    heroTimer = setTimeout(() => {
+      nextHeroSlide();
+      scheduleHeroSlideTransition();
+    }, delay);
+  }
+
+  window.scheduleHeroSlideTransition = scheduleHeroSlideTransition;
+
   if (heroSlides.length > 1) {
     heroNext?.addEventListener('click', () => {
       nextHeroSlide();
-      resetHeroTimer();
+      scheduleHeroSlideTransition();
     });
 
     heroPrev?.addEventListener('click', () => {
       prevHeroSlide();
-      resetHeroTimer();
+      scheduleHeroSlideTransition();
     });
 
     heroDots.forEach((dot, idx) => {
       dot.addEventListener('click', () => {
         showHeroSlide(idx);
-        resetHeroTimer();
+        scheduleHeroSlideTransition();
       });
     });
 
-    function resetHeroTimer() {
-      clearInterval(heroTimer);
-      heroTimer = setInterval(nextHeroSlide, 5500);
-    }
-    resetHeroTimer();
+    scheduleHeroSlideTransition();
   } else {
     // Single slide: hide navigation arrows and dots
     const heroControls = heroCarousel?.querySelector('.hero-controls');
@@ -294,6 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapSuit?.classList.add('active');
         wrapDummy?.classList.remove('active');
       }
+      if (window.triggerTurntableSpin) window.triggerTurntableSpin();
+      if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
     }
 
     btnDummy?.addEventListener('click', (e) => {
@@ -309,10 +327,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-spin toggle
     function setAutoSpin(enable) {
       isAutoSpinning = enable;
+      window._turntablePaused = !enable;
       if (isAutoSpinning) {
         rotator?.classList.add('spinning');
         toggleSpinBtn?.classList.remove('paused');
         if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: ON';
+        if (window.triggerTurntableSpin) window.triggerTurntableSpin();
+        if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
       } else {
         rotator?.classList.remove('spinning');
         toggleSpinBtn?.classList.add('paused');
@@ -325,11 +346,21 @@ document.addEventListener('DOMContentLoaded', () => {
       setAutoSpin(!isAutoSpinning);
     });
 
+    // Function to re-trigger 2s 360° spin
+    window.triggerTurntableSpin = function() {
+      if (!rotator || window._turntablePaused) return;
+      rotator.classList.remove('spinning');
+      rotator.style.transform = '';
+      void rotator.offsetWidth; // force reflow to restart CSS 2s animation
+      rotator.classList.add('spinning');
+    };
+
     // Interactive Drag to Rotate 360° (Mouse & Touch)
     if (viewport && rotator) {
       const onStart = (clientX) => {
         isDragging = true;
         startX = clientX;
+        window._turntablePaused = true;
         rotator.classList.remove('spinning');
         rotator.style.transition = 'none';
       };
@@ -349,8 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isAutoSpinning) {
           setTimeout(() => {
             if (isAutoSpinning && !isDragging) {
+              window._turntablePaused = false;
               rotator.style.transition = '';
-              rotator.classList.add('spinning');
+              if (window.triggerTurntableSpin) window.triggerTurntableSpin();
+              if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
             }
           }, 800);
         }
@@ -370,6 +403,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }, { passive: true });
       window.addEventListener('touchend', onEnd);
     }
+
+    // Initial trigger on load
+    window.triggerTurntableSpin();
   }
 
   // Initialize Hero Turntable Stage
