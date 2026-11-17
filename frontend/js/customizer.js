@@ -1,7 +1,13 @@
 /**
  * PROSIX SPORTS - CUSTOM APPAREL INQUIRY & ORDER ENGINE
- * Replaces the color system with direct image upload, quantity stepper,
- * multi-size selector, detailed description, and direct WhatsApp messaging.
+ * Supports:
+ * 1. Image / Artwork / Mockup upload with immediate thumbnail preview & remove option
+ * 2. Men/Unisex vs Women's Cut Fit selector
+ * 3. Dynamic size chips (XS-5XL for Men, XS-3XL for Women)
+ * 4. Interactive collapsible Size Chart & 7-point How to Measure Guide
+ * 5. Order quantity stepper & quick-select presets
+ * 6. Direct WhatsApp Order Confirmation
+ * 7. Factory Direct Order Inquiry Form with online API submission & WhatsApp fallback
  */
 
 const FALLBACK_CUSTOMIZER_PRODUCTS = [
@@ -27,14 +33,237 @@ const FALLBACK_CUSTOMIZER_PRODUCTS = [
   { id: 20, sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', sport: 'Compression Wear', category: 'New Arrivals', image: 'assets/images/products/rashguard-20.jpg' }
 ];
 
-document.addEventListener('DOMContentLoaded', async () => {
-  // Elements
-  const selectedProductThumb = document.getElementById('selectedProductThumb');
-  const selectedProductName = document.getElementById('selectedProductName');
-  const selectedProductCategory = document.getElementById('selectedProductCategory');
-  const customizerProductImg = document.getElementById('customizerProductImg');
+const MEN_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
+const WOMEN_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+const ADMIN_WHATSAPP = '19292104402';
 
-  // Upload Elements
+let currentProduct = null;
+let allProducts = [];
+let attachedFile = null;
+let selectedGender = 'men';
+let selectedSize = 'L';
+let orderQty = 15;
+
+function resolveAssetUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+  const isUserDir = window.location.pathname.includes('/user/') || window.location.pathname.endsWith('/user');
+  const clean = url.replace(/^\.?\/?/, '');
+  return (isUserDir ? '../' : '') + clean;
+}
+
+function getApiBase() {
+  if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
+  const isUserDir = window.location.pathname.includes('/user/') || window.location.pathname.endsWith('/user');
+  const host = window.location.hostname || '';
+  const port = window.location.port || '';
+  const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+  if (isLocal && port && port !== '5000') return `http://${host}:5000/api`;
+  return isUserDir ? '../api' : '/api';
+}
+
+// 1. Gender / Fit Handler
+function setGender(gender) {
+  selectedGender = gender;
+  const btnMen = document.getElementById('btnGenderMen');
+  const btnWomen = document.getElementById('btnGenderWomen');
+  const label = document.getElementById('genderLabelDisplay');
+
+  if (gender === 'men') {
+    if (btnMen) btnMen.className = 'gender-pill-btn active';
+    if (btnWomen) btnWomen.className = 'gender-pill-btn';
+    if (label) label.textContent = 'Men / Unisex';
+    renderSizeChips(MEN_SIZES);
+    switchChartTab('men');
+  } else {
+    if (btnMen) btnMen.className = 'gender-pill-btn';
+    if (btnWomen) btnWomen.className = 'gender-pill-btn active';
+    if (label) label.textContent = "Women's Cut";
+    renderSizeChips(WOMEN_SIZES);
+    switchChartTab('women');
+  }
+}
+
+// 2. Size Chips Rendering
+function renderSizeChips(sizes) {
+  const wrap = document.getElementById('sizeSelectorWrap');
+  if (!wrap) return;
+
+  if (!sizes.includes(selectedSize)) {
+    selectedSize = sizes.includes('L') ? 'L' : sizes[0];
+  }
+  const lbl = document.getElementById('selectedSizeLabel');
+  if (lbl) lbl.textContent = selectedSize;
+
+  wrap.innerHTML = sizes.map(s => `
+    <button type="button" class="size-badge-btn ${s === selectedSize ? 'active' : ''}" onclick="selectSize(this, '${s}')">${s}</button>
+  `).join('');
+}
+
+function selectSize(btn, size) {
+  document.querySelectorAll('#sizeSelectorWrap .size-badge-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedSize = size;
+  const lbl = document.getElementById('selectedSizeLabel');
+  if (lbl) lbl.textContent = size;
+}
+
+// 3. Size Chart Tab Switching
+function switchChartTab(tab) {
+  const pMen = document.getElementById('chartPaneMen');
+  const pWomen = document.getElementById('chartPaneWomen');
+  const pMeasure = document.getElementById('chartPaneMeasure');
+  const tMen = document.getElementById('tabMenChartBtn');
+  const tWomen = document.getElementById('tabWomenChartBtn');
+  const tMeasure = document.getElementById('tabMeasureBtn');
+
+  if (pMen) pMen.style.display = (tab === 'men') ? 'block' : 'none';
+  if (pWomen) pWomen.style.display = (tab === 'women') ? 'block' : 'none';
+  if (pMeasure) pMeasure.style.display = (tab === 'measure') ? 'block' : 'none';
+
+  if (tMen) tMen.className = `btn btn-sm rounded-pill px-3 py-1 fw-bold ${tab === 'men' ? 'btn-dark' : 'btn-outline-dark'}`;
+  if (tWomen) tWomen.className = `btn btn-sm rounded-pill px-3 py-1 fw-bold ${tab === 'women' ? 'btn-dark' : 'btn-outline-dark'}`;
+  if (tMeasure) tMeasure.className = `btn btn-sm rounded-pill px-3 py-1 fw-bold ${tab === 'measure' ? 'btn-dark' : 'btn-outline-dark'}`;
+}
+
+// 4. Quantity Adjustments
+function adjustQty(delta) {
+  orderQty = Math.max(1, orderQty + delta);
+  const input = document.getElementById('productQtyInput');
+  if (input) input.value = orderQty;
+}
+
+function setPresetQty(q) {
+  orderQty = q;
+  const input = document.getElementById('productQtyInput');
+  if (input) input.value = orderQty;
+}
+
+// 5. WhatsApp Order Generation
+function handleWhatsAppOrder() {
+  const prodName = currentProduct ? currentProduct.name : 'Custom Sublimated Team Uniform';
+  const prodSku = currentProduct ? (currentProduct.sku || 'PRO-CUSTOM') : 'PRO-CUSTOM';
+  const sport = currentProduct ? (currentProduct.sport || 'Custom Sportswear') : 'Custom Sportswear';
+  const fitText = (selectedGender === 'women') ? "Women's Cut" : "Men / Unisex";
+  const name = document.getElementById('inqName')?.value.trim() || 'Valued Customer';
+  const phone = document.getElementById('inqPhone')?.value.trim() || 'Not specified';
+  const notes = document.getElementById('inqNotes')?.value.trim() || 'Please guide me on order confirmation and 3D mockups.';
+  const artworkStatus = attachedFile ? `Yes (${attachedFile.name}) - Ready to send` : 'No file uploaded yet';
+
+  const msg = 
+`*NEW CUSTOM ORDER INQUIRY - PROSIX SPORTS*
+---------------------------------------
+*Product:* ${prodName}
+*SKU:* ${prodSku}
+*Sport:* ${sport}
+*Fit / Gender:* ${fitText}
+*Size Selected:* ${selectedSize}
+*Order Quantity:* ${orderQty} pieces
+*Artwork / Logo:* ${artworkStatus}
+*Customer Name:* ${name}
+*Phone / WhatsApp:* ${phone}
+*Custom Notes:*
+${notes}
+---------------------------------------
+*Page URL:* ${window.location.href}
+_Sent via Prosix Sports Customizer Studio_`;
+
+  window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// 6. Direct Inquiry Form Submission
+async function handleInquirySubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('inqName').value.trim();
+  const phone = document.getElementById('inqPhone').value.trim();
+  const email = document.getElementById('inqEmail').value.trim();
+  const notes = document.getElementById('inqNotes').value.trim();
+  const submitBtn = document.getElementById('inquirySubmitBtn');
+  const successMsg = document.getElementById('inquirySuccessMsg');
+
+  if (!name || !phone) {
+    alert('Please provide your Full Name and WhatsApp / Phone Number.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Submitting...`;
+
+  const fitText = (selectedGender === 'women') ? "Women's Cut" : "Men / Unisex";
+  const prodName = currentProduct ? currentProduct.name : 'Custom Uniform';
+
+  const payload = {
+    name: name,
+    email: email || 'inquiry@prosixsports.com',
+    phone: phone,
+    subject: `Custom Order Inquiry: ${prodName} (${fitText}, Size: ${selectedSize}, Qty: ${orderQty})`,
+    message: `Product: ${prodName} (SKU: ${currentProduct ? currentProduct.sku : 'PRO-001'})\nFit: ${fitText}\nSize: ${selectedSize}\nQuantity: ${orderQty} pieces\nArtwork Uploaded: ${attachedFile ? attachedFile.name : 'None'}\n\nCustom Instructions:\n${notes}`
+  };
+
+  try {
+    await fetch(`${getApiBase()}/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('API error, proceeding to client confirmation', err);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = `<i class="bi bi-check2 me-1"></i> Inquiry Sent!`;
+  if (successMsg) {
+    successMsg.classList.remove('d-none');
+  }
+
+  // Automatically offer WhatsApp confirmation
+  setTimeout(() => {
+    handleWhatsAppOrder();
+  }, 1000);
+}
+
+// 7. Product Selection
+function selectProduct(product, updateUrl = true) {
+  if (!product) return;
+  currentProduct = product;
+
+  const resolvedImg = resolveAssetUrl(product.image);
+  const nameEl = document.getElementById('customizerProductName');
+  const skuEl = document.getElementById('customizerProductSku');
+  const catEl = document.getElementById('customizerProductCategory');
+  const sportTag = document.getElementById('headerSportTag');
+  const imgEl = document.getElementById('customizerProductImg');
+
+  if (nameEl) nameEl.textContent = product.name.toUpperCase();
+  if (skuEl) skuEl.textContent = `SKU: ${product.sku || 'PRO-' + product.id}`;
+  if (catEl) catEl.textContent = (product.sport || product.category || 'Compression Wear').toUpperCase();
+  if (sportTag) sportTag.textContent = (product.sport || 'CUSTOM SPORTSWEAR').toUpperCase();
+  if (imgEl) imgEl.src = resolvedImg;
+
+  if (updateUrl && history.replaceState) {
+    const url = new URL(window.location);
+    url.searchParams.set('id', product.id);
+    window.history.replaceState({}, '', url);
+  }
+
+  highlightActiveCard(product.id);
+}
+
+function highlightActiveCard(id) {
+  const container = document.getElementById('customizerProductSwitcher');
+  if (!container) return;
+  container.querySelectorAll('.product-mini-select-card').forEach(c => {
+    const isMatch = String(c.dataset.id) === String(id);
+    c.classList.toggle('active', isMatch);
+  });
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', async () => {
+  // Render Men sizes by default
+  renderSizeChips(MEN_SIZES);
+
+  // Upload elements
   const dropzoneWrap = document.getElementById('artworkDropzoneWrap');
   const fileInput = document.getElementById('artworkFileInput');
   const uploadedCard = document.getElementById('uploadedArtworkCard');
@@ -43,103 +272,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fileSizeEl = document.getElementById('artworkFileSize');
   const removeFileBtn = document.getElementById('removeArtworkBtn');
 
-  // Quantity Elements
-  const qtyInput = document.getElementById('orderQuantityInput');
-  const qtyMinusBtn = document.getElementById('qtyMinusBtn');
-  const qtyPlusBtn = document.getElementById('qtyPlusBtn');
-  const qtyPresetBtns = document.querySelectorAll('.qty-preset-btn');
-
-  // Size Chips
-  const sizeChips = document.querySelectorAll('.size-chip-btn');
-
-  // Form Fields
-  const descriptionInput = document.getElementById('orderDescription');
-  const customerNameInput = document.getElementById('customerName');
-  const customerPhoneInput = document.getElementById('customerPhone');
-
-  // Action Buttons
-  const sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
-  const submitInquiryBtn = document.getElementById('submitInquiryBtn');
-
-  // State
-  let activeProduct = null;
-  let allProducts = [];
-  let attachedFile = null;
-  let selectedSizes = ['Adult L'];
-
-  function resolveAssetUrl(url) {
-    if (!url) return '';
-    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
-    const isUserDir = window.location.pathname.includes('/user/') || window.location.pathname.endsWith('/user');
-    const clean = url.replace(/^\.?\/?/, '');
-    return (isUserDir ? '../' : '') + clean;
-  }
-
-  // 1. Fetch products from API or fallback
-  try {
-    const isUserDir = window.location.pathname.includes('/user/');
-    const apiBase = isUserDir ? '../api' : '/api';
-    const res = await fetch(`${apiBase}/products`);
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        allProducts = data;
-      }
-    }
-  } catch (e) {
-    console.warn('Using local fallback catalog', e);
-  }
-
-  if (allProducts.length === 0) {
-    allProducts = FALLBACK_CUSTOMIZER_PRODUCTS;
-  }
-
-  // 2. Select product by URL parameter
-  function findProductFromParam() {
-    const params = new URLSearchParams(window.location.search);
-    const idParam = params.get('id');
-
-    if (idParam) {
-      let match = allProducts.find(p => String(p.id) === String(idParam));
-      if (match) return match;
-
-      const num = parseInt(idParam, 10);
-      if (!isNaN(num) && num >= 1 && num <= allProducts.length) {
-        return allProducts[num - 1];
-      }
-    }
-
-    return allProducts[0];
-  }
-
-  function selectProduct(product, updateUrl = true) {
-    if (!product) return;
-    activeProduct = product;
-
-    const resolvedImg = resolveAssetUrl(product.image);
-    if (selectedProductThumb) selectedProductThumb.src = resolvedImg;
-    if (selectedProductName) selectedProductName.textContent = product.name;
-    if (selectedProductCategory) selectedProductCategory.textContent = product.sport || product.category || 'Custom Apparel';
-    if (customizerProductImg) customizerProductImg.src = resolvedImg;
-
-    if (updateUrl && history.replaceState) {
-      const url = new URL(window.location);
-      url.searchParams.set('id', product.id);
-      window.history.replaceState({}, '', url);
-    }
-
-    highlightActiveProductCard(product.id);
-  }
-
-  // 3. Image Upload Logic
-  function handleFileSelection(file) {
+  function handleFile(file) {
     if (!file) return;
     attachedFile = file;
 
     if (fileNameEl) fileNameEl.textContent = file.name;
     if (fileSizeEl) fileSizeEl.textContent = (file.size / 1024).toFixed(1) + ' KB';
 
-    // Show preview if it's an image
     if (file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -153,185 +292,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  dropzoneWrap?.addEventListener('click', () => {
-    fileInput?.click();
-  });
-
+  dropzoneWrap?.addEventListener('click', () => fileInput?.click());
   fileInput?.addEventListener('change', (e) => {
-    if (e.target.files && e.target.files[0]) {
-      handleFileSelection(e.target.files[0]);
-    }
+    if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
   });
 
-  // Drag and drop support
   dropzoneWrap?.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropzoneWrap.classList.add('border-primary', 'bg-white');
+    dropzoneWrap.classList.add('dragover');
   });
-
-  dropzoneWrap?.addEventListener('dragleave', () => {
-    dropzoneWrap.classList.remove('border-primary', 'bg-white');
-  });
-
+  dropzoneWrap?.addEventListener('dragleave', () => dropzoneWrap.classList.remove('dragover'));
   dropzoneWrap?.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropzoneWrap.classList.remove('border-primary', 'bg-white');
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileSelection(e.dataTransfer.files[0]);
-    }
+    dropzoneWrap.classList.remove('dragover');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
 
-  removeFileBtn?.addEventListener('click', () => {
+  removeFileBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
     attachedFile = null;
     if (fileInput) fileInput.value = '';
     if (uploadedCard) uploadedCard.style.display = 'none';
   });
 
-  // 4. Quantity Stepper
-  qtyMinusBtn?.addEventListener('click', () => {
-    let val = parseInt(qtyInput.value, 10) || 1;
-    if (val > 1) qtyInput.value = val - 1;
-  });
-
-  qtyPlusBtn?.addEventListener('click', () => {
-    let val = parseInt(qtyInput.value, 10) || 1;
-    qtyInput.value = val + 1;
-  });
-
-  qtyPresetBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const q = parseInt(btn.dataset.qty, 10);
-      if (q && qtyInput) qtyInput.value = q;
-    });
-  });
-
-  // 5. Size Selection Chips
-  sizeChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const size = chip.dataset.size;
-      if (!size) return;
-
-      if (chip.classList.contains('active')) {
-        chip.classList.remove('active', 'btn-dark');
-        chip.classList.add('btn-outline-dark');
-        selectedSizes = selectedSizes.filter(s => s !== size);
-      } else {
-        chip.classList.add('active', 'btn-dark');
-        chip.classList.remove('btn-outline-dark');
-        if (!selectedSizes.includes(size)) selectedSizes.push(size);
+  // Fetch product list
+  try {
+    const res = await fetch(`${getApiBase()}/products`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        allProducts = data;
       }
-    });
-  });
+    }
+  } catch (err) {
+    console.warn('Using fallback products', err);
+  }
 
-  // 6. Quick Product Switcher Carousel
-  const productSwitcherContainer = document.getElementById('customizerProductSwitcher');
-  if (productSwitcherContainer && allProducts.length > 0) {
-    let cardsHtml = '';
-    allProducts.forEach(p => {
+  if (allProducts.length === 0) {
+    allProducts = FALLBACK_CUSTOMIZER_PRODUCTS;
+  }
+
+  // Populate Switcher Strip
+  const switcherContainer = document.getElementById('customizerProductSwitcher');
+  if (switcherContainer) {
+    switcherContainer.innerHTML = allProducts.map(p => {
       const img = resolveAssetUrl(p.image);
-      cardsHtml += `
-        <div class="product-mini-select-card" data-id="${p.id}" style="cursor: pointer; min-width: 130px; text-align: center; padding: 10px; border: 2px solid #e9ecef; border-radius: 14px; transition: all 0.25s ease; background: #ffffff;">
-          <img src="${img}" alt="${p.name}" style="width: 100%; height: 95px; object-fit: contain; margin-bottom: 6px;">
-          <div class="fw-bold text-dark text-truncate small" style="font-size: 0.78rem;">${p.name}</div>
-          <span class="badge bg-light text-muted border text-uppercase" style="font-size: 0.65rem;">${p.sport || 'Pro'}</span>
+      return `
+        <div class="product-mini-select-card" data-id="${p.id}" onclick="selectProductFromCard('${p.id}')">
+          <img src="${img}" alt="${p.name}" style="width: 100%; height: 85px; object-fit: contain; margin-bottom: 6px;">
+          <div class="fw-bold text-dark text-truncate small" style="font-size: 0.76rem;">${p.name}</div>
+          <span class="badge bg-light text-muted border text-uppercase" style="font-size: 0.64rem;">${p.sport || 'Pro'}</span>
         </div>
       `;
-    });
-    productSwitcherContainer.innerHTML = cardsHtml;
-
-    productSwitcherContainer.querySelectorAll('.product-mini-select-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.dataset.id;
-        const prod = allProducts.find(x => String(x.id) === String(id));
-        if (prod) selectProduct(prod, true);
-      });
-    });
+    }).join('');
   }
 
-  function highlightActiveProductCard(id) {
-    if (!productSwitcherContainer) return;
-    productSwitcherContainer.querySelectorAll('.product-mini-select-card').forEach(c => {
-      const match = String(c.dataset.id) === String(id);
-      c.style.borderColor = match ? '#000000' : '#e9ecef';
-      c.style.transform = match ? 'translateY(-3px)' : 'none';
-      c.style.boxShadow = match ? '0 8px 20px rgba(0,0,0,0.12)' : 'none';
-    });
+  // Initial Product selection from URL ?id=X
+  const urlParams = new URLSearchParams(window.location.search);
+  const idParam = urlParams.get('id');
+  let targetProduct = allProducts[0];
+  if (idParam) {
+    const match = allProducts.find(p => String(p.id) === String(idParam));
+    if (match) targetProduct = match;
   }
-
-  // 7. Send Message on WhatsApp
-  sendWhatsAppBtn?.addEventListener('click', () => {
-    const prodName = activeProduct ? activeProduct.name : 'Custom Sublimated Team Uniform';
-    const prodSku = activeProduct ? (activeProduct.sku || 'RG-CUSTOM') : 'RG-CUSTOM';
-    const quantity = qtyInput?.value || '15';
-    const sizes = selectedSizes.length > 0 ? selectedSizes.join(', ') : 'Standard Team Sizes';
-    const desc = descriptionInput?.value.trim() || 'No special placement notes provided.';
-    const custName = customerNameInput?.value.trim() || 'Valued Customer';
-    const custPhone = customerPhoneInput?.value.trim() || 'Not specified';
-    const artworkStatus = attachedFile ? `Yes (${attachedFile.name}) - Ready to send` : 'No file attached';
-
-    // WhatsApp Message Format
-    const msg = 
-`*NEW CUSTOM ORDER INQUIRY - PROSIX SPORTS*
----------------------------------------
-*Product:* ${prodName}
-*SKU:* ${prodSku}
-*Quantity:* ${quantity} units
-*Sizes Required:* ${sizes}
-*Customer Name:* ${custName}
-*Phone / WhatsApp:* ${custPhone}
-*Custom Image/Logo:* ${artworkStatus}
-*Details & Description:*
-${desc}
----------------------------------------
-_Sent via Prosix Sports Website Customizer_`;
-
-    const waNumber = '19292104402'; // Prosix Official WhatsApp
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
-
-    if (typeof CartStore !== 'undefined' && CartStore.showToast) {
-      CartStore.showToast('Connecting to WhatsApp with your order details...');
-    }
-
-    window.open(waUrl, '_blank');
-  });
-
-  // 8. Submit Inquiry Form Online
-  submitInquiryBtn?.addEventListener('click', async () => {
-    const prodName = activeProduct ? activeProduct.name : 'Custom Sublimated Team Uniform';
-    const quantity = qtyInput?.value || '15';
-    const sizes = selectedSizes.length > 0 ? selectedSizes.join(', ') : 'Standard Team Sizes';
-    const desc = descriptionInput?.value.trim() || '';
-    const custName = customerNameInput?.value.trim() || 'Customer';
-    const custPhone = customerPhoneInput?.value.trim() || '';
-
-    submitInquiryBtn.disabled = true;
-    submitInquiryBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting...';
-
-    try {
-      const isUserDir = window.location.pathname.includes('/user/');
-      const apiBase = isUserDir ? '../api' : '/api';
-
-      await fetch(`${apiBase}/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: custName,
-          phone: custPhone,
-          subject: `Custom Inquiry: ${prodName} (${quantity} units)`,
-          message: `Product: ${prodName}\nQty: ${quantity}\nSizes: ${sizes}\nArtwork: ${attachedFile ? attachedFile.name : 'None'}\n\nNotes:\n${desc}`
-        })
-      });
-
-      alert(`Thank you ${custName}! Your custom inquiry for "${prodName}" has been received. Our team will contact you shortly.`);
-    } catch (e) {
-      alert(`Inquiry received for "${prodName}"! We will contact you at ${custPhone || 'your contact'}.`);
-    } finally {
-      submitInquiryBtn.disabled = false;
-      submitInquiryBtn.innerHTML = '<i class="bi bi-send-check me-2"></i> Submit Inquiry Online';
-    }
-  });
-
-  // Initialize
-  const initialProduct = findProductFromParam();
-  selectProduct(initialProduct, false);
+  selectProduct(targetProduct, false);
 });
+
+// Card click wrapper
+function selectProductFromCard(id) {
+  const prod = allProducts.find(p => String(p.id) === String(id));
+  if (prod) selectProduct(prod, true);
+}
