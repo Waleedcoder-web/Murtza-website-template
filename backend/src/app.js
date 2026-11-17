@@ -14,6 +14,7 @@ const ordersRoute = require('./routes/orders');
 const artworkRoute = require('./routes/artwork');
 const contactRoute = require('./routes/contact');
 const statsRoute = require('./routes/stats');
+const authRoute = require('./routes/auth');
 const db = require('./config/db');
 
 const app = express();
@@ -63,6 +64,7 @@ app.use('/api/orders', ordersRoute);
 app.use('/api/artwork', artworkRoute);
 app.use('/api/contact', contactRoute);
 app.use('/api/stats', statsRoute);
+app.use('/api/auth', authRoute);
 
 // Static Shared Assets Serving
 app.use('/css', express.static(path.join(__dirname, '../../frontend/css')));

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Snowtop Sports</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
+
+  <!-- CSS Dependencies -->
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  
+  <style>
+    body.login-body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #1c1c1c 0%, #0a0a0a 100%);
+      padding: 24px;
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+    }
+    .login-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.1));
+    }
+    .form-control-custom {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff !important;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+    }
+    .form-control-custom:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    .form-control-custom::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .btn-login-submit {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+    }
+    .btn-login-submit:hover {
+      background: #e0e0e0;
+      color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+    }
+    .input-group-text-custom {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+    }
+    .toggle-pass-btn {
+      cursor: pointer;
+      border-top-right-radius: 12px !important;
+      border-bottom-right-radius: 12px !important;
+      border-left: none;
+    }
+    .toggle-pass-btn:hover {
+      color: #ffffff;
+    }
+  </style>
+
+  <!-- Auth Guard Script (redirects to index.html if already logged in) -->
+  <script src="../js/admin-auth.js"></script>
+</head>
+<body class="login-body">
+
+  <div class="login-card text-center">
+    
+    <!-- Brand Logo -->
+    <div class="mb-4">
+      <img src="../assets/images/logo-white.png" alt="Snowtop Sports" class="login-logo mb-3">
+      <div class="badge bg-light text-dark px-3 py-1 rounded-pill small fw-bold text-uppercase">
+        <i class="bi bi-shield-lock-fill me-1"></i> Admin Security Portal
+      </div>
+    </div>
+
+    <!-- Title & Subtitle -->
+    <h3 class="fw-black text-uppercase tracking-wider mb-2">ADMINISTRATOR SIGN IN</h3>
+    <p class="text-white-50 small mb-4">
+      Enter authorized administrative credentials to manage products, categories, team orders and client inquiries.
+    </p>
+
+    <!-- Error / Success Alert -->
+    <div id="loginAlert" class="alert alert-danger py-2 px-3 small rounded-3 text-start mb-4 d-none" role="alert">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+        <span id="loginAlertText">Invalid credentials. Please verify your email and password.</span>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="text-start">
+      
+      <!-- Email / Username Input -->
+      <div class="mb-3">
+        <label class="form-label small text-uppercase fw-bold text-white-50 mb-1">
+          <i class="bi bi-envelope-fill me-1"></i> Admin Email or Username
+        </label>
+        <input 
+          type="text" 
+          id="adminEmail" 
+          class="form-control form-control-custom" 
+          placeholder="murtza@gmail.com" 
+          required 
+          autocomplete="username"
+        >
+      </div>
+
+      <!-- Password Input with Toggle -->
+      <div class="mb-3">
+        <label class="form-label small text-uppercase fw-bold text-white-50 mb-1">
+          <i class="bi bi-key-fill me-1"></i> Admin Password
+        </label>
+        <div class="input-group">
+          <input 
+            type="password" 
+            id="adminPassword" 
+            class="form-control form-control-custom" 
+            placeholder="Enter admin password" 
+            required 
+            autocomplete="current-password"
+            style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+          >
+          <span class="input-group-text input-group-text-custom toggle-pass-btn" id="togglePasswordBtn" onclick="togglePasswordVisibility()">
+            <i class="bi bi-eye" id="toggleEyeIcon"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Remember Me Checkbox -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="form-check">
+          <input class="form-check-input bg-dark border-secondary" type="checkbox" id="rememberMe" checked>
+          <label class="form-check-label small text-white-50" for="rememberMe">
+            Stay logged in
+          </label>
+        </div>
+        <span class="small text-white-50" style="font-size: 0.78rem;">
+          <i class="bi bi-lock-fill text-success"></i> 256-Bit SSL
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-login-submit w-100 mb-3 text-uppercase" id="loginSubmitBtn">
+        <i class="bi bi-box-arrow-in-right me-2"></i> Sign In To Dashboard
+      </button>
+
+      <!-- Return to Storefront Link -->
+      <div class="text-center pt-2 border-top border-secondary border-opacity-25">
+        <a href="../index.html" class="text-white-50 small text-decoration-none hover-white">
+          <i class="bi bi-arrow-left me-1"></i> Back to Snowtop Sports Storefront
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script>
+    function getApiBase() {
+      if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
+      const host = window.location.hostname || '';
+      const port = window.location.port || '';
+      const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+      if (isLocal && port && port !== '5000') return `http://${host}:5000/api`;
+      return '/api';
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('adminPassword');
+      const eyeIcon = document.getElementById('toggleEyeIcon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.className = 'bi bi-eye-slash';
+      } else {
+        passInput.type = 'password';
+        eyeIcon.className = 'bi bi-eye';
+      }
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      const remember = document.getElementById('rememberMe').checked;
+      const alertBox = document.getElementById('loginAlert');
+      const alertText = document.getElementById('loginAlertText');
+      const submitBtn = document.getElementById('loginSubmitBtn');
+
+      if (!email || !password) {
+        showAlert('Please enter both email and password.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Authenticating...';
+      hideAlert();
+
+      try {
+        const res = await fetch(`${getApiBase()}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success && data.token) {
+          // Store token in localStorage (if remember) or sessionStorage
+          if (remember) {
+            localStorage.setItem('snowtop_admin_token', data.token);
+            localStorage.setItem('snowtop_admin_user', JSON.stringify(data.admin));
+          } else {
+            sessionStorage.setItem('snowtop_admin_token', data.token);
+            sessionStorage.setItem('snowtop_admin_user', JSON.stringify(data.admin));
+          }
+
+          submitBtn.className = 'btn btn-success w-100 mb-3 text-uppercase fw-bold';
+          submitBtn.innerHTML = '<i class="bi bi-check2-circle me-2"></i> Verified! Redirecting...';
+
+          // Resolve return URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const returnUrl = urlParams.get('return') || 'index.html';
+
+          setTimeout(() => {
+            window.location.replace(returnUrl);
+          }, 600);
+
+        } else {
+          showAlert(data.error || 'Invalid email or password. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.className = 'btn btn-login-submit w-100 mb-3 text-uppercase';
+          submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i> Sign In To Dashboard';
+        }
+      } catch (err) {
+        console.error('Login network error', err);
+        showAlert('Connection error. Please ensure the backend server is running.');
+        submitBtn.disabled = false;
+        submitBtn.className = 'btn btn-login-submit w-100 mb-3 text-uppercase';
+        submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i> Sign In To Dashboard';
+      }
+    }
+
+    function showAlert(msg) {
+      const alertBox = document.getElementById('loginAlert');
+      const alertText = document.getElementById('loginAlertText');
+      if (alertBox && alertText) {
+        alertText.textContent = msg;
+        alertBox.className = 'alert alert-danger py-2 px-3 small rounded-3 text-start mb-4';
+        alertBox.classList.remove('d-none');
+      }
+    }
+
+    function hideAlert() {
+      const alertBox = document.getElementById('loginAlert');
+      if (alertBox) alertBox.classList.add('d-none');
+    }
+
+    // Check if session expired param exists
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('expired')) {
+        showAlert('Your admin session has expired. Please sign in again.');
+      }
+    });
+  </script>
+</body>
+</html>

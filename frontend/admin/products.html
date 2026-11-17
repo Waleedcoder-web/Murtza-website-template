@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/bootstrap-icons.min.css">
   <link rel="stylesheet" href="../css/admin.css">
+  <!-- Auth Guard Script (protects page from unauthorized access) -->
+  <script src="../js/admin-auth.js"></script>
 </head>
 <body class="admin-body">
 
@@ -68,10 +70,14 @@
             <span class="live-dot"></span>
             <span>Live Store Engine</span>
           </div>
+          <span class="badge bg-light text-dark fw-bold px-3 py-2 rounded-pill"><i class="bi bi-person-fill me-1"></i> <span class="admin-user-display">murtza@gmail.com</span></span>
           <a href="../user/index.html" class="btn-glass btn-sm">
             <i class="bi bi-arrow-up-right-square"></i>
             <span>Open Storefront</span>
           </a>
+          <button type="button" onclick="logoutAdmin()" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </button>
         </div>
       </div>
     </div>

@@ -136,6 +136,7 @@ VALUES
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO admin_users (username, email, password_hash, role)
-VALUES ('admin', 'admin@snowtopsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
+VALUES ('murtza', 'murtza@gmail.com', 'c256808d6a23e034b0f70dba55e16e5e:e3b6a7b46bc948f662720f8adbef6a7de6e30013691f2e1ff7a23f900a1a2f6a53651d6b7314dcbb3f0d2787f791f7ab9d0df5e968669e0d2f6f32b1a1726aaa', 'superadmin')
+ON CONFLICT (username) DO UPDATE SET email = EXCLUDED.email, password_hash = EXCLUDED.password_hash;
 ON CONFLICT (username) DO NOTHING;
 
