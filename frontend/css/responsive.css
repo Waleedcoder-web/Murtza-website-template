@@ -2,6 +2,12 @@
    PROSIX SPORTS - RESPONSIVE STYLES (Media Queries)
    ========================================================================== */
 
+/* Prevent horizontal body overflow on all mobile devices */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 @media (max-width: 1200px) {
   .hero-title {
     font-size: 4.2rem;
@@ -64,27 +70,276 @@
   html {
     font-size: 16px;
   }
+
+  /* ----------------------------------------------------
+     1. HERO CAROUSEL: Balanced, Proper Mobile Proportions
+     ---------------------------------------------------- */
   .hero-carousel {
-    height: 75vh;
-    min-height: 480px;
+    height: clamp(380px, 54vh, 450px) !important;
+    min-height: 380px !important;
+    max-height: 450px !important;
+    overflow: hidden !important;
+    perspective: none !important;
   }
+
+  .hero-slide {
+    display: block !important;
+  }
+
+  .hero-slide-left {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    z-index: 2 !important;
+  }
+
+  .hero-slide-left .hero-content {
+    position: absolute !important;
+    top: 22px !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100% !important;
+    padding: 0 16px !important;
+    z-index: 5 !important;
+  }
+
+  .hero-kicker {
+    font-size: 0.72rem !important;
+    padding: 4px 12px !important;
+    margin-bottom: 6px !important;
+    letter-spacing: 0.8px !important;
+    display: inline-block !important;
+  }
+
   .hero-title {
-    font-size: 3rem;
+    font-size: clamp(1.45rem, 6.2vw, 1.85rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
   }
+
+  .hero-subtitle {
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    max-width: 82% !important;
+    margin-bottom: 0 !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .hero-left-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(11, 15, 23, 0.88) 0%,
+      rgba(11, 15, 23, 0.45) 50%,
+      rgba(11, 15, 23, 0.85) 100%
+    ) !important;
+  }
+
+  /* 5-Shirts Uniform Lineup: Prominent and well proportioned */
+  .hero-lineup-wrap {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 62% !important;
+    height: 56% !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-start !important;
+    z-index: 3 !important;
+    padding: 0 0 4px 10px !important;
+    pointer-events: none !important;
+  }
+
+  .hero-lineup-img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: bottom left !important;
+    filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 16px rgba(57, 255, 20, 0.25)) !important;
+  }
+
+  /* Athlete Dummy: Grounded, full height of bottom-right */
+  .hero-slide-right {
+    position: absolute !important;
+    right: -6px !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 50% !important;
+    height: 74% !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    z-index: 4 !important;
+    pointer-events: none !important;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 18%, black 100%) !important;
+    mask-image: linear-gradient(to right, transparent 0%, black 18%, black 100%) !important;
+  }
+
+  .hero-athlete-img {
+    width: auto !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    max-width: 140% !important;
+    object-fit: contain !important;
+    object-position: bottom right !important;
+    filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(57, 255, 20, 0.3)) !important;
+  }
+
+  /* Mobile Hero Navigation Controls & Dots */
+  .hero-controls {
+    padding: 0 8px !important;
+    z-index: 10 !important;
+  }
+
+  .hero-ctrl-btn {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.1rem !important;
+    background: rgba(255, 255, 255, 0.88) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .hero-dots {
+    bottom: 8px !important;
+    z-index: 10 !important;
+  }
+
+  .hero-dot {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  /* ----------------------------------------------------
+     2. TRENDING PRODUCTS & CAROUSEL: Balanced Golden Ratio
+     ---------------------------------------------------- */
+  .trending-products-section {
+    padding: 35px 0 45px 0 !important;
+    overflow: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+  }
+
+  .trending-carousel-outer {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .tabs-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
   .section-ribbon {
-    font-size: 1.3rem;
-    padding: 6px 20px;
-    margin-left: -20px;
+    font-size: 1.15rem !important;
+    padding: 5px 16px !important;
+    margin-left: 0 !important;
+    border-radius: 6px !important;
   }
+
+  .filter-tabs {
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 6px 14px !important;
+    font-size: 0.82rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Carousel Horizontal Track */
+  .products-carousel-track {
+    max-width: 100% !important;
+    gap: 12px !important;
+    padding: 10px 4px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Card Sizing: 2 Cards per mobile screen */
+  .products-carousel-track .product-card {
+    flex: 0 0 162px !important;
+    min-width: 162px !important;
+    max-width: 162px !important;
+    padding: 0 !important;
+  }
+
+  .product-card-inner {
+    padding: 10px 8px 12px 8px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Fixed excessive height! Proportional image wrap */
+  .product-img-wrap {
+    width: 100% !important;
+    height: 155px !important; /* was 250px - now perfectly proportioned */
+    margin-bottom: 6px !important;
+  }
+
+  .product-img {
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .product-meta-row,
+  .product-info-row {
+    margin-bottom: 8px !important;
+    min-height: 32px !important;
+  }
+
+  .product-name {
+    font-size: 0.74rem !important;
+    line-height: 1.25 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .btn-customize-full {
+    font-size: 0.75rem !important;
+    padding: 6px 8px !important;
+    border-radius: 8px !important;
+  }
+
+  .carousel-nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.95rem !important;
+  }
+  .carousel-nav-btn.prev-btn {
+    left: 2px !important;
+  }
+  .carousel-nav-btn.next-btn {
+    right: 2px !important;
+  }
+
+  /* Deals & Other Sections */
   .deals-sub-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  .product-card {
-    padding: 10px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
   .story-card {
     flex-direction: column;
@@ -108,13 +363,39 @@
 }
 
 @media (max-width: 480px) {
+  .hero-carousel {
+    height: clamp(360px, 50vh, 420px) !important;
+    min-height: 360px !important;
+  }
+  .hero-slide-left .hero-content {
+    top: 18px !important;
+    padding: 0 14px !important;
+  }
   .hero-title {
-    font-size: 2.4rem;
+    font-size: 1.45rem !important;
   }
+  .hero-subtitle {
+    max-width: 80% !important;
+  }
+  .hero-lineup-wrap {
+    width: 60% !important;
+    height: 52% !important;
+  }
+  .hero-slide-right {
+    width: 52% !important;
+    height: 72% !important;
+  }
+
+  .products-carousel-track .product-card {
+    flex: 0 0 155px !important;
+    min-width: 155px !important;
+    max-width: 155px !important;
+  }
+  .product-img-wrap {
+    height: 145px !important;
+  }
+
   .deals-sub-grid {
-    grid-template-columns: 1fr;
-  }
-  .products-grid {
     grid-template-columns: 1fr;
   }
 }
