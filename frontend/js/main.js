@@ -1,5 +1,5 @@
 /**
- * PROSIX SPORTS - MAIN INTERACTION SCRIPT (Vanilla JS)
+ * SNOWTOP SPORTS - MAIN INTERACTION SCRIPT (Vanilla JS)
  */
 
 // Global Trending Carousel Controls (Available immediately)

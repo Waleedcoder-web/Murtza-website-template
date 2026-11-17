@@ -40,7 +40,7 @@ function openBrowser(url) {
 // Start Server locally
 app.listen(PORT, async () => {
   console.log('========================================================');
-  console.log(`🚀 Prosix Sports Server running on port ${PORT}`);
+  console.log(`🚀 Snowtop Sports Server running on port ${PORT}`);
   console.log(`👉 User Storefront:  http://localhost:${PORT}/`);
   console.log(`👉 Admin Dashboard:  http://localhost:${PORT}/admin`);
   console.log(`👉 API Endpoints:    http://localhost:${PORT}/api/products`);

@@ -1,7 +1,7 @@
 {
   "name": "prosix-sports-template",
   "version": "1.0.0",
-  "description": "Prosix Sports Custom Athletic Wear & Team Uniform Store",
+  "description": "Snowtop Sports Custom Athletic Wear & Team Uniform Store",
   "main": "api/index.js",
   "scripts": {
     "start": "node backend/src/server.js",
@@ -24,6 +24,6 @@
     "express",
     "postgresql"
   ],
-  "author": "Prosix Sports",
+  "author": "Snowtop Sports",
   "license": "ISC"
 }

@@ -1,5 +1,5 @@
 /**
- * PROSIX SPORTS - CUSTOM APPAREL INQUIRY & ORDER ENGINE
+ * SNOWTOP SPORTS - CUSTOM APPAREL INQUIRY & ORDER ENGINE
  * Supports:
  * 1. Image / Artwork / Mockup upload with immediate thumbnail preview & remove option
  * 2. Men/Unisex vs Women's Cut Fit selector

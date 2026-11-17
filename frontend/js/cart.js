@@ -1,5 +1,5 @@
 /**
- * PROSIX SPORTS - SHOPPING CART STORE (Vanilla JS)
+ * SNOWTOP SPORTS - SHOPPING CART STORE (Vanilla JS)
  */
 
 const CartStore = {

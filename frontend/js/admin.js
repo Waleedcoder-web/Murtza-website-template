@@ -1,5 +1,5 @@
 /**
- * PROSIX SPORTS - ADMIN PANEL JAVASCRIPT (admin.js)
+ * SNOWTOP SPORTS - ADMIN PANEL JAVASCRIPT (admin.js)
  * Live Integration with PostgreSQL API & Products/Inquiries Management
  */
 
