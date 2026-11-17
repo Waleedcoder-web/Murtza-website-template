@@ -204,7 +204,7 @@ async function initializeDatabase() {
         `INSERT INTO admin_users (username, email, password_hash, role)
          VALUES ($1, $2, $3, $4)
          ON CONFLICT (username) DO NOTHING`,
-        ['admin', 'admin@prosixsports.com', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQmG6W6W6W6W6W6W6W6W6', 'superadmin']
+        ['admin', 'admin@snowtopsports.com', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQmG6W6W6W6W6W6W6W6W6', 'superadmin']
       );
       console.log('✅ Seeded default admin user (admin).');
     } else {

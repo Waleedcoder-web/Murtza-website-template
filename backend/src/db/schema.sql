@@ -136,6 +136,6 @@ VALUES
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO admin_users (username, email, password_hash, role)
-VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
+VALUES ('admin', 'admin@snowtopsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
 ON CONFLICT (username) DO NOTHING;
 

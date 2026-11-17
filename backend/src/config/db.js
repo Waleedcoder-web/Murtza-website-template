@@ -43,7 +43,7 @@ const fallbackStore = {
   ],
   inquiries: [],
   admin_users: [
-    { id: 1, username: 'admin', email: 'admin@prosixsports.com', role: 'superadmin', is_active: true }
+    { id: 1, username: 'admin', email: 'admin@snowtopsports.com', role: 'superadmin', is_active: true }
   ],
   categories: [
     { id: 1, name: '7v7 Football', slug: '7v7', image: '/assets/images/sport-7v7.png', description: 'Non-padded 7v7 tournament uniforms & practice compression gear', is_active: true, product_count: 5 },
@@ -222,7 +222,7 @@ ON CONFLICT (name) DO UPDATE SET
   slug = EXCLUDED.slug;
 
 INSERT INTO admin_users (username, email, password_hash, role)
-VALUES ('admin', 'admin@prosixsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
+VALUES ('admin', 'admin@snowtopsports.com', '$2b$10$e8w8q8r4Q1234567890abcdef...', 'superadmin')
 ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
