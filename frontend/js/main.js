@@ -261,6 +261,121 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   // ==========================================
+  // Hero 3D Turntable Stage (360° Rotating Mannequin & Ghost Suit)
+  // ==========================================
+  function initHeroTurntable() {
+    const stage = document.getElementById('turntableStage');
+    if (!stage) return;
+
+    const btnDummy = document.getElementById('btnModelDummy');
+    const btnSuit = document.getElementById('btnModelSuit');
+    const wrapDummy = document.getElementById('modelWrapDummy');
+    const wrapSuit = document.getElementById('modelWrapSuit');
+    const rotator = document.getElementById('turntableRotator');
+    const viewport = document.getElementById('turntableViewport');
+    const toggleSpinBtn = document.getElementById('btnToggleSpin');
+    const toggleSpinText = document.getElementById('spinToggleText');
+
+    let isAutoSpinning = true;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+
+    // Model switching (Athlete Dummy vs Straight Ghost Suit)
+    function switchModel(type) {
+      if (type === 'dummy') {
+        btnDummy?.classList.add('active');
+        btnSuit?.classList.remove('active');
+        wrapDummy?.classList.add('active');
+        wrapSuit?.classList.remove('active');
+      } else {
+        btnSuit?.classList.add('active');
+        btnDummy?.classList.remove('active');
+        wrapSuit?.classList.add('active');
+        wrapDummy?.classList.remove('active');
+      }
+    }
+
+    btnDummy?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchModel('dummy');
+    });
+
+    btnSuit?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchModel('suit');
+    });
+
+    // Auto-spin toggle
+    function setAutoSpin(enable) {
+      isAutoSpinning = enable;
+      if (isAutoSpinning) {
+        rotator?.classList.add('spinning');
+        toggleSpinBtn?.classList.remove('paused');
+        if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: ON';
+      } else {
+        rotator?.classList.remove('spinning');
+        toggleSpinBtn?.classList.add('paused');
+        if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: OFF';
+      }
+    }
+
+    toggleSpinBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setAutoSpin(!isAutoSpinning);
+    });
+
+    // Interactive Drag to Rotate 360° (Mouse & Touch)
+    if (viewport && rotator) {
+      const onStart = (clientX) => {
+        isDragging = true;
+        startX = clientX;
+        rotator.classList.remove('spinning');
+        rotator.style.transition = 'none';
+      };
+
+      const onMove = (clientX) => {
+        if (!isDragging) return;
+        const deltaX = clientX - startX;
+        startX = clientX;
+        currentAngle = (currentAngle + deltaX * 0.75) % 360;
+        rotator.style.transform = `perspective(1200px) rotateY(${currentAngle}deg)`;
+      };
+
+      const onEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        rotator.style.transition = 'transform 0.4s ease-out';
+        if (isAutoSpinning) {
+          setTimeout(() => {
+            if (isAutoSpinning && !isDragging) {
+              rotator.style.transition = '';
+              rotator.classList.add('spinning');
+            }
+          }, 800);
+        }
+      };
+
+      viewport.addEventListener('mousedown', (e) => onStart(e.clientX));
+      window.addEventListener('mousemove', (e) => {
+        if (isDragging) onMove(e.clientX);
+      });
+      window.addEventListener('mouseup', onEnd);
+
+      viewport.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) onStart(e.touches[0].clientX);
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (isDragging && e.touches && e.touches.length > 0) onMove(e.touches[0].clientX);
+      }, { passive: true });
+      window.addEventListener('touchend', onEnd);
+    }
+  }
+
+  // Initialize Hero Turntable Stage
+  initHeroTurntable();
+
+  // ==========================================
   // Trending Carousel Scroll & Tab Filtering
   // ==========================================
   const trendingTrack = document.getElementById('trendingProductsTrack');

@@ -588,6 +588,432 @@ img {
   transform: perspective(1200px) translate3d(0, 0, 100px) rotateY(0deg);
 }
 
+/* ==========================================================================
+   HERO 3D TURNTABLE SHOWCASE STAGE (360° Circular Rotating Mannequin & Ghost Suit)
+   ========================================================================== */
+.hero-turntable-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  pointer-events: auto;
+  z-index: 5;
+}
+
+/* Header with Badge & Switcher Pills */
+.turntable-header {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.turntable-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: rgba(8, 12, 20, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(57, 255, 20, 0.45);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #39ff14;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 16px rgba(57, 255, 20, 0.3);
+}
+
+.turntable-pills {
+  display: inline-flex;
+  background: rgba(10, 16, 26, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.turntable-pill-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.turntable-pill-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.turntable-pill-btn.active {
+  background: linear-gradient(135deg, #39ff14 0%, #00e5ff 100%);
+  color: #060d16;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(57, 255, 20, 0.45);
+}
+
+/* Turntable 3D Viewport */
+.turntable-viewport {
+  position: relative;
+  width: 100%;
+  height: 95%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+.turntable-viewport:active {
+  cursor: grabbing;
+}
+
+/* Glowing 3D Base Pedestal Platform */
+.turntable-pedestal {
+  position: absolute;
+  bottom: 8px;
+  width: 320px;
+  max-width: 92%;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pedestal-outer-glow {
+  position: absolute;
+  width: 350px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(57, 255, 20, 0.45) 0%, rgba(0, 229, 255, 0.25) 45%, transparent 72%);
+  filter: blur(16px);
+  transform: rotateX(74deg);
+  animation: pedestalAuraPulse 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes pedestalAuraPulse {
+  0% {
+    opacity: 0.65;
+    transform: rotateX(74deg) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(74deg) scale(1.1);
+  }
+}
+
+.pedestal-ring-neon {
+  position: absolute;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  transform: rotateX(74deg);
+}
+
+.pedestal-ring-neon.ring-outer {
+  width: 300px;
+  height: 95px;
+  border: 2px dashed rgba(57, 255, 20, 0.9);
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.85), inset 0 0 20px rgba(57, 255, 20, 0.45);
+  animation: ringSpinOuter 18s linear infinite;
+}
+
+.pedestal-ring-neon.ring-inner {
+  width: 215px;
+  height: 70px;
+  border: 2px solid rgba(0, 229, 255, 0.95);
+  box-shadow: 0 0 22px rgba(0, 229, 255, 0.95), inset 0 0 16px rgba(0, 229, 255, 0.55);
+  animation: ringSpinInner 12s linear infinite reverse;
+}
+
+@keyframes ringSpinOuter {
+  from { transform: rotateX(74deg) rotateZ(0deg); }
+  to { transform: rotateX(74deg) rotateZ(360deg); }
+}
+
+@keyframes ringSpinInner {
+  from { transform: rotateX(74deg) rotateZ(0deg); }
+  to { transform: rotateX(74deg) rotateZ(360deg); }
+}
+
+.pedestal-disc {
+  position: absolute;
+  width: 255px;
+  height: 82px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(16, 26, 38, 0.94) 0%, rgba(6, 12, 20, 0.98) 75%, rgba(57, 255, 20, 0.65) 100%);
+  border: 1px solid rgba(57, 255, 20, 0.55);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 35px rgba(57, 255, 20, 0.35);
+  transform: rotateX(74deg);
+}
+
+.pedestal-crosshairs {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: 
+    linear-gradient(to right, transparent 49.5%, rgba(57, 255, 20, 0.45) 50%, transparent 50.5%),
+    linear-gradient(to bottom, transparent 49.5%, rgba(0, 229, 255, 0.45) 50%, transparent 50.5%);
+}
+
+.pedestal-spotlight {
+  position: absolute;
+  bottom: 25px;
+  width: 230px;
+  height: 290px;
+  background: linear-gradient(to top, rgba(57, 255, 20, 0.2) 0%, rgba(0, 229, 255, 0.08) 45%, transparent 100%);
+  clip-path: polygon(25% 100%, 75% 100%, 100% 0, 0 0);
+  pointer-events: none;
+  filter: blur(8px);
+  animation: spotBeam 4s ease-in-out infinite alternate;
+}
+
+@keyframes spotBeam {
+  0% { opacity: 0.55; }
+  100% { opacity: 0.95; }
+}
+
+/* 360° Rotator & Model Presentation */
+.turntable-rotator {
+  position: relative;
+  z-index: 4;
+  width: auto;
+  height: 98%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.turntable-rotator.spinning {
+  animation: turntableSpin360 14s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes turntableSpin360 {
+  0% {
+    transform: perspective(1200px) rotateY(0deg) translateZ(0);
+  }
+  25% {
+    transform: perspective(1200px) rotateY(26deg) translateZ(12px) scale(0.985);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(0deg) translateZ(0) scale(1);
+  }
+  75% {
+    transform: perspective(1200px) rotateY(-26deg) translateZ(12px) scale(0.985);
+  }
+  100% {
+    transform: perspective(1200px) rotateY(0deg) translateZ(0);
+  }
+}
+
+.turntable-model-wrap {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  width: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.turntable-model-wrap.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  position: relative;
+}
+
+.turntable-model-img {
+  height: 98%;
+  max-height: 98%;
+  width: auto;
+  max-width: 125%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 28px rgba(57, 255, 20, 0.3));
+  transition: filter 0.3s ease;
+  pointer-events: none;
+}
+
+.turntable-model-img.suit-img {
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 32px rgba(0, 229, 255, 0.45));
+}
+
+/* Light Sheen Reflection gliding across fabric */
+.model-light-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.28) 50%, rgba(57, 255, 20, 0.22) 55%, transparent 65%);
+  background-size: 250% 100%;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: fabricSheenSweep 5s ease-in-out infinite;
+}
+
+@keyframes fabricSheenSweep {
+  0% { background-position: -150% 0; }
+  50% { background-position: 150% 0; }
+  100% { background-position: 150% 0; }
+}
+
+/* Footer / Interaction Bar */
+.turntable-footer {
+  position: absolute;
+  bottom: 18px;
+  right: 25px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.turntable-spin-toggle {
+  background: rgba(10, 16, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(57, 255, 20, 0.4);
+  color: #39ff14;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
+}
+
+.turntable-spin-toggle:hover {
+  background: rgba(57, 255, 20, 0.18);
+  border-color: #39ff14;
+  color: #ffffff;
+}
+
+.turntable-spin-toggle.paused {
+  color: #ffb400;
+  border-color: rgba(255, 180, 0, 0.45);
+}
+
+.turntable-drag-hint {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+/* Mobile & Tablet adjustments */
+@media (max-width: 992px) {
+  .hero-slide-right {
+    width: 42%;
+  }
+  .turntable-header {
+    top: 15px;
+    right: 15px;
+  }
+  .turntable-pills {
+    padding: 3px;
+  }
+  .turntable-pill-btn {
+    font-size: 0.7rem;
+    padding: 5px 11px;
+  }
+  .turntable-pedestal {
+    width: 260px;
+  }
+  .pedestal-ring-neon.ring-outer {
+    width: 245px;
+  }
+  .pedestal-ring-neon.ring-inner {
+    width: 175px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-slide-right {
+    width: 52%;
+  }
+  .turntable-header {
+    top: 10px;
+    right: 10px;
+    gap: 4px;
+  }
+  .turntable-badge {
+    font-size: 0.62rem;
+    padding: 2px 8px;
+  }
+  .turntable-pill-btn {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+  .turntable-footer {
+    bottom: 10px;
+    right: 10px;
+  }
+  .turntable-drag-hint {
+    display: none;
+  }
+  .turntable-pedestal {
+    width: 210px;
+    height: 65px;
+    bottom: 5px;
+  }
+  .pedestal-ring-neon.ring-outer {
+    width: 195px;
+    height: 60px;
+  }
+  .pedestal-ring-neon.ring-inner {
+    width: 145px;
+    height: 45px;
+  }
+  .pedestal-disc {
+    width: 175px;
+    height: 55px;
+  }
+}
+
 /* 3D Navigation Controls */
 .hero-controls {
   position: absolute;
