@@ -35,7 +35,9 @@ const FALLBACK_CUSTOMIZER_PRODUCTS = [
 
 const MEN_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
 const WOMEN_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
-const ADMIN_WHATSAPP = '19292104402';
+const ADMIN_WHATSAPP = '923040999605';
+const COMPANY_NAME = 'Snowtop Sports';
+const ADMIN_EMAIL = 'snowtopsports@gmail.com';
 
 let currentProduct = null;
 let allProducts = [];
@@ -151,7 +153,7 @@ function handleWhatsAppOrder() {
   const artworkStatus = attachedFile ? `Yes (${attachedFile.name}) - Ready to send` : 'No file uploaded yet';
 
   const msg = 
-`*NEW CUSTOM ORDER INQUIRY - PROSIX SPORTS*
+`*NEW CUSTOM ORDER INQUIRY - SNOWTOP SPORTS*
 ---------------------------------------
 *Product:* ${prodName}
 *SKU:* ${prodSku}
@@ -166,7 +168,7 @@ function handleWhatsAppOrder() {
 ${notes}
 ---------------------------------------
 *Page URL:* ${window.location.href}
-_Sent via Prosix Sports Customizer Studio_`;
+_Sent via Snowtop Sports Customizer Studio_`;
 
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -194,7 +196,7 @@ async function handleInquirySubmit(e) {
 
   const payload = {
     name: name,
-    email: email || 'inquiry@prosixsports.com',
+    email: email || ADMIN_EMAIL,
     phone: phone,
     subject: `Custom Order Inquiry: ${prodName} (${fitText}, Size: ${selectedSize}, Qty: ${orderQty})`,
     message: `Product: ${prodName} (SKU: ${currentProduct ? currentProduct.sku : 'PRO-001'})\nFit: ${fitText}\nSize: ${selectedSize}\nQuantity: ${orderQty} pieces\nArtwork Uploaded: ${attachedFile ? attachedFile.name : 'None'}\n\nCustom Instructions:\n${notes}`

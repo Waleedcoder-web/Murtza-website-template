@@ -98,7 +98,6 @@
         <li class="nav-item"><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
         <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
         <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
-        <li class="nav-item"><a href="artwork.html" class="nav-link">Artwork</a></li>
         <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
         <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
       </nav>
@@ -122,7 +121,6 @@
       <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
       <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
       <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
-      <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
       <li><a href="contact.html" class="nav-link">Contact Us</a></li>
     </ul>
   </div>
@@ -397,7 +395,7 @@
     let selectedGender = 'men';
     let selectedSize = 'L';
     let qty = 1;
-    const ADMIN_WHATSAPP = '19292104402';
+    const ADMIN_WHATSAPP = '923040999605';
 
     function setGender(gender) {
       selectedGender = gender;
@@ -509,7 +507,7 @@ Please provide team pricing and guide me on how to proceed with the order confir
 
       const payload = {
         name: name,
-        email: email || 'inquiry@prosixsports.com',
+        email: email || 'snowtopsports@gmail.com',
         phone: phone,
         subject: `Order Inquiry: ${currentProduct ? currentProduct.name : 'Custom Jersey'} (${fitText}, Size: ${selectedSize}, Qty: ${qty})`,
         message: `Product: ${currentProduct ? currentProduct.name : ''} (ID: ${currentProduct ? currentProduct.id : ''})\nFit: ${fitText}\nSize: ${selectedSize}\nQuantity: ${qty}\nNotes: ${notes}`

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - Prosix Sports</title>
+  <title>Contact Us & Factory Inquiries - Snowtop Sports</title>
   <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
 
   <!-- CSS Dependencies -->
@@ -12,45 +12,371 @@
   <link rel="stylesheet" href="../css/all.min.css">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .contact-hero-banner {
+      background: radial-gradient(circle at top, #1a1a1a 0%, #000000 100%);
+      color: #ffffff;
+      padding: 60px 0 50px 0;
+    }
+    .contact-info-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s ease;
+      height: 100%;
+    }
+    .contact-info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+      border-color: #000000;
+    }
+    .contact-icon-box {
+      width: 52px;
+      height: 52px;
+      background: #000000;
+      color: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .btn-whatsapp-direct {
+      background-color: #25D366 !important;
+      border-color: #25D366 !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      transition: all 0.25s ease;
+    }
+    .btn-whatsapp-direct:hover {
+      background-color: #1ebe57 !important;
+      border-color: #1ebe57 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+    }
+    .contact-form-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.09);
+      border-radius: 20px;
+      padding: 36px 30px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
+    .feature-pill {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Announcement Bar -->
-  
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="../assets/images/logo-black.png" alt="Snowtop Sports">
+      </a>
+      <nav class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+        <li class="nav-item"><a href="customizer.html" class="nav-link">Customizer</a></li>
+        <li class="nav-item"><a href="placeorder.html" class="nav-link">Place Order</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link active">Contact</a></li>
+        <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
+      </nav>
+      <div class="nav-actions">
+        <button class="action-icon-btn trigger-search-modal" title="Search"><i class="bi bi-search"></i></button>
+        <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle"><i class="bi bi-list"></i></button>
+      </div>
+    </div>
+  </header>
 
-        <!-- Contact Form (Right) -->
-        <div class="col-lg-7">
-          <div class="p-4 p-md-5 bg-white border rounded-4 shadow-sm">
-            <h3 class="fw-bold mb-4 text-uppercase">Send Us A Message</h3>
-            <form onsubmit="event.preventDefault(); CartStore.showToast('Thank you! Your message has been sent.'); this.reset();">
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-uppercase">Your Name *</label>
-                  <input type="text" class="form-control form-control-lg" placeholder="Coach Sarah" required>
+  <!-- Mobile Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <img src="../assets/images/logo-black.png" alt="Snowtop Sports" style="height: 38px;">
+      <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+      <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
+      <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
+      <li><a href="contact.html" class="nav-link active">Contact Us</a></li>
+      <li><a href="faqs.html" class="nav-link">FAQs</a></li>
+    </ul>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="full-container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="index.html" class="text-dark text-decoration-none">Home</a></li>
+          <li class="breadcrumb-item active fw-bold" aria-current="page">Contact Us</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Banner -->
+  <section class="contact-hero-banner text-center">
+    <div class="container">
+      <span class="badge bg-white text-dark px-3 py-2 text-uppercase fw-bold rounded-pill mb-3">
+        <i class="bi bi-geo-alt-fill text-danger me-1"></i> Factory Headquarters & Global Export
+      </span>
+      <h1 class="display-5 fw-black text-uppercase tracking-wider mb-3">Get In Touch With Snowtop Sports</h1>
+      <p class="lead text-white-50 mx-auto mb-0" style="max-width: 760px; font-size: 1.15rem;">
+        Direct factory manufacturing, bespoke team uniforms, rashguards, and tournament sportswear. Connect with our dedicated sales & production managers for wholesale inquiries, free 3D proofs, and custom orders.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Contact & Company Details Section -->
+  <section class="py-5 bg-white">
+    <div class="full-container">
+      <div class="row g-5">
+        
+        <!-- Left Column: Company Profile, Details & Contact Channels -->
+        <div class="col-lg-5">
+          
+          <!-- About Snowtop Sports Paragraphs -->
+          <div class="mb-4">
+            <span class="badge bg-black text-white px-3 py-2 text-uppercase mb-2">Company Overview</span>
+            <h2 class="h3 fw-bold text-uppercase mb-3">About Snowtop Sports</h2>
+            
+            <p class="text-muted" style="line-height: 1.7; font-size: 0.96rem;">
+              <strong>Snowtop Sports</strong> is a premier manufacturer and international exporter of high-performance custom sports uniforms, athletic apparel, compression gear, and tournament teamwear. Headquartered in Sialkot, Pakistan — the world’s renowned capital for sporting goods manufacturing — we engineer championship-grade apparel for professional clubs, academies, collegiate teams, athletic brands, and gyms across the United States, United Kingdom, Europe, Canada, and Australia.
+            </p>
+            
+            <p class="text-muted" style="line-height: 1.7; font-size: 0.96rem;">
+              Our comprehensive in-house manufacturing infrastructure covers everything from high-resolution digital dye-sublimation with premium anti-fade Italian inks, precision laser-cutting, to heavy-duty 6-thread ergonomic flatlock seam construction. By cutting out brokers and retail distributors, Snowtop Sports delivers factory-direct wholesale pricing with unbeatable turnaround times and zero compromise on fabric durability.
+            </p>
+          </div>
+
+          <!-- Manufacturing Capabilities Badges -->
+          <div class="mb-4 pb-2">
+            <h6 class="fw-bold text-uppercase small text-dark mb-3">Our Core Manufacturing Capabilities:</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="feature-pill"><i class="bi bi-patch-check-fill text-dark"></i> 100% Full Sublimation</span>
+              <span class="feature-pill"><i class="bi bi-tag-fill text-dark"></i> Factory Direct Wholesale</span>
+              <span class="feature-pill"><i class="bi bi-palette-fill text-dark"></i> Free 3D Mockup Proofs</span>
+              <span class="feature-pill"><i class="bi bi-clock-history text-dark"></i> 10–14 Days Turnaround</span>
+              <span class="feature-pill"><i class="bi bi-airplane-fill text-dark"></i> Express Global Shipping</span>
+              <span class="feature-pill"><i class="bi bi-shield-lock-fill text-dark"></i> OEM & Private Labeling</span>
+            </div>
+          </div>
+
+          <!-- Direct Contact Cards Grid -->
+          <div class="row g-3">
+            
+            <!-- WhatsApp & Phone Card -->
+            <div class="col-12">
+              <div class="contact-info-card d-flex align-items-start gap-3">
+                <div class="contact-icon-box bg-success flex-shrink-0 mb-0">
+                  <i class="bi bi-whatsapp"></i>
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-uppercase">Email *</label>
-                  <input type="email" class="form-control form-control-lg" placeholder="sarah@team.com" required>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-uppercase">Phone / Mobile</label>
-                  <input type="tel" class="form-control form-control-lg" placeholder="+1 (555) 000-0000">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label small fw-bold text-uppercase">Sport / Topic</label>
-                  <input type="text" class="form-control form-control-lg" placeholder="e.g. 7v7 Football Uniforms">
-                </div>
-                <div class="col-12">
-                  <label class="form-label small fw-bold text-uppercase">Message *</label>
-                  <textarea class="form-control" rows="5" placeholder="Let us know how we can help your program..." required></textarea>
+                <div>
+                  <h6 class="fw-bold mb-1 text-uppercase">Direct WhatsApp & Mobile</h6>
+                  <p class="text-muted small mb-2">Instant quotes, live order tracking, and 24/7 client support:</p>
+                  <a href="https://wa.me/923040999605" target="_blank" class="fw-bold fs-5 text-dark text-decoration-none d-block mb-2">
+                    +92 304 0999605
+                  </a>
+                  <a href="https://wa.me/923040999605" target="_blank" class="btn btn-sm btn-whatsapp-direct rounded-pill px-3 py-1">
+                    <i class="bi bi-whatsapp me-1"></i> Chat on WhatsApp
+                  </a>
                 </div>
               </div>
-              <button type="submit" class="btn btn-dark btn-lg px-5 py-3 rounded-pill fw-bold text-uppercase fs-5">
-                Send Message
-              </button>
+            </div>
+
+            <!-- Email Card -->
+            <div class="col-12">
+              <div class="contact-info-card d-flex align-items-start gap-3">
+                <div class="contact-icon-box flex-shrink-0 mb-0">
+                  <i class="bi bi-envelope-fill"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-1 text-uppercase">Official Email Address</h6>
+                  <p class="text-muted small mb-2">Send official RFQs, vector artwork, tech packs, and tenders:</p>
+                  <a href="mailto:snowtopsports@gmail.com" class="fw-bold fs-6 text-dark text-decoration-none d-block mb-2">
+                    snowtopsports@gmail.com
+                  </a>
+                  <a href="mailto:snowtopsports@gmail.com" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1 fw-bold">
+                    <i class="bi bi-envelope me-1"></i> Send Email
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Factory Location & Hours Card -->
+            <div class="col-12">
+              <div class="contact-info-card d-flex align-items-start gap-3">
+                <div class="contact-icon-box flex-shrink-0 mb-0">
+                  <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-1 text-uppercase">Factory & Export Office</h6>
+                  <p class="text-muted small mb-1">
+                    <strong>Snowtop Sports</strong><br>
+                    Sialkot, Punjab, Pakistan (51310)<br>
+                    <em>Global Epicenter of Sports Goods Production</em>
+                  </p>
+                  <div class="small text-muted mt-2 border-top pt-2">
+                    <strong>Business Hours:</strong> Mon – Sat: 9:00 AM – 8:00 PM PKT<br>
+                    <strong>WhatsApp Live Chat:</strong> 24/7 Available
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right Column: Direct Inquiry & Contact Form -->
+        <div class="col-lg-7">
+          <div class="contact-form-card">
+            
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <div>
+                <span class="badge bg-black text-white px-3 py-2 text-uppercase mb-2">Direct Contact Form</span>
+                <h3 class="fw-black mb-1 text-uppercase">Send Us A Message</h3>
+              </div>
+              <span class="badge bg-light text-dark border px-3 py-2 rounded-pill small fw-bold">
+                <i class="bi bi-shield-check text-success me-1"></i> Fast 2-Hour Response
+              </span>
+            </div>
+
+            <p class="text-muted small mb-4">
+              Please submit your custom requirements, uniform questions, or bulk volume requests. Our export production team will review your specifications and reply with wholesale pricing and free 3D digital mockups.
+            </p>
+
+            <form id="mainContactForm" onsubmit="handleContactPageSubmit(event)">
+              <div class="row g-3 mb-3">
+                
+                <!-- Full Name -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">Your Full Name *</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control" id="contactName" placeholder="e.g. Coach David Miller" required>
+                  </div>
+                </div>
+
+                <!-- Email Address -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">Email Address *</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="e.g. david@team.com" required>
+                  </div>
+                </div>
+
+                <!-- WhatsApp / Phone -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">WhatsApp / Phone Number *</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-telephone"></i></span>
+                    <input type="tel" class="form-control" id="contactPhone" placeholder="+1 (555) 000-0000" required>
+                  </div>
+                </div>
+
+                <!-- Sport / Uniform Category -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">Product / Sport Category</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-trophy"></i></span>
+                    <select class="form-select" id="contactCategory">
+                      <option value="Compression Wear & Rashguards">Compression Wear & Rashguards</option>
+                      <option value="7v7 Football Uniforms">7v7 Football Uniforms</option>
+                      <option value="Basketball Jerseys & Shorts">Basketball Jerseys & Shorts</option>
+                      <option value="Soccer / Football Kits">Soccer / Football Kits</option>
+                      <option value="MMA, BJJ & Fightwear">MMA, BJJ & Fightwear</option>
+                      <option value="Hoodies, Tracksuits & Warmups">Hoodies, Tracksuits & Warmups</option>
+                      <option value="Full Team Package (Multi-Sport)">Full Team Package (Multi-Sport)</option>
+                      <option value="Other Custom Apparel">Other Custom Apparel</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Estimated Quantity -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">Estimated Quantity</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-boxes"></i></span>
+                    <select class="form-select" id="contactQuantity">
+                      <option value="15 - 25 units">15 - 25 units (Team Order)</option>
+                      <option value="25 - 50 units">25 - 50 units (Club Order)</option>
+                      <option value="50 - 100 units">50 - 100 units (Bulk Order)</option>
+                      <option value="100 - 500 units">100 - 500 units (Tournament / Organization)</option>
+                      <option value="500+ units">500+ units (Wholesale / Distributor)</option>
+                      <option value="Sample Prototype">Sample Prototype</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Country / Location -->
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase">Your Country / Location</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-globe"></i></span>
+                    <input type="text" class="form-control" id="contactCountry" placeholder="e.g. USA, UK, Canada, Australia">
+                  </div>
+                </div>
+
+                <!-- Message / Project Details -->
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-uppercase">Message & Order Requirements *</label>
+                  <textarea class="form-control" id="contactMessage" rows="5" placeholder="Tell us about your team or program: required delivery deadline, logo details, team colors, player names/numbers, or any specific fabric requests..." required></textarea>
+                </div>
+
+              </div>
+
+              <!-- Submit Button -->
+              <div class="d-grid gap-2 mb-3">
+                <button type="submit" class="btn btn-dark btn-lg py-3 rounded-pill fw-bold text-uppercase fs-6" id="contactSubmitBtn">
+                  <i class="bi bi-send-fill me-2"></i> Submit Inquiry Online
+                </button>
+              </div>
+
+              <!-- Direct WhatsApp Button -->
+              <div class="d-grid gap-2">
+                <a href="https://wa.me/923040999605" target="_blank" class="btn btn-whatsapp-direct btn-lg py-3 rounded-pill fw-bold text-uppercase fs-6 d-flex align-items-center justify-content-center gap-2">
+                  <i class="bi bi-whatsapp fs-4"></i> Chat Directly On WhatsApp (+92 304 0999605)
+                </a>
+              </div>
+
+              <!-- Success Alert -->
+              <div id="contactSuccessAlert" class="alert alert-success mt-3 py-3 d-none rounded-3" role="alert">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
+                  <div>
+                    <h6 class="fw-bold mb-1">Thank You! Your message has been received.</h6>
+                    <p class="mb-0 small">A Snowtop Sports export manager will review your inquiry and contact you shortly.</p>
+                  </div>
+                </div>
+              </div>
+
             </form>
+
+            <div class="text-center mt-3 pt-2 border-top">
+              <small class="text-muted"><i class="bi bi-shield-check text-success me-1"></i> Confidential & Secure • Zero Spam Guarantee • Free 3D Digital Mockup Proof</small>
+            </div>
+
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -58,18 +384,89 @@
   <!-- Footer -->
   <footer class="main-footer">
     <div class="full-container">
-      <div class="footer-top"><img src="../assets/images/logo-white.png" alt="Prosix Sports" style="height: 40px;"></div>
-      <div class="footer-bottom"><p class="mb-0">&copy; 2026 Prosix Sports. All Rights Reserved.</p></div>
+      <div class="footer-top">
+        <div class="footer-logos"><img src="../assets/images/logo-white.png" alt="Snowtop Sports"></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 Snowtop Sports. All Rights Reserved. Precision Sports Uniforms & Sublimated Teamwear.</p>
+      </div>
     </div>
   </footer>
-
-  <!-- Slide-over Cart Drawer -->
-  
-
-  <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/cart.js"></script>
   <script src="../js/main.js"></script>
+  <script>
+    const ADMIN_WHATSAPP = '923040999605';
+
+    function getApiBase() {
+      if (window.location.protocol === 'file:') return 'http://localhost:5000/api';
+      const host = window.location.hostname || '';
+      const port = window.location.port || '';
+      const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+      if (isLocal && port && port !== '5000') return `http://${host}:5000/api`;
+      return '/api';
+    }
+
+    async function handleContactPageSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const category = document.getElementById('contactCategory').value;
+      const quantity = document.getElementById('contactQuantity').value;
+      const country = document.getElementById('contactCountry').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+
+      const submitBtn = document.getElementById('contactSubmitBtn');
+      const successAlert = document.getElementById('contactSuccessAlert');
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Submitting Inquiry...`;
+
+      const payload = {
+        name: name,
+        email: email,
+        phone: phone,
+        subject: `Contact Inquiry: ${category} (${quantity}) from ${name}`,
+        message: `Category: ${category}\nQuantity: ${quantity}\nCountry: ${country || 'Not specified'}\n\nClient Message:\n${message}`
+      };
+
+      try {
+        await fetch(`${getApiBase()}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('API submission error, proceeding with WhatsApp confirmation', err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="bi bi-check2 me-1"></i> Inquiry Submitted!`;
+      if (successAlert) {
+        successAlert.classList.remove('d-none');
+      }
+
+      // Automatically offer WhatsApp redirection with pre-filled details
+      setTimeout(() => {
+        const waText = 
+`*NEW INQUIRY - SNOWTOP SPORTS*
+---------------------------------------
+*Name:* ${name}
+*Email:* ${email}
+*Phone:* ${phone}
+*Category:* ${category}
+*Quantity:* ${quantity}
+*Country:* ${country || 'Not specified'}
+*Message:*
+${message}
+---------------------------------------
+_Sent from Snowtop Sports Website Contact Page_`;
+
+        window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waText)}`, '_blank');
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
