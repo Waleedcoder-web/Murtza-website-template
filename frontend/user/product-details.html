@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Details - Prosix Sports</title>
+  <title>Product Details & Order Confirmation - Prosix Sports</title>
   <link rel="icon" type="image/png" href="../assets/images/logo-black.png">
 
   <!-- CSS Dependencies -->
@@ -14,9 +14,10 @@
   <link rel="stylesheet" href="../css/responsive.css">
   <style>
     .size-badge-btn {
-      width: 48px;
-      height: 48px;
-      border: 2px solid #000;
+      min-width: 46px;
+      height: 46px;
+      padding: 0 12px;
+      border: 1.5px solid #000;
       background: #fff;
       font-weight: 700;
       border-radius: 8px;
@@ -24,19 +25,41 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
     .size-badge-btn.active, .size-badge-btn:hover {
       background: #000;
       color: #fff;
     }
+    .btn-whatsapp-order {
+      background-color: #25D366 !important;
+      border-color: #25D366 !important;
+      color: #ffffff !important;
+      transition: all 0.25s ease;
+    }
+    .btn-whatsapp-order:hover {
+      background-color: #1ebe57 !important;
+      border-color: #1ebe57 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+    }
+    .product-hero-preview {
+      background: radial-gradient(circle at center, #ffffff 0%, #f4f5f7 100%);
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .inquiry-box-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
   </style>
 </head>
 <body>
 
-  
-
-  <!-- Header -->
+  <!-- Main Navigation Header -->
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="brand-logo">
@@ -52,7 +75,7 @@
         <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
       </nav>
       <div class="nav-actions">
-        <button class="action-icon-btn trigger-search-modal"><i class="bi bi-search"></i></button>
+        <button class="action-icon-btn trigger-search-modal" title="Search"><i class="bi bi-search"></i></button>
         <a href="customizer.html" class="btn-header-cta d-none d-lg-inline-block">Customize Now</a>
         <button class="mobile-nav-toggle" id="mobileNavToggle"><i class="bi bi-list"></i></button>
       </div>
@@ -68,7 +91,7 @@
     </div>
     <ul class="mobile-nav-links">
       <li><a href="index.html" class="nav-link">Home</a></li>
-      <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+      <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
       <li><a href="customizer.html" class="nav-link">Uniform Customizer</a></li>
       <li><a href="placeorder.html" class="nav-link">Place Team Order</a></li>
       <li><a href="artwork.html" class="nav-link">Artwork Request</a></li>
@@ -81,34 +104,40 @@
     <div class="full-container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
-          <li class="breadcrumb-item"><a href="index.html" class="text-dark">Home</a></li>
-          <li class="breadcrumb-item"><a href="catalogue.html" class="text-dark">Catalogue</a></li>
-          <li class="breadcrumb-item active" aria-current="page" id="breadcrumbProductName">Chargers Jersey Designs</li>
+          <li class="breadcrumb-item"><a href="index.html" class="text-dark text-decoration-none">Home</a></li>
+          <li class="breadcrumb-item"><a href="catalogue.html" class="text-dark text-decoration-none">Catalogue</a></li>
+          <li class="breadcrumb-item active fw-bold" aria-current="page" id="breadcrumbProductName">Product Details</li>
         </ol>
       </nav>
     </div>
   </div>
 
-  <!-- Product Details Section -->
+  <!-- Product Details & Order Confirmation Section -->
   <section class="py-5">
     <div class="full-container">
       <div class="row g-5">
+        
         <!-- Gallery Col -->
         <div class="col-lg-6">
-          <div class="p-4 bg-light rounded-4 text-center border mb-3 d-flex align-items-center justify-content-center" style="min-height: 380px;">
-            <img id="mainProductImg" src="" alt="Product Design" style="max-height: 480px; width: auto; margin: 0 auto; object-fit: contain; display: none;">
+          <div class="p-4 product-hero-preview text-center mb-3 d-flex align-items-center justify-content-center position-relative" style="min-height: 420px;">
+            <img id="mainProductImg" src="" alt="Product Design" style="max-height: 480px; width: auto; max-width: 100%; margin: 0 auto; object-fit: contain; display: none;">
             <div id="noProductImgPlaceholder" class="text-muted p-5">
-              <i class="bi bi-image fs-1 d-block mb-2 text-secondary"></i>
-              <span>Loading product design...</span>
+              <div class="spinner-border text-dark mb-3" role="status"></div>
+              <h5 class="fw-bold">Loading Sports Design...</h5>
             </div>
           </div>
           <div id="productThumbnailsRow" class="d-flex gap-3 justify-content-center"></div>
         </div>
 
-        <!-- Details Info Col -->
+        <!-- Details & Order Col -->
         <div class="col-lg-6">
-          <div class="badge bg-black text-white px-3 py-2 text-uppercase mb-2">CUSTOMIZABLE MODEL</div>
-          <h1 class="display-5 fw-bold mb-2" id="detailTitle">CHARGERS JERSEY DESIGNS</h1>
+          <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+            <span class="badge bg-black text-white px-3 py-2 text-uppercase" id="detailSport">PRO SPORTSWEAR</span>
+            <span class="badge bg-light text-dark border px-3 py-2 text-uppercase" id="detailSku">SKU: PRO-001</span>
+          </div>
+          
+          <h1 class="display-6 fw-bold mb-2 text-uppercase" id="detailTitle">CUSTOM SPORTS UNIFORM</h1>
+          
           <div class="d-flex align-items-center gap-2 mb-3">
             <div class="text-warning">
               <i class="bi bi-star-fill text-dark"></i>
@@ -117,68 +146,105 @@
               <i class="bi bi-star-fill text-dark"></i>
               <i class="bi bi-star-fill text-dark"></i>
             </div>
-            <span class="text-muted small fw-bold">(42 Verified Team Reviews)</span>
+            <span class="text-muted small fw-bold">(Championship Proven Quality)</span>
           </div>
 
-          <p class="text-muted mb-4 lead">
+          <!-- Price & Estimated Total -->
+          <div class="p-3 bg-light rounded-3 border mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+              <span class="text-muted small d-block">Unit Price:</span>
+              <span class="fs-3 fw-bold text-dark" id="detailPrice">$120.00</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted small d-block">Estimated Total:</span>
+              <span class="fs-3 fw-bold text-success" id="detailTotalEstimate">$120.00</span>
+            </div>
+          </div>
+
+          <p class="text-muted mb-4" id="detailDescription" style="line-height: 1.6;">
             Engineered with ultra-breathable moisture-management poly-spandex mesh. Features 4-way stretch capability, heat-pressed flatlock seams, and fade-resistant full dye sublimation printing.
           </p>
 
           <!-- Select Size -->
           <div class="mb-4">
-            <label class="fw-bold mb-2 d-block text-uppercase">Select Size:</label>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="fw-bold mb-0 text-uppercase small">Select Size:</label>
+              <span class="text-muted small">Selected: <strong class="text-dark" id="selectedSizeLabel">L</strong></span>
+            </div>
             <div class="d-flex gap-2 flex-wrap" id="sizeSelectorWrap">
-              <button class="size-badge-btn" onclick="selectSize(this, 'S')">S</button>
-              <button class="size-badge-btn" onclick="selectSize(this, 'M')">M</button>
-              <button class="size-badge-btn active" onclick="selectSize(this, 'L')">L</button>
-              <button class="size-badge-btn" onclick="selectSize(this, 'XL')">XL</button>
-              <button class="size-badge-btn" onclick="selectSize(this, '2XL')">2XL</button>
-              <button class="size-badge-btn" onclick="selectSize(this, '3XL')">3XL</button>
+              <button type="button" class="size-badge-btn" onclick="selectSize(this, 'S')">S</button>
+              <button type="button" class="size-badge-btn" onclick="selectSize(this, 'M')">M</button>
+              <button type="button" class="size-badge-btn active" onclick="selectSize(this, 'L')">L</button>
+              <button type="button" class="size-badge-btn" onclick="selectSize(this, 'XL')">XL</button>
+              <button type="button" class="size-badge-btn" onclick="selectSize(this, '2XL')">2XL</button>
+              <button type="button" class="size-badge-btn" onclick="selectSize(this, '3XL')">3XL</button>
             </div>
           </div>
 
           <!-- Quantity -->
           <div class="mb-4">
-            <label class="fw-bold mb-2 d-block text-uppercase">Quantity:</label>
+            <label class="fw-bold mb-2 d-block text-uppercase small">Order Quantity:</label>
             <div class="d-flex align-items-center gap-3">
               <div class="input-group" style="width: 140px;">
                 <button class="btn btn-outline-dark" type="button" onclick="adjustQty(-1)">-</button>
                 <input type="text" class="form-control text-center fw-bold" id="productQtyInput" value="1" readonly>
                 <button class="btn btn-outline-dark" type="button" onclick="adjustQty(1)">+</button>
               </div>
-              <span class="text-muted small">Bulk discount applies automatically on orders over 15 units.</span>
+              <span class="text-muted small">Bulk team discount applies on orders over 15 units.</span>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="d-flex gap-3 mb-5">
-            <a href="placeorder.html" class="btn btn-dark btn-lg flex-grow-1 py-3 rounded-pill fw-bold text-uppercase">
-              <i class="bi bi-file-earmark-check me-2"></i> Place Team Order
+          <!-- Quick Action Buttons: Direct WhatsApp Confirmation & Team Order -->
+          <div class="d-flex flex-column gap-2 mb-4">
+            <a id="whatsappOrderBtn" href="#" target="_blank" class="btn btn-whatsapp-order btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+              <i class="bi bi-whatsapp fs-4"></i> Confirm Order on WhatsApp
             </a>
-            <a href="customizer.html" class="btn btn-outline-dark btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase">
-              <i class="bi bi-palette me-2"></i> Customize
-            </a>
-          </div>
-
-          <!-- Quick Highlights -->
-          <div class="border-top pt-4">
-            <div class="row g-3">
-              <div class="col-6 d-flex align-items-center gap-3">
-                <i class="bi bi-truck fs-3 text-dark"></i>
-                <div>
-                  <div class="fw-bold">Fast Delivery</div>
-                  <div class="small text-muted">2-3 weeks production</div>
-                </div>
-              </div>
-              <div class="col-6 d-flex align-items-center gap-3">
-                <i class="bi bi-patch-check fs-3 text-dark"></i>
-                <div>
-                  <div class="fw-bold">Sublimated Print</div>
-                  <div class="small text-muted">Will not fade or peel</div>
-                </div>
-              </div>
+            <div class="d-flex gap-2">
+              <a id="placeTeamOrderBtn" href="placeorder.html" class="btn btn-dark btn-lg flex-grow-1 py-3 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-file-earmark-check"></i> Place Team Order
+              </a>
+              <a id="customizeLink" href="customizer.html" class="btn btn-outline-dark btn-lg py-3 px-4 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-palette"></i> Customize
+              </a>
             </div>
           </div>
+
+          <!-- Order Inquiry Form (Sends direct inquiry to admin database + WhatsApp) -->
+          <div class="inquiry-box-card p-4 mt-4">
+            <h5 class="fw-bold mb-1 text-uppercase"><i class="bi bi-envelope-paper me-2 text-dark"></i>Direct Order Confirmation Inquiry</h5>
+            <p class="text-muted small mb-3">Send your details to the admin for instant confirmation, digital mockups, and bulk pricing.</p>
+            
+            <form id="orderInquiryForm" onsubmit="handleInquirySubmit(event)">
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="inqName" placeholder="Your Full Name *" required>
+                </div>
+                <div class="col-md-6">
+                  <input type="tel" class="form-control" id="inqPhone" placeholder="WhatsApp / Phone Number *" required>
+                </div>
+              </div>
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <input type="email" class="form-control" id="inqEmail" placeholder="Email Address">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="inqTeam" placeholder="Team / Organization Name">
+                </div>
+              </div>
+              <div class="mb-3">
+                <textarea class="form-control" id="inqNotes" rows="2" placeholder="Custom color preferences, sponsor logos, or deadline..."></textarea>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-uppercase flex-grow-1" id="inquirySubmitBtn">
+                  <i class="bi bi-send me-1"></i> Submit Order Inquiry
+                </button>
+              </div>
+              <div id="inquirySuccessMsg" class="alert alert-success mt-3 py-2 d-none" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> Inquiry submitted successfully! An admin has received your details.
+              </div>
+            </form>
+          </div>
+
         </div>
       </div>
 
@@ -191,13 +257,13 @@
         </ul>
         <div class="tab-content p-2">
           <div class="tab-pane fade show active" id="features">
-            <h4 class="fw-bold mb-3">Premium Performance Construction</h4>
-            <p>Every Prosix sports jersey is precision engineered to meet the demands of high-level athletes:</p>
+            <h4 class="fw-bold mb-3">Premium Tournament Construction</h4>
+            <p>Every Prosix sports uniform is precision-engineered to meet the rigorous demands of professional athletes:</p>
             <ul>
-              <li><strong>Fabric:</strong> 180 GSM heavyweight Poly-Spandex with dual-action antimicrobial moisture-wicking technology.</li>
-              <li><strong>Printing:</strong> Italian dye-sublimation ink infused directly into polymer fibers at 400°F.</li>
-              <li><strong>Fit:</strong> Athletic compression cut with ergonomically curved side panels for dynamic range of motion.</li>
-              <li><strong>Durability:</strong> 6-thread flatlock reinforced seam stitching.</li>
+              <li><strong>Fabric:</strong> 180-220 GSM heavyweight Poly-Spandex with dual-action antimicrobial moisture-wicking technology.</li>
+              <li><strong>Sublimation:</strong> Italian dye-sublimation ink infused directly into polymer fibers at 400°F for zero peeling or fading.</li>
+              <li><strong>Athletic Cut:</strong> Ergonomically curved raglan sleeves and multi-directional stretch for unrestricted motion.</li>
+              <li><strong>Reinforced Seams:</strong> 6-thread flatlock ergonomic stitching built for high-contact athletics.</li>
             </ul>
           </div>
           <div class="tab-pane fade" id="size-chart">
@@ -213,6 +279,7 @@
                   <tr><td>Large (L)</td><td>42 - 44</td><td>30</td><td>17</td></tr>
                   <tr><td>X-Large (XL)</td><td>45 - 47</td><td>31</td><td>18</td></tr>
                   <tr><td>2X-Large (2XL)</td><td>48 - 50</td><td>32</td><td>19</td></tr>
+                  <tr><td>3X-Large (3XL)</td><td>51 - 53</td><td>33</td><td>20</td></tr>
                 </tbody>
               </table>
             </div>
@@ -238,25 +305,122 @@
     </div>
   </footer>
 
-  <!-- Slide-over Cart Drawer -->
-  
-
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/cart.js"></script>
   <script src="../js/main.js"></script>
   <script>
+    let currentProduct = null;
     let selectedSize = 'L';
     let qty = 1;
+    const ADMIN_WHATSAPP = '19292104402';
 
     function selectSize(btn, size) {
       document.querySelectorAll('.size-badge-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       selectedSize = size;
+      const lbl = document.getElementById('selectedSizeLabel');
+      if (lbl) lbl.textContent = size;
+      updateOrderUrls();
     }
 
     function adjustQty(delta) {
       qty = Math.max(1, qty + delta);
       document.getElementById('productQtyInput').value = qty;
+      updateOrderUrls();
+    }
+
+    function updateOrderUrls() {
+      if (!currentProduct) return;
+      const unitPrice = Number(currentProduct.price) || 120;
+      const total = (unitPrice * qty).toFixed(2);
+
+      const totalEl = document.getElementById('detailTotalEstimate');
+      if (totalEl) totalEl.textContent = `$${total}`;
+
+      // 1. WhatsApp Instant Confirmation URL
+      const waText = `Hello Prosix Sports! I want to confirm an order / inquiry:
+• Product: ${currentProduct.name}
+• SKU: ${currentProduct.sku || 'PRO-' + currentProduct.id}
+• Sport: ${currentProduct.sport || 'Custom'}
+• Size: ${selectedSize}
+• Quantity: ${qty} units
+• Unit Price: $${unitPrice}
+• Estimated Total: $${total}
+• Page Link: ${window.location.href}
+
+Please let me know how to proceed with the team order and artwork approval.`;
+
+      const waBtn = document.getElementById('whatsappOrderBtn');
+      if (waBtn) {
+        waBtn.href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waText)}`;
+      }
+
+      // 2. Place Order URL
+      const placeBtn = document.getElementById('placeTeamOrderBtn');
+      if (placeBtn) {
+        placeBtn.href = `placeorder.html?product=${encodeURIComponent(currentProduct.name)}&id=${currentProduct.id}&size=${selectedSize}&qty=${qty}`;
+      }
+
+      // 3. Customize URL
+      const customBtn = document.getElementById('customizeLink');
+      if (customBtn) {
+        customBtn.href = `customizer.html?id=${currentProduct.id}&size=${selectedSize}&qty=${qty}`;
+      }
+    }
+
+    async function handleInquirySubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('inquirySubmitBtn');
+      const successMsg = document.getElementById('inquirySuccessMsg');
+
+      const name = document.getElementById('inqName').value.trim();
+      const phone = document.getElementById('inqPhone').value.trim();
+      const email = document.getElementById('inqEmail').value.trim();
+      const team = document.getElementById('inqTeam').value.trim();
+      const notes = document.getElementById('inqNotes').value.trim();
+
+      if (!name || !phone) return;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Submitting...`;
+
+      const payload = {
+        name: name,
+        email: email || 'inquiry@prosixsports.com',
+        phone: phone,
+        subject: `Order Inquiry: ${currentProduct ? currentProduct.name : 'Custom Jersey'} (Qty: ${qty}, Size: ${selectedSize})`,
+        message: `Team: ${team || 'N/A'}\nProduct: ${currentProduct ? currentProduct.name : ''} (ID: ${currentProduct ? currentProduct.id : ''})\nSize: ${selectedSize}\nQuantity: ${qty}\nNotes: ${notes}`
+      };
+
+      try {
+        await fetch(`${getApiBase()}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('API inquiry submit notice:', err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="bi bi-check2 me-1"></i> Inquiry Sent!`;
+      if (successMsg) {
+        successMsg.classList.remove('d-none');
+      }
+
+      // Automatically offer WhatsApp confirmation
+      setTimeout(() => {
+        const fullWaText = `Hello Prosix Sports! I just submitted an order inquiry on your website:
+• Name: ${name}
+• Team: ${team || 'N/A'}
+• Product: ${currentProduct ? currentProduct.name : ''}
+• Size: ${selectedSize}
+• Quantity: ${qty}
+• Notes: ${notes}
+
+Please confirm my order details!`;
+        window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(fullWaText)}`, '_blank');
+      }, 1000);
     }
 
     function getApiBase() {
@@ -282,43 +446,58 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const id = urlParams.get('id');
-      if (id) {
-        try {
-          const res = await fetch(`${getApiBase()}/products/${id}`);
-          if (res.ok) {
-            const product = await res.json();
-            if (product) {
-              if (document.getElementById('breadcrumbProductName')) {
-                document.getElementById('breadcrumbProductName').textContent = product.name;
-              }
-              if (document.getElementById('detailTitle')) {
-                document.getElementById('detailTitle').textContent = product.name.toUpperCase();
-              }
-              let img = resolveAssetUrl(product.image);
-              const mainImgEl = document.getElementById('mainProductImg');
-              const placeholderEl = document.getElementById('noProductImgPlaceholder');
-              if (img && mainImgEl) {
-                mainImgEl.src = img;
-                mainImgEl.style.display = 'block';
-                if (placeholderEl) placeholderEl.style.display = 'none';
-
-                const thumbRow = document.getElementById('productThumbnailsRow');
-                if (thumbRow) {
-                  thumbRow.innerHTML = `
-                    <div class="p-2 border rounded-3 bg-white cursor-pointer active border-dark">
-                      <img src="${img}" style="width: 70px; height: 70px; object-fit: contain;">
-                    </div>
-                  `;
-                }
-              }
-              const customizeLink = document.querySelector('a[href*="customizer.html"]');
-              if (customizeLink) customizeLink.href = `customizer.html?id=${product.id}`;
+      const id = urlParams.get('id') || '1';
+      
+      try {
+        const res = await fetch(`${getApiBase()}/products/${id}`);
+        if (res.ok) {
+          const product = await res.json();
+          if (product) {
+            currentProduct = product;
+            
+            document.title = `${product.name} - Prosix Sports Details`;
+            if (document.getElementById('breadcrumbProductName')) {
+              document.getElementById('breadcrumbProductName').textContent = product.name;
             }
+            if (document.getElementById('detailTitle')) {
+              document.getElementById('detailTitle').textContent = product.name.toUpperCase();
+            }
+            if (document.getElementById('detailSport')) {
+              document.getElementById('detailSport').textContent = (product.sport || 'CUSTOM SPORTSWEAR').toUpperCase();
+            }
+            if (document.getElementById('detailSku')) {
+              document.getElementById('detailSku').textContent = `SKU: ${product.sku || 'PRO-' + product.id}`;
+            }
+            if (document.getElementById('detailPrice')) {
+              document.getElementById('detailPrice').textContent = `$${Number(product.price || 120).toFixed(2)}`;
+            }
+            if (product.description && document.getElementById('detailDescription')) {
+              document.getElementById('detailDescription').textContent = product.description;
+            }
+            
+            let img = resolveAssetUrl(product.image);
+            const mainImgEl = document.getElementById('mainProductImg');
+            const placeholderEl = document.getElementById('noProductImgPlaceholder');
+            if (img && mainImgEl) {
+              mainImgEl.src = img;
+              mainImgEl.style.display = 'block';
+              if (placeholderEl) placeholderEl.style.display = 'none';
+
+              const thumbRow = document.getElementById('productThumbnailsRow');
+              if (thumbRow) {
+                thumbRow.innerHTML = `
+                  <div class="p-2 border rounded-3 bg-white cursor-pointer active border-dark shadow-sm">
+                    <img src="${img}" style="width: 70px; height: 70px; object-fit: contain;">
+                  </div>
+                `;
+              }
+            }
+            
+            updateOrderUrls();
           }
-        } catch (e) {
-          console.warn('Could not fetch product from API', e);
         }
+      } catch (e) {
+        console.warn('Could not fetch product from API', e);
       }
     });
   </script>
