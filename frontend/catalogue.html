@@ -763,6 +763,7 @@
   <script src="js/main.js"></script>
   <script>
     let allCatalogueProducts = [];
+    let isProductsLoaded = false;
 
     document.addEventListener('DOMContentLoaded', async () => {
       await Promise.all([loadCatalogueCategories(), loadCatalogueProducts()]);
@@ -872,7 +873,8 @@
           const data = await res.json();
           if (Array.isArray(data)) {
             allCatalogueProducts = data;
-            renderCatalogueGrid(allCatalogueProducts);
+            isProductsLoaded = true;
+            filterCatalogue();
             return;
           }
         }
@@ -880,7 +882,8 @@
         console.warn('API fetch failed', e);
       }
       allCatalogueProducts = [];
-      renderCatalogueGrid(allCatalogueProducts);
+      isProductsLoaded = true;
+      filterCatalogue();
     }
 
     function renderCatalogueGrid(products) {
@@ -928,6 +931,8 @@
     }
 
     function filterCatalogue() {
+      if (!isProductsLoaded) return;
+
       const selectedSport = document.querySelector('input[name="sportFilter"]:checked')?.value || 'all';
       const sortVal = document.getElementById('catalogueSortSelect')?.value || 'Featured';
 
