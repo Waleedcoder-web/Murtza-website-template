@@ -1676,6 +1676,17 @@ img {
   text-transform: uppercase;
 }
 
+.main-footer p,
+.main-footer .footer-col p {
+  color: #e5e7eb !important;
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+.main-footer .text-muted {
+  color: #d1d5db !important;
+}
+
 .social-links {
   display: flex;
   gap: 14px;
