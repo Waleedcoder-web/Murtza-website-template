@@ -340,12 +340,9 @@
           </div>
 
           <!-- Pagination -->
-          <nav class="mt-5 d-flex justify-content-center">
-            <ul class="pagination pagination-lg">
-              <li class="page-item active"><a class="page-link bg-black border-black text-white" href="#">1</a></li>
-              <li class="page-item"><a class="page-link text-black" href="#">2</a></li>
-              <li class="page-item"><a class="page-link text-black" href="#">3</a></li>
-              <li class="page-item"><a class="page-link text-black" href="#">&raquo;</a></li>
+          <nav class="mt-5 d-flex justify-content-center" id="cataloguePaginationNav">
+            <ul class="pagination pagination-lg" id="cataloguePagination">
+              <li class="page-item active"><a class="page-link bg-black border-black text-white" href="javascript:void(0);">1</a></li>
             </ul>
           </nav>
         </div>
@@ -388,8 +385,11 @@
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
+    const PRODUCTS_PER_PAGE = 24;
     let allCatalogueProducts = [];
     let isProductsLoaded = false;
+    let currentPage = 1;
+    let currentFilteredProducts = [];
 
     document.addEventListener('DOMContentLoaded', async () => {
       await Promise.all([loadCatalogueCategories(), loadCatalogueProducts()]);
@@ -468,6 +468,8 @@
     function showCatalogueLoader() {
       const grid = document.querySelector('.products-grid');
       const countEl = document.getElementById('catalogueCountDisplay');
+      const navEl = document.getElementById('cataloguePaginationNav');
+      if (navEl) navEl.style.display = 'none';
       if (countEl) countEl.innerHTML = `<span class="spinner-grow spinner-grow-sm me-1 text-primary"></span> Loading sports designs...`;
       if (!grid) return;
       grid.innerHTML = `
@@ -495,7 +497,7 @@
           if (Array.isArray(data)) {
             allCatalogueProducts = data;
             isProductsLoaded = true;
-            filterCatalogue();
+            filterCatalogue(true);
             return;
           }
         }
@@ -504,17 +506,16 @@
       }
       allCatalogueProducts = [];
       isProductsLoaded = true;
-      filterCatalogue();
+      filterCatalogue(true);
     }
 
-    function renderCatalogueGrid(products) {
+    function renderCatalogueGrid(products, totalCount, startIdx) {
       const grid = document.querySelector('.products-grid');
       const countEl = document.getElementById('catalogueCountDisplay');
       if (!grid) return;
 
-      if (countEl) countEl.innerHTML = `Showing <strong class="text-dark">${products.length}</strong> of ${allCatalogueProducts.length} Designs`;
-
-      if (products.length === 0) {
+      if (totalCount === 0) {
+        if (countEl) countEl.innerHTML = `Showing <strong class="text-dark">0</strong> of 0 Designs`;
         grid.innerHTML = `
           <div class="col-12 text-center py-5" style="grid-column: 1 / -1; width: 100%;">
             <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
@@ -525,6 +526,10 @@
         `;
         return;
       }
+
+      const showingFrom = startIdx + 1;
+      const showingTo = startIdx + products.length;
+      if (countEl) countEl.innerHTML = `Showing <strong class="text-dark">${showingFrom}-${showingTo}</strong> of ${totalCount} Designs`;
 
       let html = '';
       products.forEach((p, index) => {
@@ -551,8 +556,68 @@
       grid.innerHTML = html;
     }
 
-    function filterCatalogue() {
+    function renderCataloguePagination(totalPages, page) {
+      const navEl = document.getElementById('cataloguePaginationNav');
+      const ulEl = document.getElementById('cataloguePagination');
+      if (!ulEl) return;
+
+      if (totalPages <= 0 || currentFilteredProducts.length === 0) {
+        if (navEl) navEl.style.display = 'none';
+        ulEl.innerHTML = '';
+        return;
+      }
+
+      if (navEl) navEl.style.display = 'flex';
+
+      let html = '';
+
+      // Only show Previous arrow if more than 1 page
+      if (totalPages > 1) {
+        html += `
+          <li class="page-item ${page === 1 ? 'disabled' : ''}">
+            <a class="page-link text-black" href="javascript:void(0);" ${page > 1 ? `onclick="goToCataloguePage(${page - 1})"` : ''} aria-label="Previous">&laquo;</a>
+          </li>
+        `;
+      }
+
+      for (let p = 1; p <= totalPages; p++) {
+        const isActive = (p === page);
+        html += `
+          <li class="page-item ${isActive ? 'active' : ''}">
+            <a class="page-link ${isActive ? 'bg-black border-black text-white' : 'text-black'}" href="javascript:void(0);" onclick="goToCataloguePage(${p})">${p}</a>
+          </li>
+        `;
+      }
+
+      // Only show Next arrow if more than 1 page
+      if (totalPages > 1) {
+        html += `
+          <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+            <a class="page-link text-black" href="javascript:void(0);" ${page < totalPages ? `onclick="goToCataloguePage(${page + 1})"` : ''} aria-label="Next">&raquo;</a>
+          </li>
+        `;
+      }
+
+      ulEl.innerHTML = html;
+    }
+
+    function goToCataloguePage(page) {
+      const totalPages = Math.ceil(currentFilteredProducts.length / PRODUCTS_PER_PAGE) || 1;
+      if (page < 1 || page > totalPages || page === currentPage) return;
+      currentPage = page;
+      filterCatalogue(false);
+      const grid = document.querySelector('.products-grid');
+      if (grid) {
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function filterCatalogue(resetPage = true) {
       if (!isProductsLoaded) return;
+
+      if (resetPage) {
+        currentPage = 1;
+      }
 
       const selectedSport = document.querySelector('input[name="sportFilter"]:checked')?.value || 'all';
       const sortVal = document.getElementById('catalogueSortSelect')?.value || 'Featured';
@@ -566,7 +631,18 @@
         filtered.sort((a, b) => b.id - a.id);
       }
 
-      renderCatalogueGrid(filtered);
+      currentFilteredProducts = filtered;
+      const totalPages = Math.ceil(currentFilteredProducts.length / PRODUCTS_PER_PAGE) || 1;
+      if (currentPage > totalPages) {
+        currentPage = totalPages;
+      }
+
+      const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
+      const endIdx = startIdx + PRODUCTS_PER_PAGE;
+      const pageProducts = currentFilteredProducts.slice(startIdx, endIdx);
+
+      renderCatalogueGrid(pageProducts, currentFilteredProducts.length, startIdx);
+      renderCataloguePagination(totalPages, currentPage);
     }
   </script>
 </body>
