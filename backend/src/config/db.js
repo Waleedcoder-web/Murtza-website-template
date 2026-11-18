@@ -42,6 +42,7 @@ const fallbackStore = {
     { id: 20, sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-20.jpg', type: 'model', description: 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', is_active: true }
   ],
   inquiries: [],
+  orders: [],
   admin_users: [
     { id: 1, username: 'murtza', email: 'murtza@gmail.com', role: 'superadmin', password_hash: 'c256808d6a23e034b0f70dba55e16e5e:e3b6a7b46bc948f662720f8adbef6a7de6e30013691f2e1ff7a23f900a1a2f6a53651d6b7314dcbb3f0d2787f791f7ab9d0df5e968669e0d2f6f32b1a1726aaa', is_active: true }
   ],

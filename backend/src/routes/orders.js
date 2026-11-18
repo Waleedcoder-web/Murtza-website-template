@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
   } catch (err) {
     console.error('Error fetching orders:', err);
   }
+  if (!db.fallbackStore.orders) db.fallbackStore.orders = [];
   return res.json(db.fallbackStore.orders);
 });
 
@@ -26,6 +27,7 @@ router.get('/:order_number', async (req, res) => {
   } catch (err) {
     console.error('Error fetching order:', err);
   }
+  if (!db.fallbackStore.orders) db.fallbackStore.orders = [];
   const order = db.fallbackStore.orders.find(o => o.order_number.toUpperCase() === num);
   if (order) return res.json(order);
   return res.status(404).json({ error: 'Order not found' });
@@ -50,6 +52,7 @@ router.post('/', async (req, res) => {
     console.error('Error creating order in DB:', err);
   }
 
+  if (!db.fallbackStore.orders) db.fallbackStore.orders = [];
   const newOrder = {
     id: Date.now(),
     order_number,
