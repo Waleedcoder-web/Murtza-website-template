@@ -67,7 +67,7 @@ router.get('/:id', async (req, res) => {
     console.error('Error fetching category by ID:', err);
   }
 
-  const cat = (db.fallbackStore.categories || []).find(c => c.id === id);
+  const cat = (db.fallbackStore.categories || []).find(c => c.id == id || String(c.id) === String(id));
   if (cat) return res.json(cat);
   return res.status(404).json({ error: 'Category not found' });
 });
@@ -155,7 +155,7 @@ router.put('/:id', async (req, res) => {
 
   // Fallback memory store
   if (db.fallbackStore.categories) {
-    const cat = db.fallbackStore.categories.find(c => c.id === id);
+    const cat = db.fallbackStore.categories.find(c => c.id == id || String(c.id) === String(id));
     if (cat) {
       if (cleanName) { cat.name = cleanName; cat.slug = slug; }
       if (cleanDesc !== null) cat.description = cleanDesc;
@@ -199,7 +199,7 @@ router.delete('/:id', async (req, res) => {
   }
 
   if (db.fallbackStore.categories) {
-    const idx = db.fallbackStore.categories.findIndex(c => c.id === id);
+    const idx = db.fallbackStore.categories.findIndex(c => c.id == id || String(c.id) === String(id));
     if (idx !== -1) {
       const [removedCat] = db.fallbackStore.categories.splice(idx, 1);
       const catNameLow = (removedCat.name || '').toLowerCase();

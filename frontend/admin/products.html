@@ -358,7 +358,7 @@
   </div>
 
   <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/admin.js?v=3.2"></script>
   <script>
     let productsList = [];
     let categoriesList = [];
@@ -511,7 +511,7 @@
               <span class="badge bg-light text-dark border px-2 py-1">${c.product_count || 0} products</span>
             </td>
             <td class="text-end">
-              <button class="btn-glass btn-glass-danger btn-sm px-2" title="Delete Category" onclick="handleDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}')">
+              <button class="btn-glass btn-glass-danger btn-sm px-2" title="Delete Category" onclick="handleDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${c.product_count || 0})">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
@@ -537,11 +537,23 @@
       populateCategoriesUI();
     }
 
-    async function handleDeleteCategory(id, name) {
-      if (confirm(`Are you sure you want to delete category "${name}"?`)) {
+    async function handleDeleteCategory(id, name, count) {
+      const prodCount = parseInt(count, 10) || 0;
+      let confirmMsg = '';
+      if (prodCount > 0) {
+        confirmMsg = `⚠️ CRITICAL WARNING:\n\nDeleting category "${name}" will PERMANENTLY DELETE all ${prodCount} product(s) associated with this category from the store catalogue and database!\n\nAre you sure you want to proceed? This action CANNOT be undone.`;
+      } else {
+        confirmMsg = `Are you sure you want to delete category "${name}" from the database?`;
+      }
+
+      if (!confirm(confirmMsg)) return;
+
+      try {
         await AdminApp.deleteCategory(id);
         await loadCategoriesModal();
         populateCategoriesUI();
+      } catch (err) {
+        alert('Failed to delete category: ' + err.message);
       }
     }
 
