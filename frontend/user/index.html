@@ -35,6 +35,16 @@
         <li class="nav-item"><a href="faqs.html" class="nav-link">FAQs</a></li>
       </nav>
 
+      <!-- Desktop In-Header Search Bar -->
+      <div class="header-search-wrap d-none d-lg-block">
+        <div class="header-search-bar">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" class="header-search-input desktop-search-input" placeholder="Search jerseys, 7v7, gear..." autocomplete="off">
+          <button type="button" class="search-clear-btn desktop-search-clear" style="display: none;" aria-label="Clear search"><i class="bi bi-x-circle-fill"></i></button>
+        </div>
+        <div class="desktop-search-dropdown" style="display: none;"></div>
+      </div>
+
       <div class="nav-actions">
         <button class="action-icon-btn trigger-search-modal" title="Search">
           <i class="bi bi-search"></i>
@@ -55,6 +65,13 @@
     <div class="mobile-nav-header">
       <img src="../assets/images/logo-black.png" alt="Snowtop Sports" style="height: 38px;">
       <button class="close-cart-btn" id="closeMobileDrawer">&times;</button>
+    </div>
+    <!-- Mobile Drawer Search Bar -->
+    <div class="p-3 border-bottom">
+      <div class="header-search-bar w-100">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" class="header-search-input drawer-search-input" placeholder="Search sports gear..." autocomplete="off">
+      </div>
     </div>
     <ul class="mobile-nav-links">
       <li><a href="index.html" class="nav-link">Home</a></li>
@@ -779,6 +796,31 @@
 
   <!-- Slide-over Cart Drawer -->
   
+
+  <!-- Global Search Modal Backdrop -->
+  <div class="custom-modal-backdrop" id="searchModalBackdrop">
+    <div class="site-search-modal-box">
+      <div class="modal-search-header">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" id="modalSearchInput" placeholder="Search jerseys, 7v7, rashguards, gear..." autocomplete="off">
+        <button type="button" id="modalSearchClear" class="search-clear-btn" style="display: none;"><i class="bi bi-x-circle-fill"></i></button>
+        <button type="button" class="modal-search-close" id="closeSearchModal" aria-label="Close search">&times;</button>
+      </div>
+      <div class="search-quick-tags">
+        <span class="quick-tag-label">Popular:</span>
+        <button type="button" class="quick-tag-btn" data-query="7v7">7v7 Football</button>
+        <button type="button" class="quick-tag-btn" data-query="Rashguard">Rashguard</button>
+        <button type="button" class="quick-tag-btn" data-query="Compression">Compression</button>
+        <button type="button" class="quick-tag-btn" data-query="Armor">Armor</button>
+      </div>
+      <div class="modal-search-results" id="modalSearchResults">
+        <div class="text-center py-4 px-3">
+          <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+          <p class="text-muted small mb-0">Search jerseys, 7v7, rashguards, or compression wear...</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Video Modal -->
   <div class="custom-modal-backdrop" id="videoModalBackdrop">

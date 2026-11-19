@@ -612,65 +612,288 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // Search Modal
   // ==========================================
-  const searchTriggers = document.querySelectorAll('.trigger-search-modal');
-  const searchModal = document.getElementById('searchModalBackdrop');
-  const closeSearchBtn = document.getElementById('closeSearchModal');
-  const searchInput = document.getElementById('siteSearchInput');
-  const searchResults = document.getElementById('searchResultsContainer');
+  // UNIFIED SEARCH ENGINE (Desktop In-Header Bar + Mobile Modal)
+  // ==========================================
+  function initSearchSystem() {
+    const isUserDir = window.location.pathname.includes('/user/');
+    const apiBase = isUserDir ? '../api' : '/api';
+    const rootPrefix = isUserDir ? '../' : '';
+    const detailsPage = isUserDir ? 'product-details.html' : 'product-details.html';
+    const cataloguePage = isUserDir ? 'catalogue.html' : 'catalogue.html';
 
-  let searchableProducts = [];
-  fetch('/api/products')
-    .then(r => r.ok ? r.json() : [])
-    .then(data => { if (Array.isArray(data)) searchableProducts = data; })
-    .catch(() => {});
+    let searchableProducts = [];
 
-  searchTriggers.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      searchModal?.classList.add('open');
-      searchInput?.focus();
-    });
-  });
-
-  closeSearchBtn?.addEventListener('click', () => {
-    searchModal?.classList.remove('open');
-  });
-
-  searchModal?.addEventListener('click', (e) => {
-    if (e.target === searchModal) searchModal.classList.remove('open');
-  });
-
-  searchInput?.addEventListener('input', (e) => {
-    const q = e.target.value.toLowerCase().trim();
-    if (q.length < 2) {
-      if (searchResults) searchResults.innerHTML = '<p class="text-muted text-center py-3">Type at least 2 characters to search...</p>';
-      return;
-    }
-
-    const matches = searchableProducts.filter(p => p.name.toLowerCase().includes(q));
-    if (matches.length === 0) {
-      if (searchResults) searchResults.innerHTML = '<p class="text-muted text-center py-3">No products found matching your search.</p>';
-      return;
-    }
-
-    let html = '';
-    matches.forEach(p => {
-      html += `
-        <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
-          <div class="d-flex align-items-center gap-3">
-            <img src="${p.image}" alt="${p.name}" style="width: 50px; height: 50px; object-fit: contain;">
-            <div>
-              <div class="fw-bold">${p.name}</div>
+    // Auto-create Search Modal Backdrop in DOM if missing
+    let searchModal = document.getElementById('searchModalBackdrop');
+    if (!searchModal) {
+      searchModal = document.createElement('div');
+      searchModal.className = 'custom-modal-backdrop';
+      searchModal.id = 'searchModalBackdrop';
+      searchModal.innerHTML = `
+        <div class="site-search-modal-box">
+          <div class="modal-search-header">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="modalSearchInput" placeholder="Search jerseys, 7v7, rashguards, gear..." autocomplete="off">
+            <button type="button" id="modalSearchClear" class="search-clear-btn" style="display: none;"><i class="bi bi-x-circle-fill"></i></button>
+            <button type="button" class="modal-search-close" id="closeSearchModal" aria-label="Close search">&times;</button>
+          </div>
+          <div class="search-quick-tags">
+            <span class="quick-tag-label">Popular:</span>
+            <button type="button" class="quick-tag-btn" data-query="7v7">7v7 Football</button>
+            <button type="button" class="quick-tag-btn" data-query="Rashguard">Rashguard</button>
+            <button type="button" class="quick-tag-btn" data-query="Compression">Compression</button>
+            <button type="button" class="quick-tag-btn" data-query="Armor">Armor</button>
+          </div>
+          <div class="modal-search-results" id="modalSearchResults">
+            <div class="text-center py-4 px-3">
+              <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+              <p class="text-muted small mb-0">Search jerseys, 7v7, rashguards, or compression wear...</p>
             </div>
           </div>
-          <a href="product-details.html?id=${p.id}" class="btn btn-dark btn-sm rounded-pill px-3">View</a>
         </div>
       `;
+      document.body.appendChild(searchModal);
+    }
+
+    // Fetch product catalog once for instant lightning search
+    fetch(`${apiBase}/products`)
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        if (Array.isArray(data)) searchableProducts = data.filter(p => p.is_active !== false);
+      })
+      .catch(e => console.warn('Search products fetch failed', e));
+
+    function resolveImg(url) {
+      if (!url) return rootPrefix + 'assets/images/products/rashguard-1.jpg';
+      if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+      const clean = url.replace(/^\.?\/?/, '');
+      return rootPrefix + clean;
+    }
+
+    function filterItems(query) {
+      const q = (query || '').toLowerCase().trim();
+      if (!q) return [];
+      const terms = q.split(/\s+/).filter(Boolean);
+      return searchableProducts.filter(p => {
+        const combined = `${p.name || ''} ${p.sport || ''} ${p.category || ''} ${p.sku || ''} ${p.description || ''}`.toLowerCase();
+        return terms.every(t => combined.includes(t));
+      });
+    }
+
+    function renderResultsHtml(items, query) {
+      if (!items || items.length === 0) {
+        return `
+          <div class="text-center py-4 px-3">
+            <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+            <p class="fw-bold text-dark mb-1">No products found for "${query}"</p>
+            <p class="text-muted small mb-0">Try searching "jersey", "7v7", "rashguard", or "compression"</p>
+          </div>
+        `;
+      }
+
+      const maxItems = items.slice(0, 6);
+      let html = '';
+      maxItems.forEach(p => {
+        const img = resolveImg(p.image);
+        html += `
+          <a href="${detailsPage}?id=${p.id}" class="search-result-item">
+            <div class="search-result-left">
+              <img src="${img}" alt="${p.name}" class="search-result-thumb" onerror="this.src='${rootPrefix}assets/images/products/rashguard-1.jpg'">
+              <div class="search-result-info">
+                <div class="search-result-name">${p.name}</div>
+                <div class="search-result-meta">
+                  <span class="search-result-badge">${p.sport || 'Sport'}</span>
+                  <span>$${p.price || 120}</span>
+                </div>
+              </div>
+            </div>
+            <span class="search-result-btn">View <i class="bi bi-arrow-right"></i></span>
+          </a>
+        `;
+      });
+
+      if (items.length > 0) {
+        html += `
+          <div class="search-dropdown-footer">
+            <a href="${cataloguePage}?search=${encodeURIComponent(query)}">
+              View all ${items.length} designs in Catalogue &rarr;
+            </a>
+          </div>
+        `;
+      }
+      return html;
+    }
+
+    // 1. Desktop In-Header Search Setup
+    const desktopInput = document.querySelector('.desktop-search-input');
+    const desktopDropdown = document.querySelector('.desktop-search-dropdown');
+    const desktopClear = document.querySelector('.desktop-search-clear');
+
+    if (desktopInput && desktopDropdown) {
+      desktopInput.addEventListener('input', (e) => {
+        const q = e.target.value.trim();
+        if (desktopClear) desktopClear.style.display = q ? 'block' : 'none';
+
+        if (q.length < 1) {
+          desktopDropdown.style.display = 'none';
+          return;
+        }
+        const matches = filterItems(q);
+        desktopDropdown.innerHTML = renderResultsHtml(matches, q);
+        desktopDropdown.style.display = 'block';
+      });
+
+      desktopInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = desktopInput.value.trim();
+          if (q) window.location.href = `${cataloguePage}?search=${encodeURIComponent(q)}`;
+        } else if (e.key === 'Escape') {
+          desktopDropdown.style.display = 'none';
+        }
+      });
+
+      if (desktopClear) {
+        desktopClear.addEventListener('click', () => {
+          desktopInput.value = '';
+          desktopClear.style.display = 'none';
+          desktopDropdown.style.display = 'none';
+          desktopInput.focus();
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (!desktopInput.contains(e.target) && !desktopDropdown.contains(e.target)) {
+          desktopDropdown.style.display = 'none';
+        }
+      });
+    }
+
+    // 2. Mobile Modal Search Setup
+    const modalInput = document.getElementById('modalSearchInput');
+    const modalResults = document.getElementById('modalSearchResults');
+    const modalClear = document.getElementById('modalSearchClear');
+    const modalClose = document.getElementById('closeSearchModal');
+    const searchTriggers = document.querySelectorAll('.trigger-search-modal');
+    const quickTags = searchModal.querySelectorAll('.quick-tag-btn');
+
+    function openModal(defaultQuery = '') {
+      if (!searchModal) return;
+      searchModal.classList.add('open');
+      if (modalInput) {
+        modalInput.value = defaultQuery;
+        if (modalClear) modalClear.style.display = defaultQuery ? 'block' : 'none';
+        setTimeout(() => modalInput.focus(), 120);
+        if (defaultQuery) {
+          const matches = filterItems(defaultQuery);
+          if (modalResults) modalResults.innerHTML = renderResultsHtml(matches, defaultQuery);
+        } else {
+          if (modalResults) {
+            modalResults.innerHTML = `
+              <div class="text-center py-4 px-3">
+                <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+                <p class="text-muted small mb-0">Search jerseys, 7v7, rashguards, or compression wear...</p>
+              </div>
+            `;
+          }
+        }
+      }
+    }
+
+    function closeModal() {
+      if (searchModal) searchModal.classList.remove('open');
+    }
+
+    searchTriggers.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // If desktop in-header input is visible on screen, focus it, else open modal
+        if (window.innerWidth >= 992 && desktopInput) {
+          desktopInput.focus();
+          desktopInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          openModal();
+        }
+      });
     });
-    if (searchResults) searchResults.innerHTML = html;
-  });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (searchModal) {
+      searchModal.addEventListener('click', (e) => {
+        if (e.target === searchModal) closeModal();
+      });
+    }
+
+    if (modalInput && modalResults) {
+      modalInput.addEventListener('input', (e) => {
+        const q = e.target.value.trim();
+        if (modalClear) modalClear.style.display = q ? 'block' : 'none';
+        if (q.length < 1) {
+          modalResults.innerHTML = `
+            <div class="text-center py-4 px-3">
+              <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+              <p class="text-muted small mb-0">Search jerseys, 7v7, rashguards, or compression wear...</p>
+            </div>
+          `;
+          return;
+        }
+        const matches = filterItems(q);
+        modalResults.innerHTML = renderResultsHtml(matches, q);
+      });
+
+      modalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = modalInput.value.trim();
+          if (q) window.location.href = `${cataloguePage}?search=${encodeURIComponent(q)}`;
+        } else if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+
+      if (modalClear) {
+        modalClear.addEventListener('click', () => {
+          modalInput.value = '';
+          modalClear.style.display = 'none';
+          modalInput.focus();
+          modalResults.innerHTML = `
+            <div class="text-center py-4 px-3">
+              <i class="bi bi-search fs-2 text-muted mb-2 d-block"></i>
+              <p class="text-muted small mb-0">Search jerseys, 7v7, rashguards, or compression wear...</p>
+            </div>
+          `;
+        });
+      }
+    }
+
+    quickTags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        const q = tag.dataset.query || tag.textContent.trim();
+        if (modalInput) {
+          modalInput.value = q;
+          if (modalClear) modalClear.style.display = 'block';
+          const matches = filterItems(q);
+          if (modalResults) modalResults.innerHTML = renderResultsHtml(matches, q);
+        }
+      });
+    });
+
+    // 3. Mobile Nav Drawer Search Input (if present)
+    const drawerSearchInput = document.querySelector('.drawer-search-input');
+    if (drawerSearchInput) {
+      drawerSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = drawerSearchInput.value.trim();
+          if (q) window.location.href = `${cataloguePage}?search=${encodeURIComponent(q)}`;
+        }
+      });
+      drawerSearchInput.addEventListener('focus', () => {
+        const q = drawerSearchInput.value.trim();
+        openModal(q);
+      });
+    }
+  }
+
+  initSearchSystem();
 
   // ==========================================
   // Dynamic Storefront Categories Engine

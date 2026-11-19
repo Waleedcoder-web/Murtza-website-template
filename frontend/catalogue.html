@@ -683,6 +683,16 @@
         filtered = filtered.filter(p => (p.sport || '').toLowerCase().includes(selectedSport.toLowerCase()));
       }
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchParam = (urlParams.get('search') || '').toLowerCase().trim();
+      if (searchParam) {
+        const terms = searchParam.split(/\s+/).filter(Boolean);
+        filtered = filtered.filter(p => {
+          const combined = `${p.name || ''} ${p.sport || ''} ${p.category || ''} ${p.sku || ''} ${p.description || ''}`.toLowerCase();
+          return terms.every(t => combined.includes(t));
+        });
+      }
+
       if (sortVal === 'Newest Arrivals') {
         filtered.sort((a, b) => b.id - a.id);
       }
