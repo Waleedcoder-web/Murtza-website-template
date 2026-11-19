@@ -110,10 +110,10 @@ html, body {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    height: 22px !important;
-    max-height: 24px !important;
+    height: 30px !important;
+    max-height: 32px !important;
     width: auto !important;
-    max-width: 140px !important;
+    max-width: 165px !important;
     object-fit: contain !important;
     pointer-events: auto !important;
   }

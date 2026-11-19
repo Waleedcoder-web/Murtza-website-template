@@ -456,9 +456,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
+    const getAutoScrollDelay = () => {
+      // 4 seconds on mobile (<= 768px), 2.5 seconds on desktop
+      return window.innerWidth <= 768 ? 4000 : 2500;
+    };
+
     const startAutoScroll = () => {
       if (!autoScrollInterval) {
-        autoScrollInterval = setInterval(doAutoScroll, 2000);
+        autoScrollInterval = setInterval(doAutoScroll, getAutoScrollDelay());
       }
     };
 
@@ -473,6 +478,10 @@ document.addEventListener('DOMContentLoaded', () => {
       stopAutoScroll();
       startAutoScroll();
     };
+
+    window.addEventListener('resize', () => {
+      resetAutoScroll();
+    });
 
     startAutoScroll();
 
@@ -1050,8 +1059,8 @@ document.addEventListener('DOMContentLoaded', () => {
       iconImg.className = 'logo-mobile-icon';
 
       const textImg = document.createElement('img');
-      textImg.src = prefix + 'assets/images/logo-text-word-only.png';
-      textImg.alt = 'SNOWTOP';
+      textImg.src = prefix + 'assets/images/logo-text-black.png';
+      textImg.alt = 'SNOWTOP SPORTS';
       textImg.className = 'logo-mobile-text';
 
       brandLogo.appendChild(iconImg);
