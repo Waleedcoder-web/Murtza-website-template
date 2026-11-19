@@ -722,4 +722,88 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   loadStorefrontCategories();
+
+  // ==========================================
+  // Mobile 1-Per-Frame Sliders (Reels, Reviews, Stories)
+  // ==========================================
+  function initMobileSliders() {
+    const sliderConfigs = [
+      { gridId: 'reelsGrid', dotsId: 'reelsSliderDots' },
+      { gridId: 'testimonialsGrid', dotsId: 'reviewsSliderDots' },
+      { gridId: 'storiesGrid', dotsId: 'storiesSliderDots' }
+    ];
+
+    sliderConfigs.forEach(cfg => {
+      const grid = document.getElementById(cfg.gridId);
+      if (!grid) return;
+
+      const dotsContainer = document.getElementById(cfg.dotsId);
+      const dots = dotsContainer ? dotsContainer.querySelectorAll('.dot') : [];
+      const prevBtns = document.querySelectorAll(`[data-slider-target="${cfg.gridId}"].prev`);
+      const nextBtns = document.querySelectorAll(`[data-slider-target="${cfg.gridId}"].next`);
+
+      function updateActiveDot() {
+        const width = grid.clientWidth || 1;
+        const activeIdx = Math.round(grid.scrollLeft / width);
+        dots.forEach((dot, idx) => {
+          if (idx === activeIdx) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      function scrollToIndex(idx) {
+        const count = grid.children.length;
+        if (!count) return;
+        const safeIdx = Math.max(0, Math.min(idx, count - 1));
+        const targetX = safeIdx * grid.clientWidth;
+        grid.scrollTo({ left: targetX, behavior: 'smooth' });
+      }
+
+      function stepSlide(dir) {
+        const count = grid.children.length;
+        if (!count) return;
+        const width = grid.clientWidth || 1;
+        const curIdx = Math.round(grid.scrollLeft / width);
+        let nextIdx = curIdx + dir;
+        if (nextIdx >= count) nextIdx = 0;
+        else if (nextIdx < 0) nextIdx = count - 1;
+        scrollToIndex(nextIdx);
+      }
+
+      prevBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          stepSlide(-1);
+        });
+      });
+
+      nextBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          stepSlide(1);
+        });
+      });
+
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          scrollToIndex(idx);
+        });
+      });
+
+      let scrollDebounce;
+      grid.addEventListener('scroll', () => {
+        clearTimeout(scrollDebounce);
+        scrollDebounce = setTimeout(updateActiveDot, 50);
+      }, { passive: true });
+    });
+  }
+
+  initMobileSliders();
 });

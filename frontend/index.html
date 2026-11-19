@@ -558,19 +558,28 @@
   <section class="video-reels-section">
     <div class="full-container">
       <span class="section-ribbon">FEATURED REELS</span>
-      <div class="reels-grid">
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1f2937 0%, #0b0f17 100%);">
-          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
-          <div class="reel-caption">7v7 Championship Uniform Highlights</div>
+      <div class="mobile-slider-wrapper">
+        <button type="button" class="mobile-slider-arrow prev" data-slider-target="reelsGrid" aria-label="Previous Video"><i class="bi bi-chevron-left"></i></button>
+        <div class="reels-grid" id="reelsGrid">
+          <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1f2937 0%, #0b0f17 100%);">
+            <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+            <div class="reel-caption">7v7 Championship Uniform Highlights</div>
+          </div>
+          <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e293b 0%, #0b0f17 100%);">
+            <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+            <div class="reel-caption">Sublimation Printing & Factory Craftsmanship</div>
+          </div>
+          <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e1e2f 0%, #0b0f17 100%);">
+            <div class="play-badge"><i class="bi bi-play-fill"></i></div>
+            <div class="reel-caption">Game Day Athlete Fits & Reactions</div>
+          </div>
         </div>
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e293b 0%, #0b0f17 100%);">
-          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
-          <div class="reel-caption">Sublimation Printing & Factory Craftsmanship</div>
-        </div>
-        <div class="reel-card" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4" style="background: radial-gradient(circle at 50% 35%, #1e1e2f 0%, #0b0f17 100%);">
-          <div class="play-badge"><i class="bi bi-play-fill"></i></div>
-          <div class="reel-caption">Game Day Athlete Fits & Reactions</div>
-        </div>
+        <button type="button" class="mobile-slider-arrow next" data-slider-target="reelsGrid" aria-label="Next Video"><i class="bi bi-chevron-right"></i></button>
+      </div>
+      <div class="mobile-slider-dots" id="reelsSliderDots" data-slider-target="reelsGrid">
+        <button type="button" class="dot active" data-index="0" aria-label="Reel 1"></button>
+        <button type="button" class="dot" data-index="1" aria-label="Reel 2"></button>
+        <button type="button" class="dot" data-index="2" aria-label="Reel 3"></button>
       </div>
     </div>
   </section>
@@ -591,48 +600,57 @@
   <section class="testimonials-section">
     <div class="full-container">
       <span class="section-ribbon">TRUSTED REVIEWS</span>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="stars-rating">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <p class="testimonial-text">"The jersey quality completely exceeded our expectations! The custom logos came out super crisp and the turnaround was faster than any supplier we used before."</p>
-          <div class="author-meta">
-            <div class="author-avatar">MC</div>
-            <div class="author-info">
-              <h5>Marcus Clark</h5>
-              <span>Head Coach, Texas Knights</span>
+      <div class="mobile-slider-wrapper">
+        <button type="button" class="mobile-slider-arrow prev" data-slider-target="testimonialsGrid" aria-label="Previous Review"><i class="bi bi-chevron-left"></i></button>
+        <div class="testimonials-grid" id="testimonialsGrid">
+          <div class="testimonial-card">
+            <div class="stars-rating">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testimonial-text">"The jersey quality completely exceeded our expectations! The custom logos came out super crisp and the turnaround was faster than any supplier we used before."</p>
+            <div class="author-meta">
+              <div class="author-avatar">MC</div>
+              <div class="author-info">
+                <h5>Marcus Clark</h5>
+                <span>Head Coach, Texas Knights</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="testimonial-card">
-          <div class="stars-rating">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <p class="testimonial-text">"Snowtop Sports handled our 45-player travel team roster without a single sizing mistake. The kids felt like professionals walking out onto the field."</p>
-          <div class="author-meta">
-            <div class="author-avatar">DR</div>
-            <div class="author-info">
-              <h5>David Ramirez</h5>
-              <span>Athletic Director, West Coast Elite</span>
+          <div class="testimonial-card">
+            <div class="stars-rating">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testimonial-text">"Snowtop Sports handled our 45-player travel team roster without a single sizing mistake. The kids felt like professionals walking out onto the field."</p>
+            <div class="author-meta">
+              <div class="author-avatar">DR</div>
+              <div class="author-info">
+                <h5>David Ramirez</h5>
+                <span>Athletic Director, West Coast Elite</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="testimonial-card">
-          <div class="stars-rating">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <p class="testimonial-text">"Customer support helped us fine-tune our vector graphics within 2 hours. Seamless communication and unbeatable bulk pricing."</p>
-          <div class="author-meta">
-            <div class="author-avatar">SJ</div>
-            <div class="author-info">
-              <h5>Sarah Jenkins</h5>
-              <span>Team Coordinator, Velocity 7v7</span>
+          <div class="testimonial-card">
+            <div class="stars-rating">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="testimonial-text">"Customer support helped us fine-tune our vector graphics within 2 hours. Seamless communication and unbeatable bulk pricing."</p>
+            <div class="author-meta">
+              <div class="author-avatar">SJ</div>
+              <div class="author-info">
+                <h5>Sarah Jenkins</h5>
+                <span>Team Coordinator, Velocity 7v7</span>
+              </div>
             </div>
           </div>
         </div>
+        <button type="button" class="mobile-slider-arrow next" data-slider-target="testimonialsGrid" aria-label="Next Review"><i class="bi bi-chevron-right"></i></button>
+      </div>
+      <div class="mobile-slider-dots" id="reviewsSliderDots" data-slider-target="testimonialsGrid">
+        <button type="button" class="dot active" data-index="0" aria-label="Review 1"></button>
+        <button type="button" class="dot" data-index="1" aria-label="Review 2"></button>
+        <button type="button" class="dot" data-index="2" aria-label="Review 3"></button>
       </div>
     </div>
   </section>
@@ -641,30 +659,38 @@
   <section class="stories-section">
     <div class="full-container">
       <span class="section-ribbon">OUR STORIES</span>
-      <div class="stories-grid">
-        <div class="story-card">
-          <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 200px;">
-            <i class="bi bi-palette text-light fs-1 opacity-75"></i>
+      <div class="mobile-slider-wrapper">
+        <button type="button" class="mobile-slider-arrow prev" data-slider-target="storiesGrid" aria-label="Previous Story"><i class="bi bi-chevron-left"></i></button>
+        <div class="stories-grid" id="storiesGrid">
+          <div class="story-card">
+            <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 200px;">
+              <i class="bi bi-palette text-light fs-1 opacity-75"></i>
+            </div>
+            <div class="story-content-col">
+              <div class="story-date">OCTOBER 15, 2026 • 0 COMMENTS</div>
+              <h3 class="story-title">How To Design The Ultimate 7v7 Uniform For Your Team</h3>
+              <p class="story-desc">Tips on color contrast, typography choices, and moisture-wicking technology to keep athletes fast and cool.</p>
+              <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
+            </div>
           </div>
-          <div class="story-content-col">
-            <div class="story-date">OCTOBER 15, 2026 • 0 COMMENTS</div>
-            <h3 class="story-title">How To Design The Ultimate 7v7 Uniform For Your Team</h3>
-            <p class="story-desc">Tips on color contrast, typography choices, and moisture-wicking technology to keep athletes fast and cool.</p>
-            <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
-          </div>
-        </div>
 
-        <div class="story-card">
-          <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e1e2f 0%, #0b0f17 100%); min-height: 200px;">
-            <i class="bi bi-printer text-light fs-1 opacity-75"></i>
-          </div>
-          <div class="story-content-col">
-            <div class="story-date">NOVEMBER 02, 2026 • 0 COMMENTS</div>
-            <h3 class="story-title">Sublimation vs Screen Print: Why Sublimation Wins</h3>
-            <p class="story-desc">Discover how sublimation embeds ink straight into the fabric fibers for lifetime durability and lightweight feel.</p>
-            <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
+          <div class="story-card">
+            <div class="story-img-col d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e1e2f 0%, #0b0f17 100%); min-height: 200px;">
+              <i class="bi bi-printer text-light fs-1 opacity-75"></i>
+            </div>
+            <div class="story-content-col">
+              <div class="story-date">NOVEMBER 02, 2026 • 0 COMMENTS</div>
+              <h3 class="story-title">Sublimation vs Screen Print: Why Sublimation Wins</h3>
+              <p class="story-desc">Discover how sublimation embeds ink straight into the fabric fibers for lifetime durability and lightweight feel.</p>
+              <a href="catalogue.html" class="story-link">Read Story &rarr;</a>
+            </div>
           </div>
         </div>
+        <button type="button" class="mobile-slider-arrow next" data-slider-target="storiesGrid" aria-label="Next Story"><i class="bi bi-chevron-right"></i></button>
+      </div>
+      <div class="mobile-slider-dots" id="storiesSliderDots" data-slider-target="storiesGrid">
+        <button type="button" class="dot active" data-index="0" aria-label="Story 1"></button>
+        <button type="button" class="dot" data-index="1" aria-label="Story 2"></button>
       </div>
     </div>
   </section>

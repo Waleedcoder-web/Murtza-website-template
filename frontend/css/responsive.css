@@ -8,6 +8,16 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Base Mobile Slider wrapper (desktop default: hide arrows & dots) */
+.mobile-slider-wrapper {
+  position: relative;
+  width: 100%;
+}
+.mobile-slider-arrow,
+.mobile-slider-dots {
+  display: none !important;
+}
+
 @media (max-width: 1200px) {
   .hero-title {
     font-size: 4.2rem;
@@ -48,12 +58,7 @@ html, body {
   .hero-athlete-wrap {
     display: none;
   }
-  .benefits-grid,
-  .reels-grid,
-  .testimonials-grid {
-    grid-template-columns: 1fr;
-  }
-  .stories-grid {
+  .benefits-grid {
     grid-template-columns: 1fr;
   }
   .footer-grid {
@@ -359,6 +364,146 @@ html, body {
     width: 46px;
     height: 46px;
     font-size: 1.3rem;
+  }
+
+  /* ----------------------------------------------------
+     MOBILE 1-PER-FRAME SLIDERS: Videos, Reviews & Stories
+     Horizontal 1-in-row scroll-snap with < and > controls
+     ---------------------------------------------------- */
+  .mobile-slider-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .reels-grid,
+  .testimonials-grid,
+  .stories-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    gap: 0 !important;
+    padding: 4px 0 6px 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .reels-grid::-webkit-scrollbar,
+  .testimonials-grid::-webkit-scrollbar,
+  .stories-grid::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .reels-grid .reel-card,
+  .testimonials-grid .testimonial-card,
+  .stories-grid .story-card {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    scroll-snap-align: center !important;
+    scroll-snap-stop: always !important;
+  }
+
+  .reels-grid .reel-card {
+    height: 380px !important;
+    margin: 0 !important;
+  }
+
+  .testimonials-grid .testimonial-card {
+    margin: 0 !important;
+    padding: 24px 20px !important;
+    min-height: 240px !important;
+  }
+
+  .stories-grid .story-card {
+    margin: 0 !important;
+    flex-direction: column !important;
+  }
+
+  /* Mobile < and > Navigation Arrows */
+  .mobile-slider-arrow {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    background: rgba(15, 23, 42, 0.88) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    font-size: 1.15rem !important;
+    z-index: 25 !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    outline: none !important;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease !important;
+  }
+
+  .mobile-slider-arrow.prev {
+    left: 8px !important;
+  }
+
+  .mobile-slider-arrow.next {
+    right: 8px !important;
+  }
+
+  .mobile-slider-arrow:active {
+    transform: translateY(-50%) scale(0.9) !important;
+    background: #000000 !important;
+    color: #39ff14 !important;
+    border-color: #39ff14 !important;
+  }
+
+  /* Light section overrides for contrast */
+  .testimonials-section .mobile-slider-arrow {
+    background: rgba(0, 0, 0, 0.85) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  /* Mobile Slider Dots Indicator */
+  .mobile-slider-dots {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 14px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .mobile-slider-dots .dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #adb5bd !important;
+    border: none !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .mobile-slider-dots .dot.active {
+    width: 24px !important;
+    border-radius: 12px !important;
+    background: #000000 !important;
   }
 }
 
