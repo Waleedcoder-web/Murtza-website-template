@@ -75,6 +75,9 @@
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
+        document.querySelectorAll('.admin-username-pill').forEach(el => {
+          el.textContent = user.username || (user.email ? user.email.split('@')[0] : 'Admin');
+        });
         document.querySelectorAll('.admin-user-display').forEach(el => {
           el.textContent = user.email || user.username || 'murtza@gmail.com';
         });
