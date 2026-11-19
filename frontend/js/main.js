@@ -806,4 +806,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initMobileSliders();
+
+  // ==========================================
+  // Mobile Header: S Icon Left, Snowtop Text Center
+  // ==========================================
+  function setupMobileHeaderLogo() {
+    const brandLogo = document.querySelector('.brand-logo');
+    if (!brandLogo) return;
+
+    if (!brandLogo.querySelector('.logo-mobile-icon')) {
+      const isUserDir = window.location.pathname.includes('/user/');
+      const prefix = isUserDir ? '../' : '';
+
+      const desktopImg = brandLogo.querySelector('img');
+      if (desktopImg) desktopImg.classList.add('logo-desktop-img');
+
+      const iconImg = document.createElement('img');
+      iconImg.src = prefix + 'assets/images/logo-icon-s.png';
+      iconImg.alt = 'Snowtop Sports Icon';
+      iconImg.className = 'logo-mobile-icon';
+
+      const textImg = document.createElement('img');
+      textImg.src = prefix + 'assets/images/logo-text-black.png';
+      textImg.alt = 'Snowtop Sports';
+      textImg.className = 'logo-mobile-text';
+
+      brandLogo.appendChild(iconImg);
+      brandLogo.appendChild(textImg);
+    }
+  }
+
+  setupMobileHeaderLogo();
 });
