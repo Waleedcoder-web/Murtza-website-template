@@ -17,10 +17,7 @@ if (connectionString) {
   });
 }
 
-// Clean in-memory fallback store with local JSON disk persistence
-const DATA_DIR = path.join(__dirname, '../../data');
-const STORE_FILE = path.join(DATA_DIR, 'store.json');
-
+// Database Fallback Store (used when Neon is connecting or during build)
 const fallbackStore = {
   products: [
     { id: 1, sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-1.jpg', type: 'model', description: 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', is_active: true },
@@ -61,9 +58,7 @@ const fallbackStore = {
     { id: 9, name: 'Track & Field', slug: 'track', image: '/assets/images/sport-track.png', description: 'Ultra-lightweight speed singlets, split shorts & running tights', is_active: true },
     { id: 10, name: 'Volleyball', slug: 'volleyball', image: '/assets/images/sport-volleyball.png', description: 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', is_active: true },
     { id: 11, name: 'Wrestling', slug: 'wrestling', image: '/assets/images/sport-wrestling.png', description: 'Custom sublimated wrestling singlets, compression tops & fight shorts', is_active: true },
-    { id: 12, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true },
-    { id: 13, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/sport-basketball.png', description: 'Top performing and most ordered uniform sets', is_active: true },
-    { id: 14, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/sport-soccer.png', description: 'Latest season releases and modern cuts', is_active: true }
+    { id: 12, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true }
   ],
   hero_slides: [],
   special_offers: {
@@ -79,46 +74,6 @@ const fallbackStore = {
   featured_banners: [],
   deal_cards: []
 };
-
-// Persistence functions
-function saveFallbackStore() {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    fs.writeFileSync(STORE_FILE, JSON.stringify(fallbackStore, null, 2), 'utf-8');
-  } catch (err) {
-    console.error('Failed to save store to disk:', err.message);
-  }
-}
-
-function loadFallbackStore() {
-  try {
-    if (fs.existsSync(STORE_FILE)) {
-      const raw = fs.readFileSync(STORE_FILE, 'utf-8');
-      const data = JSON.parse(raw);
-      if (data && typeof data === 'object') {
-        if (Array.isArray(data.categories)) fallbackStore.categories = data.categories;
-        if (Array.isArray(data.products)) fallbackStore.products = data.products;
-        if (Array.isArray(data.inquiries)) fallbackStore.inquiries = data.inquiries;
-        if (Array.isArray(data.orders)) fallbackStore.orders = data.orders;
-        if (Array.isArray(data.hero_slides)) fallbackStore.hero_slides = data.hero_slides;
-        if (data.special_offers) fallbackStore.special_offers = data.special_offers;
-        if (Array.isArray(data.featured_banners)) fallbackStore.featured_banners = data.featured_banners;
-        if (Array.isArray(data.deal_cards)) fallbackStore.deal_cards = data.deal_cards;
-        return true;
-      }
-    }
-  } catch (err) {
-    console.error('Failed to load store from disk:', err.message);
-  }
-  return false;
-}
-
-// Load existing persisted store or save defaults
-if (!loadFallbackStore()) {
-  saveFallbackStore();
-}
 
 const SCHEMA_SQL = `
 -- 1. Categories Table
@@ -241,59 +196,65 @@ CREATE INDEX IF NOT EXISTS idx_categories_name ON categories(name);
 CREATE INDEX IF NOT EXISTS idx_deal_cards_order ON storefront_deal_cards(card_order);
 CREATE INDEX IF NOT EXISTS idx_hero_order ON storefront_hero(slide_order);
 
--- Initial Base Records (Safe on conflict)
+-- Initial Base Records (Seed only once if empty)
 INSERT INTO storefront_offers (id, heading, subheading, featured_title, featured_desc, featured_btn_text, featured_btn_link, featured_image)
 VALUES (1, 'SEASON SPECIAL OFFERS', 'Save up to 40% on select bulk team packages and seasonal uniform designs', '', '', 'GET PACKAGE QUOTE', 'placeorder.html', '')
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO categories (name, slug, description, image)
-VALUES 
-  ('7v7 Football', '7v7', 'Non-padded 7v7 tournament uniforms & practice compression gear', '/assets/images/sport-7v7.png'),
-  ('American Football', 'american-football', 'Tackle & flag American football jerseys, pants & practice uniforms', '/assets/images/sport-american-football.png'),
-  ('Basketball', 'basketball', 'Championship basketball jerseys, reversible kits & speed-mesh shorts', '/assets/images/sport-basketball.png'),
-  ('Baseball', 'baseball', 'Custom button-down & two-button sublimated baseball jerseys', '/assets/images/sport-baseball.png'),
-  ('Cheer', 'cheer', 'Cheerleading performance tops, skirts, warm-ups & sideline wear', '/assets/images/sport-cheer.png'),
-  ('Ice Hockey', 'hockey', 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', '/assets/images/sport-hockey.png'),
-  ('Lacrosse', 'lacrosse', 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', '/assets/images/sport-lacrosse.png'),
-  ('Soccer', 'soccer', 'Sublimated match soccer kits, goalie kits & training tops', '/assets/images/sport-soccer.png'),
-  ('Track & Field', 'track', 'Ultra-lightweight speed singlets, split shorts & running tights', '/assets/images/sport-track.png'),
-  ('Volleyball', 'volleyball', 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', '/assets/images/sport-volleyball.png'),
-  ('Wrestling', 'wrestling', 'Custom sublimated wrestling singlets, compression tops & fight shorts', '/assets/images/sport-wrestling.png'),
-  ('Compression Wear', 'compression-wear', 'High-flex compression shirts, rashguards & base layers', '/assets/images/sport-7v7.png'),
-  ('Best Sellers', 'best-sellers', 'Top performing and most ordered uniform sets', '/assets/images/sport-basketball.png'),
-  ('New Arrivals', 'new-arrivals', 'Latest season releases and modern cuts', '/assets/images/sport-soccer.png')
-ON CONFLICT (name) DO UPDATE SET 
-  image = EXCLUDED.image,
-  description = EXCLUDED.description,
-  slug = EXCLUDED.slug;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM categories LIMIT 1) THEN
+    INSERT INTO categories (name, slug, description, image) VALUES 
+      ('7v7 Football', '7v7', 'Non-padded 7v7 tournament uniforms & practice compression gear', '/assets/images/sport-7v7.png'),
+      ('American Football', 'american-football', 'Tackle & flag American football jerseys, pants & practice uniforms', '/assets/images/sport-american-football.png'),
+      ('Basketball', 'basketball', 'Championship basketball jerseys, reversible kits & speed-mesh shorts', '/assets/images/sport-basketball.png'),
+      ('Baseball', 'baseball', 'Custom button-down & two-button sublimated baseball jerseys', '/assets/images/sport-baseball.png'),
+      ('Cheer', 'cheer', 'Cheerleading performance tops, skirts, warm-ups & sideline wear', '/assets/images/sport-cheer.png'),
+      ('Ice Hockey', 'hockey', 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', '/assets/images/sport-hockey.png'),
+      ('Lacrosse', 'lacrosse', 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', '/assets/images/sport-lacrosse.png'),
+      ('Soccer', 'soccer', 'Sublimated match soccer kits, goalie kits & training tops', '/assets/images/sport-soccer.png'),
+      ('Track & Field', 'track', 'Ultra-lightweight speed singlets, split shorts & running tights', '/assets/images/sport-track.png'),
+      ('Volleyball', 'volleyball', 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', '/assets/images/sport-volleyball.png'),
+      ('Wrestling', 'wrestling', 'Custom sublimated wrestling singlets, compression tops & fight shorts', '/assets/images/sport-wrestling.png'),
+      ('Compression Wear', 'compression-wear', 'High-flex compression shirts, rashguards & base layers', '/assets/images/sport-7v7.png'),
+      ('Best Sellers', 'best-sellers', 'Top performing and most ordered uniform sets', '/assets/images/sport-basketball.png'),
+      ('New Arrivals', 'new-arrivals', 'Latest season releases and modern cuts', '/assets/images/sport-soccer.png');
+  END IF;
+END $$;
+
+-- Shift existing products off collection tags to their true sports so deleting the category won't wipe them out
+UPDATE products SET category = sport WHERE category IN ('Best Sellers', 'New Arrivals');
 
 INSERT INTO admin_users (username, email, password_hash, role)
 VALUES ('murtza', 'murtza@gmail.com', 'c256808d6a23e034b0f70dba55e16e5e:e3b6a7b46bc948f662720f8adbef6a7de6e30013691f2e1ff7a23f900a1a2f6a53651d6b7314dcbb3f0d2787f791f7ab9d0df5e968669e0d2f6f32b1a1726aaa', 'superadmin')
 ON CONFLICT (username) DO UPDATE SET email = EXCLUDED.email, password_hash = EXCLUDED.password_hash;
 
-INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
-VALUES 
-  ('Stealth Blackout Carbon Rashguard', 'RG-001', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-1.jpg', 'model', 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', true, true),
-  ('Royal Cyan & Navy Compression Top', 'RG-002', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-2.jpg', 'model', 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.', true, true),
-  ('Crimson Velocity Armor Rashguard', 'RG-003', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-3.jpg', 'model', 'Charcoal base with geometric crimson shoulder panels and reinforced seams.', true, true),
-  ('Volt Yellow Sprint Rashguard', 'RG-004', 120.00, 'Training', 'New Arrivals', '/assets/images/products/rashguard-4.jpg', 'model', 'High-visibility neon volt yellow accents with multi-directional stretch.', true, true),
-  ('Glacier White & Deep Navy Top', 'RG-005', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-5.jpg', 'model', 'Frost white torso with deep navy sleeves and ice-blue contour stitch.', true, true),
-  ('Hyper Sunset Orange Rashguard', 'RG-006', 120.00, '7v7 Football', 'New Arrivals', '/assets/images/products/rashguard-6.jpg', 'model', 'Vibrant sunset orange with gunmetal velocity side panels.', true, true),
-  ('Emerald Matrix Honeycomb Top', 'RG-007', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-7.jpg', 'model', 'Anthracite base with vibrant emerald green honeycomb matrix pattern.', true, true),
-  ('Regal Purple Tournament Rashguard', 'RG-008', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-8.jpg', 'model', 'Deep royal purple with metallic silver tournament contrast lines.', true, true),
-  ('Desert Sand Tactical Camo Rashguard', 'RG-009', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-9.jpg', 'model', 'Sublimated tactical urban camo with reinforced elbow contours.', true, true),
-  ('Oceanic Teal & Mint Base Layer', 'RG-010', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-10.jpg', 'model', 'Dark teal with mint green gradient transitions and antimicrobial fabric.', true, true),
-  ('Solar Gold & Black Striker Top', 'RG-011', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-11.jpg', 'model', 'Jet black with high-voltage solar gold sleeves and ergonomic panels.', true, true),
-  ('Bloodline Maroon Armor Rashguard', 'RG-012', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-12.jpg', 'model', 'Matte black with bloodline maroon panels and red flatlock stitching.', true, true),
-  ('Titanium Silver & Acid Lime Top', 'RG-013', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-13.jpg', 'model', 'Titanium grey body with acid lime geometric speed ribbing.', true, true),
-  ('Cobalt Blue Cross-Trainer Rashguard', 'RG-014', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-14.jpg', 'model', 'Cobalt blue with crisp white athletic raglan sleeve contours.', true, true),
-  ('Shadow Charcoal & Red Speed Top', 'RG-015', 120.00, '7v7 Football', 'Best Sellers', '/assets/images/products/rashguard-15.jpg', 'model', 'Dark charcoal with crimson speed streaks and ventilation mesh panels.', true, true),
-  ('Vortex Violet Performance Rashguard', 'RG-016', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-16.jpg', 'model', 'Vortex violet with radiant coral gradient accents.', true, true),
-  ('Military Green Camo Tactical Top', 'RG-017', 120.00, 'Training', 'Best Sellers', '/assets/images/products/rashguard-17.jpg', 'model', 'Obsidian black with military green camo sleeves and rugged flatlock seams.', true, true),
-  ('Electric Cyan & Magenta Duo Rashguard', 'RG-018', 120.00, '7v7 Football', 'New Arrivals', '/assets/images/products/rashguard-18.jpg', 'model', 'High-energy cyan and magenta contrast tournament compression wear.', true, true),
-  ('Pitch Black & Gold Foil Rashguard', 'RG-019', 120.00, 'Compression Wear', 'Best Sellers', '/assets/images/products/rashguard-19.jpg', 'model', 'Championship gold foil geometric lines on premium ultra-stretch black spandex.', true, true),
-  ('Pure Frost Minimalist Base Layer', 'RG-020', 120.00, 'Compression Wear', 'New Arrivals', '/assets/images/products/rashguard-20.jpg', 'model', 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', true, true)
-ON CONFLICT (sku) DO NOTHING;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM products LIMIT 1) THEN
+    INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active) VALUES 
+      ('Stealth Blackout Carbon Rashguard', 'RG-001', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-1.jpg', 'model', 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', true, true),
+      ('Royal Cyan & Navy Compression Top', 'RG-002', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-2.jpg', 'model', 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.', true, true),
+      ('Crimson Velocity Armor Rashguard', 'RG-003', 120.00, '7v7 Football', '7v7 Football', '/assets/images/products/rashguard-3.jpg', 'model', 'Charcoal base with geometric crimson shoulder panels and reinforced seams.', true, true),
+      ('Volt Yellow Sprint Rashguard', 'RG-004', 120.00, 'American Football', 'American Football', '/assets/images/products/rashguard-4.jpg', 'model', 'High-visibility neon volt yellow accents with multi-directional stretch.', true, true),
+      ('Glacier White & Deep Navy Top', 'RG-005', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-5.jpg', 'model', 'Frost white torso with deep navy sleeves and ice-blue contour stitch.', true, true),
+      ('Hyper Sunset Orange Rashguard', 'RG-006', 120.00, '7v7 Football', '7v7 Football', '/assets/images/products/rashguard-6.jpg', 'model', 'Vibrant sunset orange with gunmetal velocity side panels.', true, true),
+      ('Emerald Matrix Honeycomb Top', 'RG-007', 120.00, 'American Football', 'American Football', '/assets/images/products/rashguard-7.jpg', 'model', 'Anthracite base with vibrant emerald green honeycomb matrix pattern.', true, true),
+      ('Regal Purple Tournament Rashguard', 'RG-008', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-8.jpg', 'model', 'Deep royal purple with metallic silver tournament contrast lines.', true, true),
+      ('Desert Sand Tactical Camo Rashguard', 'RG-009', 120.00, 'Basketball', 'Basketball', '/assets/images/products/rashguard-9.jpg', 'model', 'Sublimated tactical urban camo with reinforced elbow contours.', true, true),
+      ('Oceanic Teal & Mint Base Layer', 'RG-010', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-10.jpg', 'model', 'Dark teal with mint green gradient transitions and antimicrobial fabric.', true, true),
+      ('Solar Gold & Black Striker Top', 'RG-011', 120.00, '7v7 Football', '7v7 Football', '/assets/images/products/rashguard-11.jpg', 'model', 'Jet black with high-voltage solar gold sleeves and ergonomic panels.', true, true),
+      ('Bloodline Maroon Armor Rashguard', 'RG-012', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-12.jpg', 'model', 'Matte black with bloodline maroon panels and red flatlock stitching.', true, true),
+      ('Titanium Silver & Acid Lime Top', 'RG-013', 120.00, 'Basketball', 'Basketball', '/assets/images/products/rashguard-13.jpg', 'model', 'Titanium grey body with acid lime geometric speed ribbing.', true, true),
+      ('Cobalt Blue Cross-Trainer Rashguard', 'RG-014', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-14.jpg', 'model', 'Cobalt blue with crisp white athletic raglan sleeve contours.', true, true),
+      ('Shadow Charcoal & Red Speed Top', 'RG-015', 120.00, '7v7 Football', '7v7 Football', '/assets/images/products/rashguard-15.jpg', 'model', 'Dark charcoal with crimson speed streaks and ventilation mesh panels.', true, true),
+      ('Vortex Violet Performance Rashguard', 'RG-016', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-16.jpg', 'model', 'Vortex violet with radiant coral gradient accents.', true, true),
+      ('Military Green Camo Tactical Top', 'RG-017', 120.00, 'Basketball', 'Basketball', '/assets/images/products/rashguard-17.jpg', 'model', 'Obsidian black with military green camo sleeves and rugged flatlock seams.', true, true),
+      ('Electric Cyan & Magenta Duo Rashguard', 'RG-018', 120.00, '7v7 Football', '7v7 Football', '/assets/images/products/rashguard-18.jpg', 'model', 'High-energy cyan and magenta contrast tournament compression wear.', true, true),
+      ('Pitch Black & Gold Foil Rashguard', 'RG-019', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-19.jpg', 'model', 'Championship gold foil geometric lines on premium ultra-stretch black spandex.', true, true),
+      ('Pure Frost Minimalist Base Layer', 'RG-020', 120.00, 'Compression Wear', 'Compression Wear', '/assets/images/products/rashguard-20.jpg', 'model', 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', true, true);
+  END IF;
+END $$;
 `;
 
 let isConnected = false;
@@ -349,8 +310,6 @@ module.exports = {
   initDB,
   query,
   fallbackStore,
-  saveFallbackStore,
-  loadFallbackStore,
   getIsConnected: () => isConnected,
   getLastError: () => lastConnectionError,
   SCHEMA_SQL

@@ -15,23 +15,23 @@ function generateSlug(text) {
     .replace(/-+$/, '');
 }
 
-// GET all categories
+// GET all categories (Direct Neon PostgreSQL query with fallback)
 router.get('/', async (req, res) => {
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query(
-        `SELECT c.*, 
-          COALESCE(p_count.total_products, 0)::int as product_count
-         FROM categories c
-         LEFT JOIN (
-           SELECT category, COUNT(*) as total_products 
-           FROM products 
-           WHERE is_active = true 
-           GROUP BY category
-         ) p_count ON LOWER(c.name) = LOWER(p_count.category)
-         WHERE c.is_active = true
-         ORDER BY c.id ASC`
-      );
+    const result = await db.query(
+      `SELECT c.*, 
+        COALESCE(p_count.total_products, 0)::int as product_count
+       FROM categories c
+       LEFT JOIN (
+         SELECT category, COUNT(*) as total_products 
+         FROM products 
+         WHERE is_active = true 
+         GROUP BY category
+       ) p_count ON LOWER(c.name) = LOWER(p_count.category)
+       WHERE c.is_active = true
+       ORDER BY c.id ASC`
+    );
+    if (result && result.rows) {
       return res.json(result.rows);
     }
   } catch (err) {
@@ -59,9 +59,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
-      if (result.rows.length > 0) return res.json(result.rows[0]);
+    const result = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+    if (result && result.rows && result.rows.length > 0) {
+      return res.json(result.rows[0]);
     }
   } catch (err) {
     console.error('Error fetching category by ID:', err);
@@ -82,20 +82,20 @@ router.post('/', async (req, res) => {
   const cleanName = name.trim();
   const slug = generateSlug(cleanName) || `cat-${Date.now()}`;
   const cleanDesc = description ? description.trim() : '';
-  const cleanImage = image ? image.trim() : '/assets/images/products/rashguard-1.jpg';
+  const cleanImage = image ? image.trim() : '/assets/images/sport-7v7.png';
 
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query(
-        `INSERT INTO categories (name, slug, description, image, is_active)
-         VALUES ($1, $2, $3, $4, true)
-         ON CONFLICT (name) DO UPDATE 
-         SET description = EXCLUDED.description,
-             image = COALESCE(EXCLUDED.image, categories.image),
-             is_active = true
-         RETURNING *`,
-        [cleanName, slug, cleanDesc, cleanImage]
-      );
+    const result = await db.query(
+      `INSERT INTO categories (name, slug, description, image, is_active)
+       VALUES ($1, $2, $3, $4, true)
+       ON CONFLICT (name) DO UPDATE 
+       SET description = EXCLUDED.description,
+           image = COALESCE(EXCLUDED.image, categories.image),
+           is_active = true
+       RETURNING *`,
+      [cleanName, slug, cleanDesc, cleanImage]
+    );
+    if (result && result.rows && result.rows.length > 0) {
       return res.status(201).json(result.rows[0]);
     }
   } catch (err) {
@@ -115,7 +115,6 @@ router.post('/', async (req, res) => {
   };
   db.fallbackStore.categories = db.fallbackStore.categories || [];
   db.fallbackStore.categories.push(newCat);
-  if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
   return res.status(201).json(newCat);
 });
 
@@ -131,18 +130,18 @@ router.put('/:id', async (req, res) => {
   const cleanActive = is_active !== undefined ? Boolean(is_active) : true;
 
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query(
-        `UPDATE categories 
-         SET name = COALESCE($1, name),
-             slug = COALESCE($2, slug),
-             description = COALESCE($3, description),
-             image = COALESCE($4, image),
-             is_active = $5
-         WHERE id = $6
-         RETURNING *`,
-        [cleanName, slug, cleanDesc, cleanImage, cleanActive, id]
-      );
+    const result = await db.query(
+      `UPDATE categories 
+       SET name = COALESCE($1, name),
+           slug = COALESCE($2, slug),
+           description = COALESCE($3, description),
+           image = COALESCE($4, image),
+           is_active = $5
+       WHERE id = $6
+       RETURNING *`,
+      [cleanName, slug, cleanDesc, cleanImage, cleanActive, id]
+    );
+    if (result && result.rows) {
       if (result.rows.length === 0) {
         return res.status(404).json({ error: 'Category not found' });
       }
@@ -161,7 +160,6 @@ router.put('/:id', async (req, res) => {
       if (cleanDesc !== null) cat.description = cleanDesc;
       if (cleanImage !== null) cat.image = cleanImage;
       if (is_active !== undefined) cat.is_active = cleanActive;
-      if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
       return res.json(cat);
     }
   }
@@ -172,19 +170,20 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   try {
-    if (db.getIsConnected()) {
-      const catRes = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+    const catRes = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+    if (catRes && catRes.rows) {
       if (catRes.rows.length === 0) {
         return res.status(404).json({ error: 'Category not found' });
       }
       const cat = catRes.rows[0];
 
-      // Cascade delete associated products
+      // Cascade delete associated products from Neon database
       const prodDelRes = await db.query(
         'DELETE FROM products WHERE LOWER(category) = LOWER($1) OR LOWER(sport) = LOWER($1) OR LOWER(category) = LOWER($2) RETURNING id',
         [cat.name, cat.slug]
       );
 
+      // Delete category row from Neon database
       const result = await db.query('DELETE FROM categories WHERE id = $1 RETURNING *', [id]);
       return res.json({
         success: true,
@@ -216,11 +215,6 @@ router.delete('/:id', async (req, res) => {
           return !matches;
         });
         deletedProductsCount = initialLen - db.fallbackStore.products.length;
-      }
-
-      // Persist to disk
-      if (typeof db.saveFallbackStore === 'function') {
-        db.saveFallbackStore();
       }
 
       return res.json({

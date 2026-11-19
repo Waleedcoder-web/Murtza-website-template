@@ -28,16 +28,16 @@ router.all('/seed', async (req, res) => {
   ];
 
   try {
-    if (db.getIsConnected()) {
-      for (const p of seedItems) {
-        await db.query(
-          `INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
-           VALUES ($1, $2, $3, $4, $5, $6, 'model', $7, true, true)
-           ON CONFLICT (sku) DO NOTHING`,
-          [p.name, p.sku, p.price, p.sport, p.category, p.image, p.desc]
-        );
-      }
-      const countRes = await db.query('SELECT COUNT(*) FROM products');
+    for (const p of seedItems) {
+      await db.query(
+        `INSERT INTO products (name, sku, price, sport, category, image, type, description, is_featured, is_active)
+         VALUES ($1, $2, $3, $4, $5, $6, 'model', $7, true, true)
+         ON CONFLICT (sku) DO NOTHING`,
+        [p.name, p.sku, p.price, p.sport, p.category, p.image, p.desc]
+      );
+    }
+    const countRes = await db.query('SELECT COUNT(*) FROM products');
+    if (countRes && countRes.rows) {
       return res.json({ success: true, count: parseInt(countRes.rows[0].count, 10), message: 'All 20 rashguards seeded into database successfully!' });
     }
   } catch (err) {
@@ -51,8 +51,8 @@ router.all('/seed', async (req, res) => {
 // GET all products (newest first)
 router.get('/', async (req, res) => {
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query('SELECT * FROM products WHERE is_active = true ORDER BY id DESC');
+    const result = await db.query('SELECT * FROM products WHERE is_active = true ORDER BY id DESC');
+    if (result && result.rows) {
       return res.json(result.rows);
     }
   } catch (err) {
@@ -65,9 +65,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   try {
-    if (db.getIsConnected()) {
-      const result = await db.query('SELECT * FROM products WHERE id = $1', [id]);
-      if (result.rows.length > 0) return res.json(result.rows[0]);
+    const result = await db.query('SELECT * FROM products WHERE id = $1', [id]);
+    if (result && result.rows && result.rows.length > 0) {
+      return res.json(result.rows[0]);
     }
   } catch (err) {
     console.error('Error querying single product from PostgreSQL:', err);
@@ -87,29 +87,29 @@ router.post('/', async (req, res) => {
   const generatedSku = sku || `PRO-${Math.floor(100 + Math.random() * 900)}`;
   const cleanPrice = price !== undefined && price !== null && price !== '' ? parseFloat(price) : 0.00;
   const cleanSport = sport || '7v7 Football';
-  const cleanCategory = category || 'New Arrivals';
+  const cleanCategory = category || cleanSport || 'Compression Wear';
   const cleanImage = image || '';
   const cleanType = type || 'model';
   const cleanDesc = description || `${cleanSport} performance uniform.`;
 
   try {
-    if (db.getIsConnected()) {
-      // Auto-register category if not present
-      if (cleanCategory) {
-        const catSlug = cleanCategory.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
-        await db.query(
-          `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-          [cleanCategory.trim(), catSlug]
-        ).catch(e => {
-          console.warn('Auto-category note:', e.message);
-        });
-      }
+    // Auto-register category if not present
+    if (cleanCategory) {
+      const catSlug = cleanCategory.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
+      await db.query(
+        `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+        [cleanCategory.trim(), catSlug]
+      ).catch(e => {
+        console.warn('Auto-category note:', e.message);
+      });
+    }
 
-      const result = await db.query(
-        `INSERT INTO products (name, sku, price, sport, category, image, type, description) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-        [name, generatedSku, cleanPrice, cleanSport, cleanCategory, cleanImage, cleanType, cleanDesc]
-      );
+    const result = await db.query(
+      `INSERT INTO products (name, sku, price, sport, category, image, type, description) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [name, generatedSku, cleanPrice, cleanSport, cleanCategory, cleanImage, cleanType, cleanDesc]
+    );
+    if (result && result.rows && result.rows.length > 0) {
       return res.status(201).json(result.rows[0]);
     }
   } catch (err) {
@@ -128,7 +128,6 @@ router.post('/', async (req, res) => {
     description: cleanDesc
   };
   db.fallbackStore.products.unshift(newProduct);
-  if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
   return res.status(201).json(newProduct);
 });
 
@@ -136,15 +135,14 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   try {
-    if (db.getIsConnected()) {
-      await db.query('DELETE FROM products WHERE id = $1', [id]);
+    const result = await db.query('DELETE FROM products WHERE id = $1', [id]);
+    if (result) {
       return res.json({ success: true, message: 'Product deleted from database' });
     }
   } catch (err) {
     console.error('Error deleting product from PostgreSQL:', err);
   }
   db.fallbackStore.products = db.fallbackStore.products.filter(p => p.id !== id);
-  if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
   return res.json({ success: true, message: 'Product deleted from store' });
 });
 
