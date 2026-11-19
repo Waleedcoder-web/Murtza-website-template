@@ -13,6 +13,9 @@ app.get('*', (req, res, next) => {
   if (req.path.startsWith('/admin')) {
     return res.sendFile(path.join(__dirname, '../../frontend/admin/index.html'));
   }
+  if (req.path === '/home1' || req.path === '/home1.html' || req.path === '/user/home1.html') {
+    return res.sendFile(path.join(__dirname, '../../frontend/home1.html'));
+  }
   return res.sendFile(path.join(__dirname, '../../frontend/user/index.html'));
 });
 
