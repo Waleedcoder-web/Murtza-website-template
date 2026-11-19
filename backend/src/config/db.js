@@ -17,29 +17,32 @@ if (connectionString) {
   });
 }
 
-// Clean in-memory fallback store ready for user uploads
+// Clean in-memory fallback store with local JSON disk persistence
+const DATA_DIR = path.join(__dirname, '../../data');
+const STORE_FILE = path.join(DATA_DIR, 'store.json');
+
 const fallbackStore = {
   products: [
-    { id: 1, sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-1.jpg', type: 'model', description: 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', is_active: true },
-    { id: 2, sku: 'RG-002', name: 'Royal Cyan & Navy Compression Top', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-2.jpg', type: 'model', description: 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.', is_active: true },
-    { id: 3, sku: 'RG-003', name: 'Crimson Velocity Armor Rashguard', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-3.jpg', type: 'model', description: 'Charcoal base with geometric crimson shoulder panels and reinforced seams.', is_active: true },
-    { id: 4, sku: 'RG-004', name: 'Volt Yellow Sprint Rashguard', price: 120.00, sport: 'Training', category: 'New Arrivals', image: '/assets/images/products/rashguard-4.jpg', type: 'model', description: 'High-visibility neon volt yellow accents with multi-directional stretch.', is_active: true },
-    { id: 5, sku: 'RG-005', name: 'Glacier White & Deep Navy Top', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-5.jpg', type: 'model', description: 'Frost white torso with deep navy sleeves and ice-blue contour stitch.', is_active: true },
-    { id: 6, sku: 'RG-006', name: 'Hyper Sunset Orange Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-6.jpg', type: 'model', description: 'Vibrant sunset orange with gunmetal velocity side panels.', is_active: true },
-    { id: 7, sku: 'RG-007', name: 'Emerald Matrix Honeycomb Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-7.jpg', type: 'model', description: 'Anthracite base with vibrant emerald green honeycomb matrix pattern.', is_active: true },
-    { id: 8, sku: 'RG-008', name: 'Regal Purple Tournament Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-8.jpg', type: 'model', description: 'Deep royal purple with metallic silver tournament contrast lines.', is_active: true },
-    { id: 9, sku: 'RG-009', name: 'Desert Sand Tactical Camo Rashguard', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-9.jpg', type: 'model', description: 'Sublimated tactical urban camo with reinforced elbow contours.', is_active: true },
-    { id: 10, sku: 'RG-010', name: 'Oceanic Teal & Mint Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-10.jpg', type: 'model', description: 'Dark teal with mint green gradient transitions and antimicrobial fabric.', is_active: true },
-    { id: 11, sku: 'RG-011', name: 'Solar Gold & Black Striker Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-11.jpg', type: 'model', description: 'Jet black with high-voltage solar gold sleeves and ergonomic panels.', is_active: true },
-    { id: 12, sku: 'RG-012', name: 'Bloodline Maroon Armor Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-12.jpg', type: 'model', description: 'Matte black with bloodline maroon panels and red flatlock stitching.', is_active: true },
-    { id: 13, sku: 'RG-013', name: 'Titanium Silver & Acid Lime Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-13.jpg', type: 'model', description: 'Titanium grey body with acid lime geometric speed ribbing.', is_active: true },
-    { id: 14, sku: 'RG-014', name: 'Cobalt Blue Cross-Trainer Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-14.jpg', type: 'model', description: 'Cobalt blue with crisp white athletic raglan sleeve contours.', is_active: true },
-    { id: 15, sku: 'RG-015', name: 'Shadow Charcoal & Red Speed Top', price: 120.00, sport: '7v7 Football', category: 'Best Sellers', image: '/assets/images/products/rashguard-15.jpg', type: 'model', description: 'Dark charcoal with crimson speed streaks and ventilation mesh panels.', is_active: true },
-    { id: 16, sku: 'RG-016', name: 'Vortex Violet Performance Rashguard', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-16.jpg', type: 'model', description: 'Vortex violet with radiant coral gradient accents.', is_active: true },
-    { id: 17, sku: 'RG-017', name: 'Military Green Camo Tactical Top', price: 120.00, sport: 'Training', category: 'Best Sellers', image: '/assets/images/products/rashguard-17.jpg', type: 'model', description: 'Obsidian black with military green camo sleeves and rugged flatlock seams.', is_active: true },
-    { id: 18, sku: 'RG-018', name: 'Electric Cyan & Magenta Duo Rashguard', price: 120.00, sport: '7v7 Football', category: 'New Arrivals', image: '/assets/images/products/rashguard-18.jpg', type: 'model', description: 'High-energy cyan and magenta contrast tournament compression wear.', is_active: true },
-    { id: 19, sku: 'RG-019', name: 'Pitch Black & Gold Foil Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Best Sellers', image: '/assets/images/products/rashguard-19.jpg', type: 'model', description: 'Championship gold foil geometric lines on premium ultra-stretch black spandex.', is_active: true },
-    { id: 20, sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', price: 120.00, sport: 'Compression Wear', category: 'New Arrivals', image: '/assets/images/products/rashguard-20.jpg', type: 'model', description: 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', is_active: true }
+    { id: 1, sku: 'RG-001', name: 'Stealth Blackout Carbon Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-1.jpg', type: 'model', description: 'Matte carbon fiber flank panels with dark grey flatlock ergonomic stitching.', is_active: true },
+    { id: 2, sku: 'RG-002', name: 'Royal Cyan & Navy Compression Top', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-2.jpg', type: 'model', description: 'Electric blue raglan sleeves with moisture-wicking contrast seam panels.', is_active: true },
+    { id: 3, sku: 'RG-003', name: 'Crimson Velocity Armor Rashguard', price: 120.00, sport: '7v7 Football', category: '7v7 Football', image: '/assets/images/products/rashguard-3.jpg', type: 'model', description: 'Charcoal base with geometric crimson shoulder panels and reinforced seams.', is_active: true },
+    { id: 4, sku: 'RG-004', name: 'Volt Yellow Sprint Rashguard', price: 120.00, sport: 'American Football', category: 'American Football', image: '/assets/images/products/rashguard-4.jpg', type: 'model', description: 'High-visibility neon volt yellow accents with multi-directional stretch.', is_active: true },
+    { id: 5, sku: 'RG-005', name: 'Glacier White & Deep Navy Top', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-5.jpg', type: 'model', description: 'Frost white torso with deep navy sleeves and ice-blue contour stitch.', is_active: true },
+    { id: 6, sku: 'RG-006', name: 'Hyper Sunset Orange Rashguard', price: 120.00, sport: '7v7 Football', category: '7v7 Football', image: '/assets/images/products/rashguard-6.jpg', type: 'model', description: 'Vibrant sunset orange with gunmetal velocity side panels.', is_active: true },
+    { id: 7, sku: 'RG-007', name: 'Emerald Matrix Honeycomb Top', price: 120.00, sport: 'American Football', category: 'American Football', image: '/assets/images/products/rashguard-7.jpg', type: 'model', description: 'Anthracite base with vibrant emerald green honeycomb matrix pattern.', is_active: true },
+    { id: 8, sku: 'RG-008', name: 'Regal Purple Tournament Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-8.jpg', type: 'model', description: 'Deep royal purple with metallic silver tournament contrast lines.', is_active: true },
+    { id: 9, sku: 'RG-009', name: 'Desert Sand Tactical Camo Rashguard', price: 120.00, sport: 'Basketball', category: 'Basketball', image: '/assets/images/products/rashguard-9.jpg', type: 'model', description: 'Sublimated tactical urban camo with reinforced elbow contours.', is_active: true },
+    { id: 10, sku: 'RG-010', name: 'Oceanic Teal & Mint Base Layer', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-10.jpg', type: 'model', description: 'Dark teal with mint green gradient transitions and antimicrobial fabric.', is_active: true },
+    { id: 11, sku: 'RG-011', name: 'Solar Gold & Black Striker Top', price: 120.00, sport: '7v7 Football', category: '7v7 Football', image: '/assets/images/products/rashguard-11.jpg', type: 'model', description: 'Jet black with high-voltage solar gold sleeves and ergonomic panels.', is_active: true },
+    { id: 12, sku: 'RG-012', name: 'Bloodline Maroon Armor Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-12.jpg', type: 'model', description: 'Matte black with bloodline maroon panels and red flatlock stitching.', is_active: true },
+    { id: 13, sku: 'RG-013', name: 'Titanium Silver & Acid Lime Top', price: 120.00, sport: 'Basketball', category: 'Basketball', image: '/assets/images/products/rashguard-13.jpg', type: 'model', description: 'Titanium grey body with acid lime geometric speed ribbing.', is_active: true },
+    { id: 14, sku: 'RG-014', name: 'Cobalt Blue Cross-Trainer Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-14.jpg', type: 'model', description: 'Cobalt blue with crisp white athletic raglan sleeve contours.', is_active: true },
+    { id: 15, sku: 'RG-015', name: 'Shadow Charcoal & Red Speed Top', price: 120.00, sport: '7v7 Football', category: '7v7 Football', image: '/assets/images/products/rashguard-15.jpg', type: 'model', description: 'Dark charcoal with crimson speed streaks and ventilation mesh panels.', is_active: true },
+    { id: 16, sku: 'RG-016', name: 'Vortex Violet Performance Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-16.jpg', type: 'model', description: 'Vortex violet with radiant coral gradient accents.', is_active: true },
+    { id: 17, sku: 'RG-017', name: 'Military Green Camo Tactical Top', price: 120.00, sport: 'Basketball', category: 'Basketball', image: '/assets/images/products/rashguard-17.jpg', type: 'model', description: 'Obsidian black with military green camo sleeves and rugged flatlock seams.', is_active: true },
+    { id: 18, sku: 'RG-018', name: 'Electric Cyan & Magenta Duo Rashguard', price: 120.00, sport: '7v7 Football', category: '7v7 Football', image: '/assets/images/products/rashguard-18.jpg', type: 'model', description: 'High-energy cyan and magenta contrast tournament compression wear.', is_active: true },
+    { id: 19, sku: 'RG-019', name: 'Pitch Black & Gold Foil Rashguard', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-19.jpg', type: 'model', description: 'Championship gold foil geometric lines on premium ultra-stretch black spandex.', is_active: true },
+    { id: 20, sku: 'RG-020', name: 'Pure Frost Minimalist Base Layer', price: 120.00, sport: 'Compression Wear', category: 'Compression Wear', image: '/assets/images/products/rashguard-20.jpg', type: 'model', description: 'Clean frost white with steel grey technical stitching and moisture-wicking weave.', is_active: true }
   ],
   inquiries: [],
   orders: [],
@@ -47,20 +50,20 @@ const fallbackStore = {
     { id: 1, username: 'murtza', email: 'murtza@gmail.com', role: 'superadmin', password_hash: 'c256808d6a23e034b0f70dba55e16e5e:e3b6a7b46bc948f662720f8adbef6a7de6e30013691f2e1ff7a23f900a1a2f6a53651d6b7314dcbb3f0d2787f791f7ab9d0df5e968669e0d2f6f32b1a1726aaa', is_active: true }
   ],
   categories: [
-    { id: 1, name: '7v7 Football', slug: '7v7', image: '/assets/images/sport-7v7.png', description: 'Non-padded 7v7 tournament uniforms & practice compression gear', is_active: true, product_count: 5 },
-    { id: 2, name: 'American Football', slug: 'american-football', image: '/assets/images/sport-american-football.png', description: 'Tackle & flag American football jerseys, pants & practice uniforms', is_active: true, product_count: 2 },
-    { id: 3, name: 'Basketball', slug: 'basketball', image: '/assets/images/sport-basketball.png', description: 'Championship basketball jerseys, reversible kits & speed-mesh shorts', is_active: true, product_count: 4 },
-    { id: 4, name: 'Baseball', slug: 'baseball', image: '/assets/images/sport-baseball.png', description: 'Custom button-down & two-button sublimated baseball jerseys', is_active: true, product_count: 2 },
-    { id: 5, name: 'Cheer', slug: 'cheer', image: '/assets/images/sport-cheer.png', description: 'Cheerleading performance tops, skirts, warm-ups & sideline wear', is_active: true, product_count: 1 },
-    { id: 6, name: 'Ice Hockey', slug: 'hockey', image: '/assets/images/sport-hockey.png', description: 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', is_active: true, product_count: 1 },
-    { id: 7, name: 'Lacrosse', slug: 'lacrosse', image: '/assets/images/sport-lacrosse.png', description: 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', is_active: true, product_count: 1 },
-    { id: 8, name: 'Soccer', slug: 'soccer', image: '/assets/images/sport-soccer.png', description: 'Sublimated match soccer kits, goalie kits & training tops', is_active: true, product_count: 2 },
-    { id: 9, name: 'Track & Field', slug: 'track', image: '/assets/images/sport-track.png', description: 'Ultra-lightweight speed singlets, split shorts & running tights', is_active: true, product_count: 2 },
-    { id: 10, name: 'Volleyball', slug: 'volleyball', image: '/assets/images/sport-volleyball.png', description: 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', is_active: true, product_count: 2 },
-    { id: 11, name: 'Wrestling', slug: 'wrestling', image: '/assets/images/sport-wrestling.png', description: 'Custom sublimated wrestling singlets, compression tops & fight shorts', is_active: true, product_count: 3 },
-    { id: 12, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true, product_count: 8 },
-    { id: 13, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/sport-basketball.png', description: 'Top performing and most ordered uniform sets', is_active: true, product_count: 10 },
-    { id: 14, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/sport-soccer.png', description: 'Latest season releases and modern cuts', is_active: true, product_count: 10 }
+    { id: 1, name: '7v7 Football', slug: '7v7', image: '/assets/images/sport-7v7.png', description: 'Non-padded 7v7 tournament uniforms & practice compression gear', is_active: true },
+    { id: 2, name: 'American Football', slug: 'american-football', image: '/assets/images/sport-american-football.png', description: 'Tackle & flag American football jerseys, pants & practice uniforms', is_active: true },
+    { id: 3, name: 'Basketball', slug: 'basketball', image: '/assets/images/sport-basketball.png', description: 'Championship basketball jerseys, reversible kits & speed-mesh shorts', is_active: true },
+    { id: 4, name: 'Baseball', slug: 'baseball', image: '/assets/images/sport-baseball.png', description: 'Custom button-down & two-button sublimated baseball jerseys', is_active: true },
+    { id: 5, name: 'Cheer', slug: 'cheer', image: '/assets/images/sport-cheer.png', description: 'Cheerleading performance tops, skirts, warm-ups & sideline wear', is_active: true },
+    { id: 6, name: 'Ice Hockey', slug: 'hockey', image: '/assets/images/sport-hockey.png', description: 'Heavyweight pro-mesh ice hockey sweaters & practice jerseys', is_active: true },
+    { id: 7, name: 'Lacrosse', slug: 'lacrosse', image: '/assets/images/sport-lacrosse.png', description: 'Custom reversible lacrosse pinnies, game jerseys & shooter shirts', is_active: true },
+    { id: 8, name: 'Soccer', slug: 'soccer', image: '/assets/images/sport-soccer.png', description: 'Sublimated match soccer kits, goalie kits & training tops', is_active: true },
+    { id: 9, name: 'Track & Field', slug: 'track', image: '/assets/images/sport-track.png', description: 'Ultra-lightweight speed singlets, split shorts & running tights', is_active: true },
+    { id: 10, name: 'Volleyball', slug: 'volleyball', image: '/assets/images/sport-volleyball.png', description: 'Long sleeve & sleeveless sublimated athletic volleyball jerseys', is_active: true },
+    { id: 11, name: 'Wrestling', slug: 'wrestling', image: '/assets/images/sport-wrestling.png', description: 'Custom sublimated wrestling singlets, compression tops & fight shorts', is_active: true },
+    { id: 12, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true },
+    { id: 13, name: 'Best Sellers', slug: 'best-sellers', image: '/assets/images/sport-basketball.png', description: 'Top performing and most ordered uniform sets', is_active: true },
+    { id: 14, name: 'New Arrivals', slug: 'new-arrivals', image: '/assets/images/sport-soccer.png', description: 'Latest season releases and modern cuts', is_active: true }
   ],
   hero_slides: [],
   special_offers: {
@@ -76,6 +79,46 @@ const fallbackStore = {
   featured_banners: [],
   deal_cards: []
 };
+
+// Persistence functions
+function saveFallbackStore() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(STORE_FILE, JSON.stringify(fallbackStore, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed to save store to disk:', err.message);
+  }
+}
+
+function loadFallbackStore() {
+  try {
+    if (fs.existsSync(STORE_FILE)) {
+      const raw = fs.readFileSync(STORE_FILE, 'utf-8');
+      const data = JSON.parse(raw);
+      if (data && typeof data === 'object') {
+        if (Array.isArray(data.categories)) fallbackStore.categories = data.categories;
+        if (Array.isArray(data.products)) fallbackStore.products = data.products;
+        if (Array.isArray(data.inquiries)) fallbackStore.inquiries = data.inquiries;
+        if (Array.isArray(data.orders)) fallbackStore.orders = data.orders;
+        if (Array.isArray(data.hero_slides)) fallbackStore.hero_slides = data.hero_slides;
+        if (data.special_offers) fallbackStore.special_offers = data.special_offers;
+        if (Array.isArray(data.featured_banners)) fallbackStore.featured_banners = data.featured_banners;
+        if (Array.isArray(data.deal_cards)) fallbackStore.deal_cards = data.deal_cards;
+        return true;
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load store from disk:', err.message);
+  }
+  return false;
+}
+
+// Load existing persisted store or save defaults
+if (!loadFallbackStore()) {
+  saveFallbackStore();
+}
 
 const SCHEMA_SQL = `
 -- 1. Categories Table
@@ -306,6 +349,8 @@ module.exports = {
   initDB,
   query,
   fallbackStore,
+  saveFallbackStore,
+  loadFallbackStore,
   getIsConnected: () => isConnected,
   getLastError: () => lastConnectionError,
   SCHEMA_SQL

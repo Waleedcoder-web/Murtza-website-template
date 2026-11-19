@@ -160,13 +160,7 @@ const AdminApp = {
     } catch (e) {
       console.warn('API error fetching categories', e);
     }
-    return [
-      { id: 1, name: 'Best Sellers', slug: 'best-sellers', product_count: 5 },
-      { id: 2, name: 'New Arrivals', slug: 'new-arrivals', product_count: 4 },
-      { id: 3, name: 'Compression Wear', slug: 'compression-wear', product_count: 0 },
-      { id: 4, name: 'Team Uniforms', slug: 'team-uniforms', product_count: 0 },
-      { id: 5, name: 'Outerwear & Warmups', slug: 'outerwear-warmups', product_count: 0 }
-    ];
+    return [];
   },
 
   async createCategory(categoryData) {
@@ -181,11 +175,13 @@ const AdminApp = {
         this.showAdminToast(`Category "${created.name}" created!`, 'bi-check-circle-fill text-success');
         return created;
       }
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Failed to create category');
     } catch (e) {
       console.error('API error creating category:', e);
+      this.showAdminToast('Error creating category: ' + e.message, 'bi-exclamation-triangle-fill text-warning');
+      throw e;
     }
-    this.showAdminToast(`Category "${categoryData.name}" created!`, 'bi-check-circle-fill text-success');
-    return { id: Date.now(), ...categoryData, slug: categoryData.name.toLowerCase().replace(/\s+/g, '-') };
   },
 
   async updateCategory(id, categoryData) {
@@ -200,27 +196,32 @@ const AdminApp = {
         this.showAdminToast(`Category "${updated.name}" updated!`, 'bi-check-circle-fill text-success');
         return updated;
       }
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Failed to update category');
     } catch (e) {
       console.error('API error updating category:', e);
+      this.showAdminToast('Error updating category: ' + e.message, 'bi-exclamation-triangle-fill text-warning');
+      throw e;
     }
-    this.showAdminToast('Category updated.', 'bi-check-circle-fill text-success');
-    return { id, ...categoryData };
   },
 
   async deleteCategory(id) {
-    try {
-      const res = await fetch(`${this.API_BASE}/categories/${id}`, {
-        method: 'DELETE'
-      });
-      if (res.ok) {
-        this.showAdminToast('Category deleted successfully.', 'bi-trash-fill text-danger');
-        return true;
-      }
-    } catch (e) {
-      console.error('API error deleting category:', e);
+    const res = await fetch(`${this.API_BASE}/categories/${id}`, {
+      method: 'DELETE'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const count = data.deletedProductsCount || 0;
+      const msg = count > 0 
+        ? `Category and ${count} associated product(s) deleted permanently.` 
+        : 'Category deleted successfully.';
+      this.showAdminToast(msg, 'bi-trash-fill text-danger');
+      return data;
     }
-    this.showAdminToast('Category removed.', 'bi-trash-fill text-danger');
-    return true;
+    const errData = await res.json().catch(() => ({}));
+    const errMsg = errData.error || 'Failed to delete category';
+    this.showAdminToast(errMsg, 'bi-exclamation-triangle-fill text-warning');
+    throw new Error(errMsg);
   },
 
   async uploadImage(file) {

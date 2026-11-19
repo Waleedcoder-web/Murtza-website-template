@@ -457,7 +457,7 @@
                 <button class="btn btn-sm btn-outline-dark" onclick="openEditCategoryModal(${c.id})" title="Edit Category">
                   <i class="bi bi-pencil-square"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCategory(${c.id}, '${c.name}')" title="Delete Category">
+                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${count})" title="Delete Category">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
@@ -578,10 +578,24 @@
       }
     }
 
-    async function confirmDeleteCategory(id, name) {
-      if (confirm(`Are you sure you want to delete category "${name}"? Products using this category will remain, but the filter will be removed.`)) {
+    async function confirmDeleteCategory(id, name, count) {
+      const prodCount = parseInt(count, 10) || 0;
+      let confirmMsg = '';
+      if (prodCount > 0) {
+        confirmMsg = `⚠️ CRITICAL WARNING:\n\nDeleting category "${name}" will PERMANENTLY DELETE all ${prodCount} product(s) associated with this category from the store catalogue and database!\n\nAre you sure you want to proceed? This action CANNOT be undone.`;
+      } else {
+        confirmMsg = `Are you sure you want to delete category "${name}" from the database?`;
+      }
+
+      if (!confirm(confirmMsg)) {
+        return;
+      }
+
+      try {
         await AdminApp.deleteCategory(id);
         await loadCategoriesTable();
+      } catch (err) {
+        alert('Failed to delete category: ' + err.message);
       }
     }
   </script>

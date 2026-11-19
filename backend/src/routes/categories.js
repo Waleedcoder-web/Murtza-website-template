@@ -37,7 +37,22 @@ router.get('/', async (req, res) => {
   } catch (err) {
     console.error('Error fetching categories from PostgreSQL:', err);
   }
-  return res.json(db.fallbackStore.categories || []);
+
+  if (db.fallbackStore.categories) {
+    const prods = db.fallbackStore.products || [];
+    const catsWithCounts = db.fallbackStore.categories.map(c => {
+      const catNameLow = (c.name || '').toLowerCase();
+      const catSlugLow = (c.slug || '').toLowerCase();
+      const count = prods.filter(p => {
+        const pCat = (p.category || '').toLowerCase();
+        const pSport = (p.sport || '').toLowerCase();
+        return (pCat === catNameLow || pSport === catNameLow || (catSlugLow && pCat === catSlugLow));
+      }).length;
+      return { ...c, product_count: count };
+    });
+    return res.json(catsWithCounts);
+  }
+  return res.json([]);
 });
 
 // GET single category
@@ -100,6 +115,7 @@ router.post('/', async (req, res) => {
   };
   db.fallbackStore.categories = db.fallbackStore.categories || [];
   db.fallbackStore.categories.push(newCat);
+  if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
   return res.status(201).json(newCat);
 });
 
@@ -145,22 +161,37 @@ router.put('/:id', async (req, res) => {
       if (cleanDesc !== null) cat.description = cleanDesc;
       if (cleanImage !== null) cat.image = cleanImage;
       if (is_active !== undefined) cat.is_active = cleanActive;
+      if (typeof db.saveFallbackStore === 'function') db.saveFallbackStore();
       return res.json(cat);
     }
   }
   return res.status(404).json({ error: 'Category not found' });
 });
 
-// DELETE a category
+// DELETE a category (with CASCADE deletion of related products)
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   try {
     if (db.getIsConnected()) {
-      const result = await db.query('DELETE FROM categories WHERE id = $1 RETURNING *', [id]);
-      if (result.rows.length === 0) {
+      const catRes = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+      if (catRes.rows.length === 0) {
         return res.status(404).json({ error: 'Category not found' });
       }
-      return res.json({ success: true, message: 'Category deleted', deleted: result.rows[0] });
+      const cat = catRes.rows[0];
+
+      // Cascade delete associated products
+      const prodDelRes = await db.query(
+        'DELETE FROM products WHERE LOWER(category) = LOWER($1) OR LOWER(sport) = LOWER($1) OR LOWER(category) = LOWER($2) RETURNING id',
+        [cat.name, cat.slug]
+      );
+
+      const result = await db.query('DELETE FROM categories WHERE id = $1 RETURNING *', [id]);
+      return res.json({
+        success: true,
+        message: `Category "${cat.name}" and ${prodDelRes.rows.length} associated product(s) deleted.`,
+        deleted: result.rows[0],
+        deletedProductsCount: prodDelRes.rows.length
+      });
     }
   } catch (err) {
     console.error('Error deleting category from PostgreSQL:', err);
@@ -170,8 +201,34 @@ router.delete('/:id', async (req, res) => {
   if (db.fallbackStore.categories) {
     const idx = db.fallbackStore.categories.findIndex(c => c.id === id);
     if (idx !== -1) {
-      const removed = db.fallbackStore.categories.splice(idx, 1);
-      return res.json({ success: true, message: 'Category deleted', deleted: removed[0] });
+      const [removedCat] = db.fallbackStore.categories.splice(idx, 1);
+      const catNameLow = (removedCat.name || '').toLowerCase();
+      const catSlugLow = (removedCat.slug || '').toLowerCase();
+      let deletedProductsCount = 0;
+
+      // Cascade delete related products from fallbackStore
+      if (Array.isArray(db.fallbackStore.products)) {
+        const initialLen = db.fallbackStore.products.length;
+        db.fallbackStore.products = db.fallbackStore.products.filter(p => {
+          const pCat = (p.category || '').toLowerCase();
+          const pSport = (p.sport || '').toLowerCase();
+          const matches = (pCat === catNameLow || pSport === catNameLow || (catSlugLow && pCat === catSlugLow));
+          return !matches;
+        });
+        deletedProductsCount = initialLen - db.fallbackStore.products.length;
+      }
+
+      // Persist to disk
+      if (typeof db.saveFallbackStore === 'function') {
+        db.saveFallbackStore();
+      }
+
+      return res.json({
+        success: true,
+        message: `Category "${removedCat.name}" and ${deletedProductsCount} associated product(s) deleted.`,
+        deleted: removedCat,
+        deletedProductsCount
+      });
     }
   }
   return res.status(404).json({ error: 'Category not found' });
