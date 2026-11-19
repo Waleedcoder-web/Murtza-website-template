@@ -860,6 +860,32 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
+      // 0. Fetch live sports categories from API for homepage marquee
+      try {
+        const catRes = await fetch(`${USER_API_BASE}/categories`);
+        if (catRes.ok) {
+          const cats = await catRes.json();
+          const track = document.getElementById('sportsCategoryTrack');
+          if (track && Array.isArray(cats) && cats.length > 0) {
+            const activeCats = cats.filter(c => c.is_active !== false);
+            let catHtml = '';
+            activeCats.forEach(c => {
+              const iconUrl = resolveAssetUrl(c.image || '/assets/images/sport-7v7.png');
+              const linkSlug = encodeURIComponent(c.slug || c.name.toLowerCase());
+              catHtml += `
+                <a href="catalogue.html?sport=${linkSlug}" class="sport-icon-card">
+                  <div class="sport-icon-circle"><img src="${iconUrl}" alt="${c.name}" onerror="this.src='../assets/images/sport-7v7.png'"></div>
+                  <span class="sport-name">${c.name}</span>
+                </a>
+              `;
+            });
+            track.innerHTML = catHtml;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load sports categories from API', e);
+      }
+
       // 1. Fetch live products from PostgreSQL
       try {
         const res = await fetch(`${USER_API_BASE}/products`);
