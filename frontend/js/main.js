@@ -1050,8 +1050,8 @@ document.addEventListener('DOMContentLoaded', () => {
       iconImg.className = 'logo-mobile-icon';
 
       const textImg = document.createElement('img');
-      textImg.src = prefix + 'assets/images/logo-text-black.png';
-      textImg.alt = 'Snowtop Sports';
+      textImg.src = prefix + 'assets/images/logo-text-word-only.png';
+      textImg.alt = 'SNOWTOP';
       textImg.className = 'logo-mobile-text';
 
       brandLogo.appendChild(iconImg);
