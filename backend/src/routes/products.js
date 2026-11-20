@@ -131,6 +131,77 @@ router.post('/', async (req, res) => {
   return res.status(201).json(newProduct);
 });
 
+// UPDATE product (including its category, sport, etc.)
+router.put('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { name, price, sport, category, image, type, sku, description, is_active } = req.body;
+
+  const cleanName = name !== undefined && name !== null ? name.trim() : null;
+  const cleanPrice = price !== undefined && price !== null && price !== '' ? parseFloat(price) : null;
+  const cleanSport = sport !== undefined && sport !== null ? sport.trim() : null;
+  const cleanCategory = category !== undefined && category !== null ? category.trim() : null;
+  const cleanImage = image !== undefined && image !== null ? image.trim() : null;
+  const cleanType = type !== undefined && type !== null ? type.trim() : null;
+  const cleanSku = sku !== undefined && sku !== null ? sku.trim() : null;
+  const cleanDesc = description !== undefined && description !== null ? description.trim() : null;
+  const cleanActive = is_active !== undefined ? Boolean(is_active) : null;
+
+  try {
+    // If category is provided, auto-register in categories table if missing
+    if (cleanCategory) {
+      const catSlug = cleanCategory.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
+      await db.query(
+        `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+        [cleanCategory, catSlug]
+      ).catch(e => console.warn('Auto-category note on update:', e.message));
+    }
+
+    const result = await db.query(
+      `UPDATE products 
+       SET name = COALESCE($1, name),
+           price = COALESCE($2, price),
+           sport = COALESCE($3, sport),
+           category = COALESCE($4, category),
+           image = COALESCE($5, image),
+           type = COALESCE($6, type),
+           sku = COALESCE($7, sku),
+           description = COALESCE($8, description),
+           is_active = COALESCE($9, is_active),
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $10
+       RETURNING *`,
+      [cleanName, cleanPrice, cleanSport, cleanCategory, cleanImage, cleanType, cleanSku, cleanDesc, cleanActive, id]
+    );
+
+    if (result && result.rows) {
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      return res.json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error('Error updating product in PostgreSQL:', err);
+    return res.status(500).json({ error: 'Failed to update product: ' + err.message });
+  }
+
+  // Fallback memory store
+  const prod = db.fallbackStore.products.find(p => p.id === id);
+  if (prod) {
+    if (cleanName !== null) prod.name = cleanName;
+    if (cleanPrice !== null) prod.price = cleanPrice;
+    if (cleanSport !== null) prod.sport = cleanSport;
+    if (cleanCategory !== null) prod.category = cleanCategory;
+    if (cleanImage !== null) prod.image = cleanImage;
+    if (cleanType !== null) prod.type = cleanType;
+    if (cleanSku !== null) prod.sku = cleanSku;
+    if (cleanDesc !== null) prod.description = cleanDesc;
+    if (cleanActive !== null) prod.is_active = cleanActive;
+    return res.json(prod);
+  }
+
+  return res.status(404).json({ error: 'Product not found' });
+});
+
 // DELETE product
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);

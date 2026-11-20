@@ -201,19 +201,23 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <!-- Add Category Inline Form -->
+        <!-- Add / Edit Category Inline Form -->
         <div class="p-3 mb-3 rounded-3" style="background: rgba(241, 245, 249, 0.7); border: 1px solid #e2e8f0;">
-          <h6 class="fw-bold text-dark mb-2 small"><i class="bi bi-plus-circle me-1 text-primary"></i> Create New Category</h6>
+          <h6 class="fw-bold text-dark mb-2 small" id="inlineCategoryFormTitle"><i class="bi bi-plus-circle me-1 text-primary"></i> Create New Category</h6>
           <form id="createCategoryForm" onsubmit="handleCreateCategory(event)" class="row g-2">
+            <input type="hidden" id="inlineEditCategoryId" value="">
             <div class="col-md-5">
               <input type="text" class="form-control form-control-glass form-control-sm" id="newCatName" placeholder="Category Name (e.g. Compression Wear)" required>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
               <input type="text" class="form-control form-control-glass form-control-sm" id="newCatDesc" placeholder="Brief description (optional)">
             </div>
-            <div class="col-md-2">
-              <button type="submit" class="btn-glass btn-glass-primary btn-sm w-100 h-100">
+            <div class="col-md-3 d-flex gap-1">
+              <button type="submit" id="inlineCatSubmitBtn" class="btn-glass btn-glass-primary btn-sm flex-grow-1">
                 <span>Save</span>
+              </button>
+              <button type="button" id="inlineCatCancelBtn" class="btn-glass btn-sm d-none" onclick="cancelInlineEditCategory()">
+                <span>Cancel</span>
               </button>
             </div>
           </form>
@@ -351,6 +355,114 @@
           <div class="d-flex gap-2">
             <button type="button" class="btn-glass flex-grow-1" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" id="submitProductBtn" class="btn-glass btn-glass-primary btn-shimmer flex-grow-1">Publish to Database & Store</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Product & Category Modal (Frosted Glass) -->
+  <div class="modal fade" id="editProductModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass-modal p-4 border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+              <i class="bi bi-pencil-square fs-5"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-0" id="editProductModalTitle">Edit Product & Category</h5>
+              <span class="text-muted small">Update sport category, title, price, or product image in Neon database</span>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form onsubmit="handleUpdateProduct(event)">
+          <input type="hidden" id="editProductId" value="">
+
+          <!-- 1. Product Name -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Product / Uniform Name *</label>
+            <input type="text" class="form-control form-control-glass py-2" id="editProductName" required>
+          </div>
+
+          <!-- 2. Sport / Category Selection -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-dark">
+                <i class="bi bi-tags-fill text-primary me-1"></i>Category / Sport *
+              </label>
+              <select class="form-select form-control-glass py-2" id="editProductSportSelect" required>
+                <!-- Populated dynamically with all categories -->
+              </select>
+              <div class="form-text text-muted" style="font-size: 0.74rem;">Main sport category in database & catalogue.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-dark">
+                <i class="bi bi-collection-fill text-primary me-1"></i>Secondary Category / Tag
+              </label>
+              <input type="text" class="form-control form-control-glass py-2" id="editProductCategoryTag" list="editCollectionTagsDatalist" placeholder="e.g. Compression Wear, 7v7 Football">
+              <datalist id="editCollectionTagsDatalist">
+                <option value="Compression Wear">
+                <option value="7v7 Football">
+                <option value="American Football">
+                <option value="Basketball">
+                <option value="Baseball">
+                <option value="Soccer">
+                <option value="Best Sellers">
+                <option value="New Arrivals">
+                <option value="Trending Now">
+              </datalist>
+              <div class="form-text text-muted" style="font-size: 0.74rem;">Filter tag or collection category.</div>
+            </div>
+          </div>
+
+          <!-- 3. SKU, Price & Status -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-dark">SKU Code</label>
+              <input type="text" class="form-control form-control-glass py-2 font-monospace" id="editProductSku">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-dark">Price ($)</label>
+              <input type="number" step="0.01" class="form-control form-control-glass py-2" id="editProductPrice" placeholder="120.00">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-dark">Status</label>
+              <div class="form-check form-switch pt-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="editProductActiveSwitch" checked>
+                <label class="form-check-label small fw-bold" for="editProductActiveSwitch" id="editProductActiveLabel">Live on Storefront</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Description -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-dark">Description</label>
+            <textarea class="form-control form-control-glass py-2" id="editProductDesc" rows="2" placeholder="Uniform description, materials, stitching details..."></textarea>
+          </div>
+
+          <!-- 5. Product Image Preview & Change -->
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-dark mb-1">Product Image</label>
+            <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: rgba(241, 245, 249, 0.7); border: 1px solid #e2e8f0;">
+              <img id="editProductImgPreview" src="" alt="Product" style="width: 70px; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; border: 1px solid #cbd5e1; padding: 2px;">
+              <div class="flex-grow-1">
+                <div class="small fw-bold text-dark mb-1">Change Image (Optional)</div>
+                <input type="file" id="editProductImageFile" accept="image/*" class="form-control form-control-glass form-control-sm" onchange="handleEditFileSelect(event)">
+                <input type="hidden" id="editProductCurrentImageUrl" value="">
+                <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Leave empty to keep current image.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" class="btn-glass flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" id="updateProductSubmitBtn" class="btn-glass btn-glass-primary btn-shimmer flex-grow-1">
+              <i class="bi bi-check2-circle me-1"></i> Save Changes to Database
+            </button>
           </div>
         </form>
       </div>
@@ -511,9 +623,14 @@
               <span class="badge bg-light text-dark border px-2 py-1">${c.product_count || 0} products</span>
             </td>
             <td class="text-end">
-              <button class="btn-glass btn-glass-danger btn-sm px-2" title="Delete Category" onclick="handleDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${c.product_count || 0})">
-                <i class="bi bi-trash"></i>
-              </button>
+              <div class="d-inline-flex gap-1">
+                <button class="btn-glass btn-sm px-2 text-primary" title="Edit Category" onclick="openInlineEditCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', '${(c.description || '').replace(/'/g, "\\'")}')">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn-glass btn-glass-danger btn-sm px-2" title="Delete Category" onclick="handleDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${c.product_count || 0})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -521,8 +638,28 @@
       tbody.innerHTML = html;
     }
 
+    function openInlineEditCategory(id, name, description) {
+      document.getElementById('inlineEditCategoryId').value = id;
+      document.getElementById('newCatName').value = name;
+      document.getElementById('newCatDesc').value = description;
+      document.getElementById('inlineCategoryFormTitle').innerHTML = `<i class="bi bi-pencil-square me-1 text-primary"></i> Edit Category: ${name}`;
+      document.getElementById('inlineCatSubmitBtn').innerHTML = '<span>Update</span>';
+      document.getElementById('inlineCatCancelBtn').classList.remove('d-none');
+      document.getElementById('newCatName').focus();
+    }
+
+    function cancelInlineEditCategory() {
+      document.getElementById('inlineEditCategoryId').value = '';
+      document.getElementById('newCatName').value = '';
+      document.getElementById('newCatDesc').value = '';
+      document.getElementById('inlineCategoryFormTitle').innerHTML = '<i class="bi bi-plus-circle me-1 text-primary"></i> Create New Category';
+      document.getElementById('inlineCatSubmitBtn').innerHTML = '<span>Save</span>';
+      document.getElementById('inlineCatCancelBtn').classList.add('d-none');
+    }
+
     async function handleCreateCategory(e) {
       e.preventDefault();
+      const editId = document.getElementById('inlineEditCategoryId').value;
       const nameInput = document.getElementById('newCatName');
       const descInput = document.getElementById('newCatDesc');
       const name = nameInput.value.trim();
@@ -530,11 +667,18 @@
 
       if (!name) return;
 
-      await AdminApp.createCategory({ name, description });
-      nameInput.value = '';
-      descInput.value = '';
-      await loadCategoriesModal();
-      populateCategoriesUI();
+      try {
+        if (editId) {
+          await AdminApp.updateCategory(editId, { name, description });
+        } else {
+          await AdminApp.createCategory({ name, description });
+        }
+        cancelInlineEditCategory();
+        await loadCategoriesModal();
+        populateCategoriesUI();
+      } catch (err) {
+        alert('Failed to save category: ' + err.message);
+      }
     }
 
     async function handleDeleteCategory(id, name, count) {
@@ -701,6 +845,9 @@
             </td>
             <td class="text-end">
               <div class="d-inline-flex gap-2">
+                <button class="btn-glass btn-sm px-2 text-dark text-nowrap" title="Edit Product & Category" onclick="openEditProductModal(${p.id})">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
                 <a href="../user/product-details.html?id=${p.id}" target="_blank" class="btn-glass btn-sm px-2 text-primary text-nowrap" title="View on Storefront">
                   <i class="bi bi-eye"></i>
                 </a>
@@ -799,6 +946,114 @@
           submitBtn.disabled = false;
           submitBtn.innerHTML = 'Publish to Database & Store';
         }
+      }
+    }
+
+    let editSelectedFile = null;
+
+    function openEditProductModal(id) {
+      const p = productsList.find(x => x.id === id);
+      if (!p) return;
+
+      document.getElementById('editProductId').value = p.id;
+      document.getElementById('editProductModalTitle').textContent = `Edit Product: ${p.name}`;
+      document.getElementById('editProductName').value = p.name || '';
+      document.getElementById('editProductSku').value = p.sku || `PRO-${p.id}`;
+      document.getElementById('editProductPrice').value = p.price !== undefined && p.price !== null ? p.price : '';
+      document.getElementById('editProductDesc').value = p.description || '';
+      document.getElementById('editProductActiveSwitch').checked = p.is_active !== false;
+
+      // Populate Categories in Sport Dropdown
+      const sportSelect = document.getElementById('editProductSportSelect');
+      if (sportSelect) {
+        let opts = '';
+        categoriesList.forEach(c => {
+          const selected = (p.sport && p.sport.toLowerCase() === c.name.toLowerCase()) || 
+                           (p.category && p.category.toLowerCase() === c.name.toLowerCase());
+          opts += `<option value="${c.name}" ${selected ? 'selected' : ''}>${c.name}</option>`;
+        });
+        sportSelect.innerHTML = opts;
+      }
+
+      document.getElementById('editProductCategoryTag').value = p.category || p.sport || '';
+
+      // Image
+      const imgUrl = AdminApp.resolveAssetUrl(p.image || '/assets/images/products/rashguard-1.jpg');
+      document.getElementById('editProductImgPreview').src = imgUrl;
+      document.getElementById('editProductCurrentImageUrl').value = p.image || '';
+      document.getElementById('editProductImageFile').value = '';
+      editSelectedFile = null;
+
+      const modalEl = document.getElementById('editProductModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+
+    function handleEditFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        if (!file.type.startsWith('image/')) {
+          alert('Please choose a valid image file');
+          return;
+        }
+        editSelectedFile = file;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          document.getElementById('editProductImgPreview').src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function handleUpdateProduct(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('updateProductSubmitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving to database...';
+
+      const id = parseInt(document.getElementById('editProductId').value, 10);
+      const name = document.getElementById('editProductName').value.trim();
+      const sport = document.getElementById('editProductSportSelect').value;
+      const category = document.getElementById('editProductCategoryTag').value.trim() || sport;
+      const sku = document.getElementById('editProductSku').value.trim();
+      const price = document.getElementById('editProductPrice').value;
+      const description = document.getElementById('editProductDesc').value.trim();
+      const is_active = document.getElementById('editProductActiveSwitch').checked;
+
+      let imageUrl = document.getElementById('editProductCurrentImageUrl').value;
+      if (editSelectedFile) {
+        try {
+          const uploadRes = await AdminApp.uploadImage(editSelectedFile);
+          if (uploadRes && uploadRes.url) {
+            imageUrl = uploadRes.url;
+          }
+        } catch (uploadErr) {
+          imageUrl = document.getElementById('editProductImgPreview').src;
+        }
+      }
+
+      try {
+        await AdminApp.updateProduct(id, {
+          name,
+          sport,
+          category,
+          sku,
+          price,
+          description,
+          image: imageUrl,
+          is_active
+        });
+
+        const modalEl = document.getElementById('editProductModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+
+        await Promise.all([loadCategories(), loadProducts()]);
+      } catch (err) {
+        alert('Failed to update product: ' + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save Changes to Database';
       }
     }
     async function syncDefaultCatalog() {

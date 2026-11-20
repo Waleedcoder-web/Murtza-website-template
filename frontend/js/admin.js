@@ -132,6 +132,42 @@ const AdminApp = {
     return productData;
   },
 
+  async updateProduct(id, productData) {
+    try {
+      let payloadImage = productData.image;
+      if (productData.imageFile) {
+        payloadImage = await this.uploadImage(productData.imageFile);
+      }
+
+      const res = await fetch(`${this.API_BASE}/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: productData.name,
+          sku: productData.sku,
+          price: productData.price,
+          sport: productData.sport,
+          category: productData.category,
+          image: payloadImage,
+          description: productData.description,
+          is_active: productData.is_active
+        })
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        this.showAdminToast(`Product "${updated.name}" updated successfully!`, 'bi-check-circle-fill text-success');
+        return updated;
+      }
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Failed to update product');
+    } catch (e) {
+      console.error('API error updating product:', e);
+      this.showAdminToast('Error updating product: ' + e.message, 'bi-exclamation-triangle-fill text-warning');
+      throw e;
+    }
+  },
+
   async deleteProduct(id) {
     try {
       const res = await fetch(`${this.API_BASE}/products/${id}`, {
