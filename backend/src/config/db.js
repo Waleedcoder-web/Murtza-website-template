@@ -60,7 +60,32 @@ const fallbackStore = {
     { id: 11, name: 'Wrestling', slug: 'wrestling', image: '/assets/images/sport-wrestling.png', description: 'Custom sublimated wrestling singlets, compression tops & fight shorts', is_active: true },
     { id: 12, name: 'Compression Wear', slug: 'compression-wear', image: '/assets/images/sport-7v7.png', description: 'High-flex compression shirts, rashguards & base layers', is_active: true }
   ],
-  hero_slides: [],
+  hero_slides: [
+    {
+      id: 1,
+      title: 'NEXT-GEN 3D SPORT WEAR',
+      subtitle: 'Volumetric lighting, layered depth, and tournament-grade custom apparel engineered for champions.',
+      btn_text: 'DESIGN YOUR KIT',
+      btn_link: 'customizer.html',
+      banner_image: '/assets/images/3d-stadium-bg.jpg',
+      lineup_image: '/assets/images/hero-jerseys-lineup-3d.png',
+      athlete_image: '/assets/images/hero-athlete-3d-new.png',
+      slide_order: 1,
+      is_active: true
+    },
+    {
+      id: 2,
+      title: 'DOMINATE THE COURT',
+      subtitle: 'Championship-grade custom sublimated jerseys, ultra-breathable speed mesh, and zero-fade dynamic colorways.',
+      btn_text: 'EXPLORE CATALOGUE',
+      btn_link: 'catalogue.html',
+      banner_image: '/assets/images/3d-arena-bg-2.jpg',
+      lineup_image: '/assets/images/hero-jerseys-lineup-2.png',
+      athlete_image: '/assets/images/hero-athlete-3d-2.png',
+      slide_order: 2,
+      is_active: true
+    }
+  ],
   special_offers: {
     id: 1,
     heading: 'SEASON SPECIAL OFFERS',
@@ -202,6 +227,17 @@ CREATE INDEX IF NOT EXISTS idx_hero_order ON storefront_hero(slide_order);
 INSERT INTO storefront_offers (id, heading, subheading, featured_title, featured_desc, featured_btn_text, featured_btn_link, featured_image)
 VALUES (1, 'SEASON SPECIAL OFFERS', 'Save up to 40% on select bulk team packages and seasonal uniform designs', '', '', 'GET PACKAGE QUOTE', 'placeorder.html', '')
 ON CONFLICT (id) DO NOTHING;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM storefront_hero LIMIT 1) THEN
+    INSERT INTO storefront_hero (id, title, subtitle, btn_text, btn_link, banner_image, lineup_image, athlete_image, slide_order, is_active)
+    VALUES 
+      (1, 'NEXT-GEN 3D SPORT WEAR', 'Volumetric lighting, layered depth, and tournament-grade custom apparel engineered for champions.', 'DESIGN YOUR KIT', 'customizer.html', '/assets/images/3d-stadium-bg.jpg', '/assets/images/hero-jerseys-lineup-3d.png', '/assets/images/hero-athlete-3d-new.png', 1, true),
+      (2, 'DOMINATE THE COURT', 'Championship-grade custom sublimated jerseys, ultra-breathable speed mesh, and zero-fade dynamic colorways.', 'EXPLORE CATALOGUE', 'catalogue.html', '/assets/images/3d-arena-bg-2.jpg', '/assets/images/hero-jerseys-lineup-2.png', '/assets/images/hero-athlete-3d-2.png', 2, true);
+    PERFORM setval(pg_get_serial_sequence('storefront_hero', 'id'), COALESCE((SELECT MAX(id) FROM storefront_hero), 1));
+  END IF;
+END $$;
 
 DO $$
 BEGIN

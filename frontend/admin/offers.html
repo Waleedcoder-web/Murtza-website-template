@@ -903,6 +903,7 @@
         preview.src = e.target.result;
         preview.classList.remove('d-none');
         placeholder.classList.add('d-none');
+        hiddenUrl.value = e.target.result; // Instant fallback
       };
       reader.readAsDataURL(file);
 
@@ -914,7 +915,7 @@
           AdminApp.showAdminToast('Background image uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Banner background upload failed: ' + err.message);
+        console.warn('Background upload notice, using direct data URI:', err.message);
       }
     }
 
@@ -931,6 +932,7 @@
         preview.src = e.target.result;
         preview.classList.remove('d-none');
         placeholder.classList.add('d-none');
+        hiddenUrl.value = e.target.result; // Instant fallback
       };
       reader.readAsDataURL(file);
 
@@ -942,7 +944,7 @@
           AdminApp.showAdminToast('5-Uniforms Lineup uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Lineup upload failed: ' + err.message);
+        console.warn('Lineup upload notice, using direct data URI:', err.message);
       }
     }
 
@@ -959,6 +961,7 @@
         preview.src = e.target.result;
         preview.classList.remove('d-none');
         placeholder.classList.add('d-none');
+        hiddenUrl.value = e.target.result; // Instant fallback
       };
       reader.readAsDataURL(file);
 
@@ -970,7 +973,7 @@
           AdminApp.showAdminToast('Athlete cutout uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Cutout upload failed: ' + err.message);
+        console.warn('Cutout upload notice, using direct data URI:', err.message);
       }
     }
 
@@ -982,7 +985,10 @@
       const hiddenUrl = document.getElementById('editHeroBgUrl');
 
       const reader = new FileReader();
-      reader.onload = (e) => { preview.src = e.target.result; };
+      reader.onload = (e) => { 
+        preview.src = e.target.result; 
+        hiddenUrl.value = e.target.result; // Instant fallback
+      };
       reader.readAsDataURL(file);
 
       AdminApp.showAdminToast('Uploading new background...', 'bi-arrow-repeat text-info');
@@ -993,7 +999,7 @@
           AdminApp.showAdminToast('Background image updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Upload failed: ' + err.message);
+        console.warn('Background upload notice, using direct data URI:', err.message);
       }
     }
 
@@ -1010,6 +1016,7 @@
         preview.src = e.target.result;
         preview.classList.remove('d-none');
         placeholder.classList.add('d-none');
+        hiddenUrl.value = e.target.result; // Instant fallback
       };
       reader.readAsDataURL(file);
 
@@ -1021,7 +1028,7 @@
           AdminApp.showAdminToast('5-Uniforms Lineup updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Lineup upload failed: ' + err.message);
+        console.warn('Lineup upload notice, using direct data URI:', err.message);
       }
     }
 
@@ -1038,6 +1045,7 @@
         preview.src = e.target.result;
         preview.classList.remove('d-none');
         placeholder.classList.add('d-none');
+        hiddenUrl.value = e.target.result; // Instant fallback
       };
       reader.readAsDataURL(file);
 
@@ -1049,16 +1057,30 @@
           AdminApp.showAdminToast('Athlete cutout updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Cutout upload failed: ' + err.message);
+        console.warn('Cutout upload notice, using direct data URI:', err.message);
       }
     }
 
     async function submitNewHeroBanner(event) {
       event.preventDefault();
 
-      const athlete_image = document.getElementById('newBannerAthleteUrl').value.trim();
+      let athlete_image = document.getElementById('newBannerAthleteUrl').value.trim();
+      if (!athlete_image) {
+        const athImg = document.getElementById('newBannerAthletePreview');
+        if (athImg && athImg.src && !athImg.classList.contains('d-none')) athlete_image = athImg.src;
+      }
+
       let banner_image = document.getElementById('newBannerBgUrl').value.trim();
-      const lineup_image = document.getElementById('newBannerLineupUrl').value.trim();
+      if (!banner_image) {
+        const bgImg = document.getElementById('newBannerBgPreview');
+        if (bgImg && bgImg.src && !bgImg.classList.contains('d-none')) banner_image = bgImg.src;
+      }
+
+      let lineup_image = document.getElementById('newBannerLineupUrl').value.trim();
+      if (!lineup_image) {
+        const lineupImg = document.getElementById('newBannerLineupPreview');
+        if (lineupImg && lineupImg.src && !lineupImg.classList.contains('d-none')) lineup_image = lineupImg.src;
+      }
 
       if (!athlete_image && !banner_image && !lineup_image) {
         alert('Please upload at least one image (Background, 5-Uniforms Lineup, or Athlete).');
@@ -1070,8 +1092,8 @@
         subtitle: document.getElementById('newBannerSubtitle').value.trim(),
         btn_text: document.getElementById('newBannerBtnText').value.trim() || 'Shop Now',
         btn_link: document.getElementById('newBannerBtnLink').value.trim() || 'catalogue.html',
-        banner_image: banner_image || athlete_image,
-        athlete_image: athlete_image || banner_image,
+        banner_image: banner_image || athlete_image || lineup_image,
+        athlete_image: athlete_image || '',
         lineup_image: lineup_image || '',
         slide_order: parseInt(document.getElementById('newBannerOrder').value, 10) || 1
       };
@@ -1107,9 +1129,23 @@
       event.preventDefault();
 
       const id = document.getElementById('editHeroId').value;
-      const athlete_image = document.getElementById('editHeroAthleteUrl').value.trim();
+      let athlete_image = document.getElementById('editHeroAthleteUrl').value.trim();
+      if (!athlete_image) {
+        const athImg = document.getElementById('editHeroAthletePreview');
+        if (athImg && athImg.src && !athImg.classList.contains('d-none')) athlete_image = athImg.src;
+      }
+
       let banner_image = document.getElementById('editHeroBgUrl').value.trim();
-      const lineup_image = document.getElementById('editHeroLineupUrl').value.trim();
+      if (!banner_image) {
+        const bgImg = document.getElementById('editHeroBgPreview');
+        if (bgImg && bgImg.src && !bgImg.classList.contains('d-none')) banner_image = bgImg.src;
+      }
+
+      let lineup_image = document.getElementById('editHeroLineupUrl').value.trim();
+      if (!lineup_image) {
+        const lineupImg = document.getElementById('editHeroLineupPreview');
+        if (lineupImg && lineupImg.src && !lineupImg.classList.contains('d-none')) lineup_image = lineupImg.src;
+      }
 
       if (!athlete_image && !banner_image && !lineup_image) {
         alert('Please upload at least one image (Background, 5-Uniforms Lineup, or Athlete).');
@@ -1121,8 +1157,8 @@
         subtitle: document.getElementById('editHeroSubtitle').value.trim(),
         btn_text: document.getElementById('editHeroBtnText').value.trim(),
         btn_link: document.getElementById('editHeroBtnLink').value.trim(),
-        banner_image: banner_image || athlete_image,
-        athlete_image: athlete_image || banner_image,
+        banner_image: banner_image || athlete_image || lineup_image,
+        athlete_image: athlete_image || '',
         lineup_image: lineup_image || '',
         slide_order: parseInt(document.getElementById('editHeroOrder').value, 10) || 1
       };

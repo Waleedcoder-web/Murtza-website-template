@@ -962,21 +962,26 @@
         const isActive = idx === 0 ? 'active' : '';
 
         slidesHtml += `
-          <div class="hero-slide" data-active="${isActive}">
+          <div class="hero-slide ${isActive}" data-index="${idx}">
             <!-- LEFT 70% SECTION: Covers entire 70% area with Image 1, text sits on top -->
             <div class="hero-slide-left">
               <div class="hero-left-bg" style="background-image: url('${leftImg}');"></div>
               <div class="hero-left-overlay"></div>
               <div class="hero-content">
+                <span class="hero-kicker">${idx === 1 ? 'ELITE BASKETBALL & TEAMWEAR' : 'SNOWTOP 3D PERFORMANCE'}</span>
                 <h1 class="hero-title">${h.title || ''}</h1>
                 ${h.subtitle ? `<p class="hero-subtitle">${h.subtitle}</p>` : ''}
+                <div class="hero-btn-group">
+                  <a href="${h.btn_link || 'catalogue.html'}" class="hero-cta-btn">${h.btn_text || 'Shop The Collection'}</a>
+                </div>
               </div>
             </div>
-            <!-- MIDDLE-GROUND 3D LAYER: Rashguards Lineup -->
+            <!-- MIDDLE-GROUND 3D LAYER: 5-Uniforms Lineup -->
+            ${lineupImg ? `
             <div class="hero-lineup-wrap">
-              <img src="${lineupImg}" alt="Custom Sublimated Rashguards Lineup" class="hero-lineup-img">
-            </div>
-            <!-- RIGHT 30% SECTION: Dedicated to Image 2 (Athlete photo) grounded top-to-bottom -->
+              <img src="${lineupImg}" alt="Custom Sublimated Lineup" class="hero-lineup-img">
+            </div>` : ''}
+            <!-- RIGHT 30% SECTION: Dedicated to Athlete Cutout grounded top-to-bottom -->
             <div class="hero-slide-right">
               <div class="hero-right-bg" style="background-image: url('${leftImg}');"></div>
               ${athleteImg ? `<img src="${athleteImg}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
@@ -984,7 +989,7 @@
           </div>
         `;
 
-        dotsHtml += `<button class="hero-dot ${isActive}" data-idx="${idx}"></button>`;
+        dotsHtml += `<button class="hero-dot ${isActive}" data-slide="${idx}"></button>`;
       });
 
       // Remove existing slides
@@ -1006,16 +1011,6 @@
 
       // Bind interactive controls
       bindHeroControls();
-
-      // Trigger smooth 3D entrance animation on load
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          const slides = carouselEl.querySelectorAll('.hero-slide');
-          slides.forEach(s => {
-            if (s.dataset.active === 'active') s.classList.add('active');
-          });
-        }, 30);
-      });
 
       // Initialize interactive 3D Mouse Parallax
       initHero3DParallax();

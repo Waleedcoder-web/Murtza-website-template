@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       const dealsRes = await db.query('SELECT * FROM storefront_deal_cards WHERE is_active = true ORDER BY card_order ASC, id ASC');
 
       return res.json({
-        hero: heroRes.rows || [],
+        hero: (heroRes && heroRes.rows && heroRes.rows.length > 0) ? heroRes.rows : db.fallbackStore.hero_slides,
         special: (offersRes.rows && offersRes.rows[0]) || db.fallbackStore.special_offers,
         featured_banners: featRes.rows || [],
         deals: dealsRes.rows || []
