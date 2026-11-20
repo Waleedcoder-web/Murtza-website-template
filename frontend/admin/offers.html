@@ -255,34 +255,53 @@
           <div class="modal-body p-4">
             <form id="newHeroBannerForm" onsubmit="submitNewHeroBanner(event)">
               <div class="row g-3">
-                <div class="col-12 col-md-6">
-                  <label class="form-label small fw-bold text-dark mb-1">Left Banner Image (70% Area - Behind Text) <span class="text-danger">*</span></label>
+                <!-- 1. Left 70% Background Image -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">1. Background Cover (70%) <span class="text-danger">*</span></label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     <img id="newBannerBgPreview" src="" alt="Left Banner Preview" class="d-none w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
                     <div id="newBannerBgPlaceholder" class="text-muted py-3">
                       <i class="bi bi-images fs-2 text-secondary d-block mb-1"></i>
-                      <span class="small fw-semibold">Upload left image (covers 70% behind text)</span>
+                      <span class="small fw-semibold" style="font-size: 0.75rem;">Stadium / Arena backdrop</span>
                     </div>
                     <input type="file" id="newBannerBgFile" accept="image/*" class="d-none" onchange="handleNewBannerBgUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('newBannerBgFile').click()">
-                    <i class="bi bi-upload me-1"></i> Choose Left 70% Image
+                    <i class="bi bi-upload me-1"></i> Background (70%)
                   </button>
                   <input type="hidden" id="newBannerBgUrl" value="">
                 </div>
 
-                <div class="col-12 col-md-6">
-                  <label class="form-label small fw-bold text-dark mb-1">Athlete Photo (Right 30% Area) <span class="text-danger">*</span></label>
+                <!-- 2. Middle 5-Uniforms Lineup Cutout -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">2. 5-Uniforms Lineup (Middle)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="newBannerLineupPreview" src="" alt="Lineup Preview" class="d-none" style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                    <div id="newBannerLineupPlaceholder" class="text-muted py-3">
+                      <i class="bi bi-collection-fill fs-2 text-warning d-block mb-1"></i>
+                      <span class="small fw-semibold" style="font-size: 0.75rem;">5 Suits/Jerseys (Transparent PNG)</span>
+                    </div>
+                    <input type="file" id="newBannerLineupFile" accept="image/*" class="d-none" onchange="handleNewBannerLineupUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-warning text-dark btn-sm w-100 fw-semibold" onclick="document.getElementById('newBannerLineupFile').click()">
+                    <i class="bi bi-upload me-1"></i> 5-Uniforms Lineup
+                  </button>
+                  <input type="hidden" id="newBannerLineupUrl" value="">
+                </div>
+
+                <!-- 3. Right 30% Pro Athlete Cutout -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">3. Athlete Cutout (Right 30%)</label>
                   <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     <img id="newBannerAthletePreview" src="" alt="Athlete Preview" class="d-none" style="max-height: 120px; object-fit: contain;">
                     <div id="newBannerAthletePlaceholder" class="text-muted py-3">
                       <i class="bi bi-person-badge fs-2 text-primary d-block mb-1"></i>
-                      <span class="small fw-semibold">Upload athlete cutout (prints on right 30%)</span>
+                      <span class="small fw-semibold" style="font-size: 0.75rem;">Athlete / Mannequin cutout</span>
                     </div>
                     <input type="file" id="newBannerAthleteFile" accept="image/*" class="d-none" onchange="handleNewBannerAthleteUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('newBannerAthleteFile').click()">
-                    <i class="bi bi-upload me-1"></i> Choose Right Athlete Photo
+                    <i class="bi bi-upload me-1"></i> Athlete Cutout (30%)
                   </button>
                   <input type="hidden" id="newBannerAthleteUrl" value="">
                 </div>
@@ -338,27 +357,43 @@
             <form id="editHeroBannerForm" onsubmit="submitEditHeroBanner(event)">
               <input type="hidden" id="editHeroId">
               <div class="row g-3">
-                <div class="col-12 col-md-6">
-                  <label class="form-label small fw-bold text-dark mb-1">Left Banner Image (70% Area - Behind Text) <span class="text-danger">*</span></label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                <!-- 1. Left 70% Background Image -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">1. Background Cover (70%) <span class="text-danger">*</span></label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     <img id="editHeroBgPreview" src="" alt="Left Banner Preview" class="w-100 rounded-2" style="max-height: 140px; object-fit: cover;">
                     <input type="file" id="editHeroBgFile" accept="image/*" class="d-none" onchange="handleEditHeroBgUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="document.getElementById('editHeroBgFile').click()">
-                    <i class="bi bi-upload me-1"></i> Change Left 70% Image
+                    <i class="bi bi-upload me-1"></i> Change Background (70%)
                   </button>
                   <input type="hidden" id="editHeroBgUrl">
                 </div>
 
-                <div class="col-12 col-md-6">
-                  <label class="form-label small fw-bold text-dark mb-1">Athlete Photo (Right 30% Area) <span class="text-danger">*</span></label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center;">
+                <!-- 2. Middle 5-Uniforms Lineup Cutout -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">2. 5-Uniforms Lineup (Middle)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <img id="editHeroLineupPreview" src="" alt="Lineup Preview" class="d-none" style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                    <span id="editHeroLineupPlaceholder" class="text-muted small">None attached (using default)</span>
+                    <input type="file" id="editHeroLineupFile" accept="image/*" class="d-none" onchange="handleEditHeroLineupUpload(event)">
+                  </div>
+                  <button type="button" class="btn btn-outline-warning text-dark btn-sm w-100 fw-semibold" onclick="document.getElementById('editHeroLineupFile').click()">
+                    <i class="bi bi-upload me-1"></i> Change 5-Suits Lineup
+                  </button>
+                  <input type="hidden" id="editHeroLineupUrl">
+                </div>
+
+                <!-- 3. Right 30% Pro Athlete Cutout -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label small fw-bold text-dark mb-1">3. Athlete Cutout (Right 30%)</label>
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     <img id="editHeroAthletePreview" src="" alt="Athlete Preview" style="max-height: 120px; object-fit: contain;">
                     <span id="editHeroAthletePlaceholder" class="text-muted small d-none">None attached</span>
                     <input type="file" id="editHeroAthleteFile" accept="image/*" class="d-none" onchange="handleEditHeroAthleteUpload(event)">
                   </div>
                   <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="document.getElementById('editHeroAthleteFile').click()">
-                    <i class="bi bi-upload me-1"></i> Change Right Athlete Photo
+                    <i class="bi bi-upload me-1"></i> Change Athlete Cutout
                   </button>
                   <input type="hidden" id="editHeroAthleteUrl">
                 </div>
@@ -709,6 +744,7 @@
         const rawBg = s.banner_image || '';
         const bannerSrc = rawBg.startsWith('/') ? '..' + rawBg : rawBg;
         const athleteSrc = s.athlete_image ? (s.athlete_image.startsWith('/') ? '..' + s.athlete_image : s.athlete_image) : '';
+        const lineupSrc = s.lineup_image ? (s.lineup_image.startsWith('/') ? '..' + s.lineup_image : s.lineup_image) : '';
 
         html += `
           <div class="col-12 col-md-6 col-xl-4" id="bannerCard_${s.id}">
@@ -728,22 +764,41 @@
                 </div>
               </div>
 
-              <!-- 70/30 Banner Preview Thumbnail -->
-              <div class="position-relative rounded-3 overflow-hidden mb-3 border bg-dark d-flex" style="height: 140px;">
-                <!-- Left 70% Area -->
+              <!-- 3-Layer Composite Hero Preview Thumbnail -->
+              <div class="position-relative rounded-3 overflow-hidden mb-2 border bg-dark d-flex" style="height: 140px;">
+                <!-- Layer 1: Left 70% Background -->
                 <div style="width: 70%; height: 100%; position: relative; overflow: hidden; background: url('${bannerSrc}') center / cover no-repeat;">
                   <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(11,15,23,0.7), transparent);"></div>
-                  <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2;">
-                    <span class="badge bg-dark bg-opacity-75 border border-secondary text-white" style="font-size: 0.65rem;">70% Cover Image</span>
+                  <!-- Layer 2: Middle 5-Uniforms Lineup Overlay -->
+                  ${lineupSrc ? `
+                    <div style="position: absolute; bottom: 0; right: 0; width: 65%; height: 80%; display: flex; align-items: flex-end; justify-content: center; z-index: 2;">
+                      <img src="${lineupSrc}" alt="Lineup" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                  ` : ''}
+                  <div style="position: absolute; bottom: 6px; left: 6px; z-index: 3;">
+                    <span class="badge bg-dark bg-opacity-75 border border-secondary text-white" style="font-size: 0.6rem;">70% Background</span>
                   </div>
                 </div>
-                <!-- Right 30% Area -->
+                <!-- Layer 3: Right 30% Athlete Cutout -->
                 <div style="width: 30%; height: 100%; position: relative; overflow: hidden; background: #0b0f17; display: flex; align-items: flex-end; justify-content: center; border-left: 1px dashed rgba(255,255,255,0.2);">
-                  ${athleteSrc ? `<img src="${athleteSrc}" alt="Athlete" style="max-height: 100%; max-width: 100%; object-fit: contain;">` : '<span class="text-muted" style="font-size: 0.65rem;">No Athlete</span>'}
-                  <div style="position: absolute; top: 6px; right: 6px;">
-                    <span class="badge bg-primary" style="font-size: 0.6rem;">30% Athlete</span>
+                  ${athleteSrc ? `<img src="${athleteSrc}" alt="Athlete" style="max-height: 100%; max-width: 100%; object-fit: contain; z-index: 2;">` : '<span class="text-muted" style="font-size: 0.65rem;">No Athlete</span>'}
+                  <div style="position: absolute; top: 6px; right: 6px; z-index: 3;">
+                    <span class="badge bg-primary" style="font-size: 0.55rem;">Athlete Cutout</span>
                   </div>
                 </div>
+              </div>
+
+              <!-- 3 Visual Components Status Badges -->
+              <div class="d-flex flex-wrap gap-1 mb-2">
+                <span class="badge ${bannerSrc ? 'bg-success' : 'bg-secondary'} bg-opacity-10 text-${bannerSrc ? 'success' : 'muted'} border" style="font-size: 0.68rem;">
+                  <i class="bi ${bannerSrc ? 'bi-check2' : 'bi-dash'} me-1"></i>1. Background
+                </span>
+                <span class="badge ${lineupSrc ? 'bg-warning text-dark' : 'bg-light text-muted'} border" style="font-size: 0.68rem;">
+                  <i class="bi ${lineupSrc ? 'bi-check2' : 'bi-dash'} me-1"></i>2. 5-Suits Lineup
+                </span>
+                <span class="badge ${athleteSrc ? 'bg-info text-dark' : 'bg-light text-muted'} border" style="font-size: 0.68rem;">
+                  <i class="bi ${athleteSrc ? 'bi-check2' : 'bi-dash'} me-1"></i>3. Athlete Cutout
+                </span>
               </div>
 
               <h6 class="fw-bold text-dark mb-1 text-truncate" title="${s.title}">${s.title}</h6>
@@ -773,6 +828,10 @@
       document.getElementById('newBannerBgPreview').classList.add('d-none');
       document.getElementById('newBannerBgPlaceholder').classList.remove('d-none');
 
+      document.getElementById('newBannerLineupUrl').value = '';
+      document.getElementById('newBannerLineupPreview').classList.add('d-none');
+      document.getElementById('newBannerLineupPlaceholder').classList.remove('d-none');
+
       document.getElementById('newBannerAthleteUrl').value = '';
       document.getElementById('newBannerAthletePreview').classList.add('d-none');
       document.getElementById('newBannerAthletePlaceholder').classList.remove('d-none');
@@ -797,8 +856,22 @@
 
       // Background preview
       document.getElementById('editHeroBgUrl').value = banner.banner_image || '';
-      const bannerSrc = banner.banner_image.startsWith('/') ? '..' + banner.banner_image : banner.banner_image;
+      const bannerSrc = banner.banner_image ? (banner.banner_image.startsWith('/') ? '..' + banner.banner_image : banner.banner_image) : '';
       document.getElementById('editHeroBgPreview').src = bannerSrc;
+
+      // Lineup preview
+      const lineupSrc = banner.lineup_image ? (banner.lineup_image.startsWith('/') ? '..' + banner.lineup_image : banner.lineup_image) : '';
+      document.getElementById('editHeroLineupUrl').value = banner.lineup_image || '';
+      const lineupPreview = document.getElementById('editHeroLineupPreview');
+      const lineupPlaceholder = document.getElementById('editHeroLineupPlaceholder');
+      if (lineupSrc) {
+        lineupPreview.src = lineupSrc;
+        lineupPreview.classList.remove('d-none');
+        lineupPlaceholder.classList.add('d-none');
+      } else {
+        lineupPreview.classList.add('d-none');
+        lineupPlaceholder.classList.remove('d-none');
+      }
 
       // Athlete preview
       const athleteSrc = banner.athlete_image ? (banner.athlete_image.startsWith('/') ? '..' + banner.athlete_image : banner.athlete_image) : '';
@@ -833,15 +906,43 @@
       };
       reader.readAsDataURL(file);
 
-      AdminApp.showAdminToast('Uploading banner image...', 'bi-arrow-repeat text-info');
+      AdminApp.showAdminToast('Uploading banner background...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Banner image uploaded!', 'bi-check-circle-fill text-success');
+          AdminApp.showAdminToast('Background image uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Banner upload failed: ' + err.message);
+        alert('Banner background upload failed: ' + err.message);
+      }
+    }
+
+    async function handleNewBannerLineupUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('newBannerLineupPreview');
+      const placeholder = document.getElementById('newBannerLineupPlaceholder');
+      const hiddenUrl = document.getElementById('newBannerLineupUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading 5-uniforms lineup...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('5-Uniforms Lineup uploaded!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Lineup upload failed: ' + err.message);
       }
     }
 
@@ -884,15 +985,43 @@
       reader.onload = (e) => { preview.src = e.target.result; };
       reader.readAsDataURL(file);
 
-      AdminApp.showAdminToast('Uploading new banner image...', 'bi-arrow-repeat text-info');
+      AdminApp.showAdminToast('Uploading new background...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Banner image updated!', 'bi-check-circle-fill text-success');
+          AdminApp.showAdminToast('Background image updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
         alert('Upload failed: ' + err.message);
+      }
+    }
+
+    async function handleEditHeroLineupUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('editHeroLineupPreview');
+      const placeholder = document.getElementById('editHeroLineupPlaceholder');
+      const hiddenUrl = document.getElementById('editHeroLineupUrl');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+      };
+      reader.readAsDataURL(file);
+
+      AdminApp.showAdminToast('Uploading new 5-uniforms lineup...', 'bi-arrow-repeat text-info');
+      try {
+        const uploadResult = await AdminApp.uploadImage(file);
+        if (uploadResult && uploadResult.url) {
+          hiddenUrl.value = uploadResult.url;
+          AdminApp.showAdminToast('5-Uniforms Lineup updated!', 'bi-check-circle-fill text-success');
+        }
+      } catch (err) {
+        alert('Lineup upload failed: ' + err.message);
       }
     }
 
@@ -929,9 +1058,10 @@
 
       const athlete_image = document.getElementById('newBannerAthleteUrl').value.trim();
       let banner_image = document.getElementById('newBannerBgUrl').value.trim();
+      const lineup_image = document.getElementById('newBannerLineupUrl').value.trim();
 
-      if (!athlete_image && !banner_image) {
-        alert('Please upload at least one image (Left 70% or Right Athlete).');
+      if (!athlete_image && !banner_image && !lineup_image) {
+        alert('Please upload at least one image (Background, 5-Uniforms Lineup, or Athlete).');
         return;
       }
 
@@ -942,6 +1072,7 @@
         btn_link: document.getElementById('newBannerBtnLink').value.trim() || 'catalogue.html',
         banner_image: banner_image || athlete_image,
         athlete_image: athlete_image || banner_image,
+        lineup_image: lineup_image || '',
         slide_order: parseInt(document.getElementById('newBannerOrder').value, 10) || 1
       };
 
@@ -978,9 +1109,10 @@
       const id = document.getElementById('editHeroId').value;
       const athlete_image = document.getElementById('editHeroAthleteUrl').value.trim();
       let banner_image = document.getElementById('editHeroBgUrl').value.trim();
+      const lineup_image = document.getElementById('editHeroLineupUrl').value.trim();
 
-      if (!athlete_image && !banner_image) {
-        alert('Please upload at least one image (Left 70% or Right Athlete).');
+      if (!athlete_image && !banner_image && !lineup_image) {
+        alert('Please upload at least one image (Background, 5-Uniforms Lineup, or Athlete).');
         return;
       }
 
@@ -991,6 +1123,7 @@
         btn_link: document.getElementById('editHeroBtnLink').value.trim(),
         banner_image: banner_image || athlete_image,
         athlete_image: athlete_image || banner_image,
+        lineup_image: lineup_image || '',
         slide_order: parseInt(document.getElementById('editHeroOrder').value, 10) || 1
       };
 

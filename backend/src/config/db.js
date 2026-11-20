@@ -144,10 +144,12 @@ CREATE TABLE IF NOT EXISTS storefront_hero (
     btn_link VARCHAR(255) DEFAULT 'catalogue.html',
     banner_image TEXT NOT NULL,
     athlete_image TEXT DEFAULT '',
+    lineup_image TEXT DEFAULT '',
     slide_order INT DEFAULT 1,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE storefront_hero ADD COLUMN IF NOT EXISTS lineup_image TEXT DEFAULT '';
 
 -- 6. Storefront Season Special Offers Table (Main Section Heading)
 CREATE TABLE IF NOT EXISTS storefront_offers (

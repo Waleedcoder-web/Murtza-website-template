@@ -35,7 +35,7 @@ router.post('/hero', async (req, res) => {
   const {
     title, subtitle,
     btn_text, btn_link,
-    banner_image, athlete_image,
+    banner_image, athlete_image, lineup_image,
     slide_order
   } = req.body;
 
@@ -44,25 +44,26 @@ router.post('/hero', async (req, res) => {
   }
 
   try {
-    if (db.getIsConnected()) {
-      const maxOrderRes = await db.query('SELECT COALESCE(MAX(slide_order), 0) as max_order FROM storefront_hero');
-      const nextOrder = slide_order || ((maxOrderRes.rows[0]?.max_order || 0) + 1);
+    const maxOrderRes = await db.query('SELECT COALESCE(MAX(slide_order), 0) as max_order FROM storefront_hero');
+    const nextOrder = slide_order || ((maxOrderRes && maxOrderRes.rows && maxOrderRes.rows[0]?.max_order || 0) + 1);
 
-      const insertRes = await db.query(
-        `INSERT INTO storefront_hero
-         (title, subtitle, btn_text, btn_link, banner_image, athlete_image, slide_order, is_active)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, true)
-         RETURNING *`,
-        [
-          title || 'New Sports Banner',
-          subtitle || '',
-          btn_text || 'Shop The Collection',
-          btn_link || 'catalogue.html',
-          banner_image,
-          athlete_image || '',
-          nextOrder
-        ]
-      );
+    const insertRes = await db.query(
+      `INSERT INTO storefront_hero
+       (title, subtitle, btn_text, btn_link, banner_image, athlete_image, lineup_image, slide_order, is_active)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
+       RETURNING *`,
+      [
+        title || 'New Sports Banner',
+        subtitle || '',
+        btn_text || 'Shop The Collection',
+        btn_link || 'catalogue.html',
+        banner_image,
+        athlete_image || '',
+        lineup_image || '',
+        nextOrder
+      ]
+    );
+    if (insertRes && insertRes.rows && insertRes.rows.length > 0) {
       return res.status(201).json({ success: true, message: 'Hero banner added', slide: insertRes.rows[0] });
     }
   } catch (err) {
@@ -78,6 +79,7 @@ router.post('/hero', async (req, res) => {
     btn_link: btn_link || 'catalogue.html',
     banner_image,
     athlete_image: athlete_image || '',
+    lineup_image: lineup_image || '',
     slide_order: slide_order || (db.fallbackStore.hero_slides.length + 1),
     is_active: true
   };
@@ -111,15 +113,15 @@ router.put('/hero/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   if (isNaN(id)) return res.status(400).json({ error: 'Invalid ID' });
 
-  const { title, subtitle, btn_text, btn_link, banner_image, athlete_image, slide_order } = req.body;
+  const { title, subtitle, btn_text, btn_link, banner_image, athlete_image, lineup_image, slide_order } = req.body;
   try {
     if (db.getIsConnected()) {
       const updateRes = await db.query(
         `UPDATE storefront_hero
          SET title = $1, subtitle = $2, btn_text = $3, btn_link = $4,
-             banner_image = $5, athlete_image = $6, slide_order = $7
-         WHERE id = $8 RETURNING *`,
-        [title, subtitle, btn_text, btn_link, banner_image, athlete_image || '', slide_order || 1, id]
+             banner_image = $5, athlete_image = $6, lineup_image = $7, slide_order = $8
+         WHERE id = $9 RETURNING *`,
+        [title, subtitle, btn_text, btn_link, banner_image, athlete_image || '', lineup_image || '', slide_order || 1, id]
       );
       if (updateRes.rows.length === 0) return res.status(404).json({ error: 'Banner not found' });
       return res.json({ success: true, message: 'Hero banner updated', slide: updateRes.rows[0] });
@@ -151,23 +153,23 @@ router.put('/hero', async (req, res) => {
           await db.query(
             `UPDATE storefront_hero 
              SET title = $1, subtitle = $2, btn_text = $3, btn_link = $4, 
-                 banner_image = $5, athlete_image = $6, slide_order = $7,
-                 is_active = $8
-             WHERE id = $9`,
+                 banner_image = $5, athlete_image = $6, lineup_image = $7, slide_order = $8,
+                 is_active = $9
+             WHERE id = $10`,
             [
               slide.title, slide.subtitle, slide.btn_text, slide.btn_link,
-              slide.banner_image, slide.athlete_image, slide.slide_order || 1,
+              slide.banner_image, slide.athlete_image, slide.lineup_image || '', slide.slide_order || 1,
               slide.is_active !== false, slide.id
             ]
           );
         } else {
           await db.query(
             `INSERT INTO storefront_hero
-             (title, subtitle, btn_text, btn_link, banner_image, athlete_image, slide_order, is_active)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+             (title, subtitle, btn_text, btn_link, banner_image, athlete_image, lineup_image, slide_order, is_active)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
             [
               slide.title, slide.subtitle, slide.btn_text, slide.btn_link,
-              slide.banner_image, slide.athlete_image, slide.slide_order || 1,
+              slide.banner_image, slide.athlete_image, slide.lineup_image || '', slide.slide_order || 1,
               slide.is_active !== false
             ]
           );

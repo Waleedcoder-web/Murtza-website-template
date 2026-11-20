@@ -957,7 +957,8 @@
         const leftImg = h.banner_image ? resolveAssetUrl(h.banner_image) : resolveAssetUrl('../assets/images/3d-stadium-bg.jpg');
         // Image 2 (Right 30% Athlete Cutout / Photo)
         const athleteImg = h.athlete_image ? resolveAssetUrl(h.athlete_image) : '';
-        const lineupImg = resolveAssetUrl('../assets/images/hero-jerseys-lineup-3d.png');
+        // Image 3 (Middle-ground 5-Uniforms Lineup Cutout)
+        const lineupImg = h.lineup_image ? resolveAssetUrl(h.lineup_image) : resolveAssetUrl('../assets/images/hero-jerseys-lineup-3d.png');
         const isActive = idx === 0 ? 'active' : '';
 
         slidesHtml += `
