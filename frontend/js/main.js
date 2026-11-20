@@ -143,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.classList.toggle('active', i === currentHeroIdx);
     });
 
-    // When transitioning to Slide 1 (index 0), trigger fresh 2s 360° spin if present
-    if (currentHeroIdx === 0 && window.triggerTurntableSpin) {
+    // When transitioning slide, trigger fresh 360° circle spin on the active slide's athlete
+    if (window.triggerTurntableSpin) {
       window.triggerTurntableSpin();
     }
   }
@@ -163,8 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = getHeroSlides();
     if (slides.length <= 1) return;
 
-    // Slide 1 has a 2.5s rotation stage; other slides display for 4.5s
-    const delay = currentHeroIdx === 0 ? 2500 : 4500;
+    // Each slide displays for 4.5s with its 360° rotation stage
+    const delay = 4500;
     heroTimer = setTimeout(() => {
       nextHeroSlide();
       scheduleHeroSlideTransition();
@@ -300,132 +300,104 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   // ==========================================
-  // Hero 3D Turntable Stage (360° Rotating Mannequin & Ghost Suit)
+  // Hero 3D Turntable Stage (360° Circular Rotating Athlete on Neon Pedestal)
   // ==========================================
   function initHeroTurntable() {
-    const stage = document.getElementById('turntableStage');
-    if (!stage) return;
+    const stages = document.querySelectorAll('.hero-turntable-stage');
+    if (!stages || stages.length === 0) return;
 
-    const btnDummy = document.getElementById('btnModelDummy');
-    const btnSuit = document.getElementById('btnModelSuit');
-    const wrapDummy = document.getElementById('modelWrapDummy');
-    const wrapSuit = document.getElementById('modelWrapSuit');
-    const rotator = document.getElementById('turntableRotator');
-    const viewport = document.getElementById('turntableViewport');
-    const toggleSpinBtn = document.getElementById('btnToggleSpin');
-    const toggleSpinText = document.getElementById('spinToggleText');
-
-    let isAutoSpinning = true;
-    let currentAngle = 0;
-    let isDragging = false;
-    let startX = 0;
-
-    // Model switching (Athlete Dummy vs Straight Ghost Suit)
-    function switchModel(type) {
-      if (type === 'dummy') {
-        btnDummy?.classList.add('active');
-        btnSuit?.classList.remove('active');
-        wrapDummy?.classList.add('active');
-        wrapSuit?.classList.remove('active');
-      } else {
-        btnSuit?.classList.add('active');
-        btnDummy?.classList.remove('active');
-        wrapSuit?.classList.add('active');
-        wrapDummy?.classList.remove('active');
-      }
-      if (window.triggerTurntableSpin) window.triggerTurntableSpin();
-      if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
-    }
-
-    btnDummy?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      switchModel('dummy');
-    });
-
-    btnSuit?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      switchModel('suit');
-    });
-
-    // Auto-spin toggle
-    function setAutoSpin(enable) {
-      isAutoSpinning = enable;
-      window._turntablePaused = !enable;
-      if (isAutoSpinning) {
-        rotator?.classList.add('spinning');
-        toggleSpinBtn?.classList.remove('paused');
-        if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: ON';
-        if (window.triggerTurntableSpin) window.triggerTurntableSpin();
-        if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
-      } else {
-        rotator?.classList.remove('spinning');
-        toggleSpinBtn?.classList.add('paused');
-        if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: OFF';
-      }
-    }
-
-    toggleSpinBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setAutoSpin(!isAutoSpinning);
-    });
-
-    // Function to re-trigger 2s 360° spin
+    // Global trigger function to spin the active slide's rotator
     window.triggerTurntableSpin = function() {
-      if (!rotator || window._turntablePaused) return;
-      rotator.classList.remove('spinning');
-      rotator.style.transform = '';
-      void rotator.offsetWidth; // force reflow to restart CSS 2s animation
-      rotator.classList.add('spinning');
+      const activeSlide = document.querySelector('.hero-carousel .hero-slide.active');
+      if (!activeSlide || window._turntablePaused) return;
+      const rotator = activeSlide.querySelector('.turntable-rotator');
+      if (rotator) {
+        rotator.classList.remove('spinning');
+        rotator.style.transform = '';
+        void rotator.offsetWidth; // force reflow to restart CSS 2s animation
+        rotator.classList.add('spinning');
+      }
     };
 
-    // Interactive Drag to Rotate 360° (Mouse & Touch)
-    if (viewport && rotator) {
-      const onStart = (clientX) => {
-        isDragging = true;
-        startX = clientX;
-        window._turntablePaused = true;
-        rotator.classList.remove('spinning');
-        rotator.style.transition = 'none';
-      };
+    stages.forEach((stage) => {
+      if (stage._turntableBound) return;
+      stage._turntableBound = true;
 
-      const onMove = (clientX) => {
-        if (!isDragging) return;
-        const deltaX = clientX - startX;
-        startX = clientX;
-        currentAngle = (currentAngle + deltaX * 0.75) % 360;
-        rotator.style.transform = `perspective(1200px) rotateY(${currentAngle}deg)`;
-      };
+      const rotator = stage.querySelector('.turntable-rotator');
+      const viewport = stage.querySelector('.turntable-viewport') || stage.querySelector('#turntableViewport');
+      const toggleSpinBtn = stage.querySelector('.turntable-spin-toggle');
+      const toggleSpinText = stage.querySelector('.turntable-spin-toggle span') || stage.querySelector('#spinToggleText');
 
-      const onEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        rotator.style.transition = 'transform 0.4s ease-out';
+      let isAutoSpinning = true;
+      let currentAngle = 0;
+      let isDragging = false;
+      let startX = 0;
+
+      // Auto-spin toggle
+      toggleSpinBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isAutoSpinning = !isAutoSpinning;
+        window._turntablePaused = !isAutoSpinning;
         if (isAutoSpinning) {
-          setTimeout(() => {
-            if (isAutoSpinning && !isDragging) {
-              window._turntablePaused = false;
-              rotator.style.transition = '';
-              if (window.triggerTurntableSpin) window.triggerTurntableSpin();
-              if (window.scheduleHeroSlideTransition) window.scheduleHeroSlideTransition();
-            }
-          }, 800);
+          rotator?.classList.add('spinning');
+          toggleSpinBtn?.classList.remove('paused');
+          if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: ON';
+          if (window.triggerTurntableSpin) window.triggerTurntableSpin();
+        } else {
+          rotator?.classList.remove('spinning');
+          toggleSpinBtn?.classList.add('paused');
+          if (toggleSpinText) toggleSpinText.textContent = 'Auto 360° Spin: OFF';
         }
-      };
-
-      viewport.addEventListener('mousedown', (e) => onStart(e.clientX));
-      window.addEventListener('mousemove', (e) => {
-        if (isDragging) onMove(e.clientX);
       });
-      window.addEventListener('mouseup', onEnd);
 
-      viewport.addEventListener('touchstart', (e) => {
-        if (e.touches && e.touches.length > 0) onStart(e.touches[0].clientX);
-      }, { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (isDragging && e.touches && e.touches.length > 0) onMove(e.touches[0].clientX);
-      }, { passive: true });
-      window.addEventListener('touchend', onEnd);
-    }
+      // Interactive Drag to Rotate 360° (Mouse & Touch)
+      if (viewport && rotator) {
+        const onStart = (clientX) => {
+          isDragging = true;
+          startX = clientX;
+          window._turntablePaused = true;
+          rotator.classList.remove('spinning');
+          rotator.style.transition = 'none';
+        };
+
+        const onMove = (clientX) => {
+          if (!isDragging) return;
+          const deltaX = clientX - startX;
+          startX = clientX;
+          currentAngle = (currentAngle + deltaX * 0.75) % 360;
+          rotator.style.transform = `perspective(1200px) rotateY(${currentAngle}deg)`;
+        };
+
+        const onEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          rotator.style.transition = 'transform 0.4s ease-out';
+          if (isAutoSpinning) {
+            setTimeout(() => {
+              if (isAutoSpinning && !isDragging) {
+                window._turntablePaused = false;
+                rotator.style.transition = '';
+                if (window.triggerTurntableSpin) window.triggerTurntableSpin();
+              }
+            }, 800);
+          }
+        };
+
+        viewport.addEventListener('mousedown', (e) => onStart(e.clientX));
+        window.addEventListener('mousemove', (e) => {
+          if (isDragging) onMove(e.clientX);
+        });
+        window.addEventListener('mouseup', onEnd);
+
+        viewport.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches.length > 0) onStart(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (isDragging && e.touches && e.touches.length > 0) onMove(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener('touchend', onEnd);
+      }
+    });
 
     // Initial trigger on load
     window.triggerTurntableSpin();
@@ -433,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Hero Turntable Stage
   initHeroTurntable();
+  window.initHeroTurntable = initHeroTurntable;
 
   // ==========================================
   // Trending Carousel Scroll & Tab Filtering

@@ -166,7 +166,35 @@
       </div>
       <div class="hero-slide-right">
         <div class="hero-right-bg" style="background-image: url('../assets/images/3d-arena-bg-2.jpg');"></div>
-        <img src="../assets/images/hero-athlete-3d-2.png" alt="3D Basketball Pro Athlete" class="hero-athlete-img">
+        <div class="hero-turntable-stage">
+          <div class="turntable-viewport">
+            <div class="turntable-pedestal">
+              <div class="pedestal-outer-glow"></div>
+              <div class="pedestal-ring-neon ring-outer"></div>
+              <div class="pedestal-ring-neon ring-inner"></div>
+              <div class="pedestal-disc">
+                <div class="pedestal-crosshairs"></div>
+              </div>
+              <div class="pedestal-spotlight"></div>
+            </div>
+            <div class="turntable-rotator spinning">
+              <div class="turntable-model-wrap active">
+                <img src="../assets/images/hero-athlete-3d-2.png" alt="3D Basketball Pro Athlete" class="hero-athlete-img turntable-model-img">
+                <div class="model-light-sheen"></div>
+              </div>
+            </div>
+          </div>
+          <div class="turntable-footer">
+            <button type="button" class="turntable-spin-toggle" title="Toggle Auto-Spin">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Auto 360° Spin: ON</span>
+            </button>
+            <div class="turntable-drag-hint">
+              <i class="fa-solid fa-arrows-left-right"></i>
+              <span>Drag to spin 360°</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -936,12 +964,21 @@
           }
 
           // C. Hero Carousel Slides (Multiple Banners Support)
-          if (Array.isArray(data.hero) && data.hero.length > 0) {
+          if (data && data.db_connected && Array.isArray(data.hero) && data.hero.length > 0) {
+            console.log('⚡ Neon PostgreSQL is ONLINE: Rendering dynamic hero slides from Neon.');
             setupDynamicHeroCarousel(data.hero);
+          } else {
+            console.warn('⚠️ Neon PostgreSQL is OFFLINE / DISCONNECTED: Displaying fallback hero carousel.');
+            if (typeof window.initHeroTurntable === 'function') {
+              window.initHeroTurntable();
+            }
           }
         }
       } catch (e) {
-        console.warn('Could not load storefront offers from API', e);
+        console.warn('⚠️ Could not connect to API/Neon. Displaying fallback hero carousel.', e);
+        if (typeof window.initHeroTurntable === 'function') {
+          window.initHeroTurntable();
+        }
       }
     });
 
@@ -981,10 +1018,42 @@
             <div class="hero-lineup-wrap">
               <img src="${lineupImg}" alt="Custom Sublimated Lineup" class="hero-lineup-img">
             </div>` : ''}
-            <!-- RIGHT 30% SECTION: Dedicated to Athlete Cutout grounded top-to-bottom -->
+            <!-- RIGHT 30% SECTION: Dedicated to Athlete Cutout with 360° Turntable Rotating Stage -->
             <div class="hero-slide-right">
               <div class="hero-right-bg" style="background-image: url('${leftImg}');"></div>
-              ${athleteImg ? `<img src="${athleteImg}" alt="Featured Athlete" class="hero-athlete-img">` : ''}
+              ${athleteImg ? `
+              <div class="hero-turntable-stage">
+                <div class="turntable-viewport">
+                  <!-- Glowing 3D Base Pedestal Platform (Rotating circular neon rings) -->
+                  <div class="turntable-pedestal">
+                    <div class="pedestal-outer-glow"></div>
+                    <div class="pedestal-ring-neon ring-outer"></div>
+                    <div class="pedestal-ring-neon ring-inner"></div>
+                    <div class="pedestal-disc">
+                      <div class="pedestal-crosshairs"></div>
+                    </div>
+                    <div class="pedestal-spotlight"></div>
+                  </div>
+                  <!-- 360° Rotating Athlete Rotator with CSS Circular Spin Animation -->
+                  <div class="turntable-rotator spinning">
+                    <div class="turntable-model-wrap active">
+                      <img src="${athleteImg}" alt="Featured Athlete" class="hero-athlete-img turntable-model-img">
+                      <div class="model-light-sheen"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Interactive drag hint & spin control for this slide -->
+                <div class="turntable-footer">
+                  <button type="button" class="turntable-spin-toggle" title="Toggle Auto-Spin">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Auto 360° Spin: ON</span>
+                  </button>
+                  <div class="turntable-drag-hint">
+                    <i class="fa-solid fa-arrows-left-right"></i>
+                    <span>Drag to spin 360°</span>
+                  </div>
+                </div>
+              </div>` : ''}
             </div>
           </div>
         `;
@@ -1014,6 +1083,11 @@
         window.refreshHeroCarousel();
       } else {
         bindHeroControls();
+      }
+
+      // Re-initialize 360° Turntable stages on all dynamic slides
+      if (typeof window.initHeroTurntable === 'function') {
+        window.initHeroTurntable();
       }
 
       // Initialize interactive 3D Mouse Parallax
