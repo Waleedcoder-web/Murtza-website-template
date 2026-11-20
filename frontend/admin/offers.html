@@ -253,6 +253,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body p-4">
+            <!-- Quick Preset 1-Click Fill -->
+            <div class="alert alert-light border shadow-sm d-flex flex-wrap align-items-center justify-content-between p-2 mb-3 rounded-3" style="background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(13,110,253,0.06));">
+              <div class="d-flex align-items-center gap-2 mb-1 mb-md-0">
+                <span class="badge bg-warning text-dark"><i class="bi bi-stars me-1"></i>New Preset Set</span>
+                <span class="small fw-bold text-dark">Apex Cyber-Gold Matching Set (3D Stadium + 5 Uniforms + Athlete Cutout)</span>
+              </div>
+              <button type="button" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold" onclick="applyApexGoldPreset()">
+                <i class="bi bi-magic me-1"></i> 1-Click Autofill Matching Set
+              </button>
+            </div>
+
             <form id="newHeroBannerForm" onsubmit="submitNewHeroBanner(event)">
               <div class="row g-3">
                 <!-- 1. Left 70% Background Image -->
@@ -890,6 +901,80 @@
       bootstrap.Modal.getOrCreateInstance(document.getElementById('editHeroBannerModal')).show();
     }
 
+    function applyApexGoldPreset() {
+      // 1. Background Cover
+      const bgUrl = '/assets/images/new_uniforms/perfect_matching_carousel/1_background_stadium_cyber_gold.jpg';
+      document.getElementById('newBannerBgUrl').value = bgUrl;
+      const bgPreview = document.getElementById('newBannerBgPreview');
+      bgPreview.src = '..' + bgUrl;
+      bgPreview.classList.remove('d-none');
+      document.getElementById('newBannerBgPlaceholder').classList.add('d-none');
+
+      // 2. 5-Uniforms Lineup
+      const lineupUrl = '/assets/images/new_uniforms/perfect_matching_carousel/2_five_jerseys_lineup_transparent.png';
+      document.getElementById('newBannerLineupUrl').value = lineupUrl;
+      const lineupPreview = document.getElementById('newBannerLineupPreview');
+      lineupPreview.src = '..' + lineupUrl;
+      lineupPreview.classList.remove('d-none');
+      document.getElementById('newBannerLineupPlaceholder').classList.add('d-none');
+
+      // 3. Pro Athlete Cutout
+      const athleteUrl = '/assets/images/new_uniforms/perfect_matching_carousel/3_pro_athlete_cutout_transparent.png';
+      document.getElementById('newBannerAthleteUrl').value = athleteUrl;
+      const athletePreview = document.getElementById('newBannerAthletePreview');
+      athletePreview.src = '..' + athleteUrl;
+      athletePreview.classList.remove('d-none');
+      document.getElementById('newBannerAthletePlaceholder').classList.add('d-none');
+
+      // Texts
+      document.getElementById('newBannerTitle').value = 'APEX CYBER-GOLD PERFORMANCE';
+      document.getElementById('newBannerSubtitle').value = 'Engineered for dominance. Pro-grade sublimated obsidian & championship gold uniforms.';
+      document.getElementById('newBannerBtnText').value = 'Shop The Collection';
+      document.getElementById('newBannerBtnLink').value = 'catalogue.html';
+
+      AdminApp.showAdminToast('Apex Cyber-Gold Matching Set loaded!', 'bi-stars text-warning');
+    }
+
+    // Client-side lightweight image optimizer (resizes & compresses to keep total request well under 1MB)
+    async function optimizeImageFile(file, isPng = false) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const rawData = e.target.result;
+          const img = new Image();
+          img.onload = () => {
+            const maxDim = 1400;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const mime = isPng ? 'image/png' : 'image/jpeg';
+            const quality = isPng ? undefined : 0.82;
+            resolve(canvas.toDataURL(mime, quality));
+          };
+          img.onerror = () => resolve(rawData);
+          img.src = rawData;
+        };
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function handleNewBannerBgUpload(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
@@ -898,25 +983,13 @@
       const placeholder = document.getElementById('newBannerBgPlaceholder');
       const hiddenUrl = document.getElementById('newBannerBgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading banner background...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Background image uploaded!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Background upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing background image...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, false);
+      preview.src = optimizedData;
+      preview.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('Background image ready!', 'bi-check-circle-fill text-success');
     }
 
     async function handleNewBannerLineupUpload(event) {
@@ -927,25 +1000,13 @@
       const placeholder = document.getElementById('newBannerLineupPlaceholder');
       const hiddenUrl = document.getElementById('newBannerLineupUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading 5-uniforms lineup...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('5-Uniforms Lineup uploaded!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Lineup upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing 5-uniforms lineup...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      preview.src = optimizedData;
+      preview.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('5-Uniforms Lineup ready!', 'bi-check-circle-fill text-success');
     }
 
     async function handleNewBannerAthleteUpload(event) {
@@ -956,25 +1017,13 @@
       const placeholder = document.getElementById('newBannerAthletePlaceholder');
       const hiddenUrl = document.getElementById('newBannerAthleteUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading athlete cutout...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Athlete cutout uploaded!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Cutout upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing athlete cutout...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      preview.src = optimizedData;
+      preview.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('Athlete cutout ready!', 'bi-check-circle-fill text-success');
     }
 
     async function handleEditHeroBgUpload(event) {
@@ -984,23 +1033,11 @@
       const preview = document.getElementById('editHeroBgPreview');
       const hiddenUrl = document.getElementById('editHeroBgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => { 
-        preview.src = e.target.result; 
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading new background...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Background image updated!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Background upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing background...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, false);
+      preview.src = optimizedData;
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('Background updated!', 'bi-check-circle-fill text-success');
     }
 
     async function handleEditHeroLineupUpload(event) {
@@ -1011,25 +1048,13 @@
       const placeholder = document.getElementById('editHeroLineupPlaceholder');
       const hiddenUrl = document.getElementById('editHeroLineupUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading new 5-uniforms lineup...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('5-Uniforms Lineup updated!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Lineup upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing 5-uniforms lineup...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      preview.src = optimizedData;
+      preview.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('5-Uniforms Lineup updated!', 'bi-check-circle-fill text-success');
     }
 
     async function handleEditHeroAthleteUpload(event) {
@@ -1040,25 +1065,13 @@
       const placeholder = document.getElementById('editHeroAthletePlaceholder');
       const hiddenUrl = document.getElementById('editHeroAthleteUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-        hiddenUrl.value = e.target.result; // Instant fallback
-      };
-      reader.readAsDataURL(file);
-
-      AdminApp.showAdminToast('Uploading athlete cutout...', 'bi-arrow-repeat text-info');
-      try {
-        const uploadResult = await AdminApp.uploadImage(file);
-        if (uploadResult && uploadResult.url) {
-          hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Athlete cutout updated!', 'bi-check-circle-fill text-success');
-        }
-      } catch (err) {
-        console.warn('Cutout upload notice, using direct data URI:', err.message);
-      }
+      AdminApp.showAdminToast('Optimizing athlete cutout...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      preview.src = optimizedData;
+      preview.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      hiddenUrl.value = optimizedData;
+      AdminApp.showAdminToast('Athlete cutout updated!', 'bi-check-circle-fill text-success');
     }
 
     async function submitNewHeroBanner(event) {
@@ -1114,8 +1127,19 @@
           bootstrap.Modal.getInstance(document.getElementById('addHeroBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to add banner: ' + (err.error || 'Server error'));
+          let errMsg = 'Server error';
+          try {
+            const err = await res.json();
+            errMsg = err.error || err.message || errMsg;
+          } catch (parseErr) {
+            const text = await res.text().catch(() => '');
+            if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
+              errMsg = 'Images are too large (exceeds 4.5MB serverless limit). Please use compressed images or the 1-click Preset.';
+            } else {
+              errMsg = text || `HTTP ${res.status}`;
+            }
+          }
+          alert('Failed to add banner: ' + errMsg);
         }
       } catch (err) {
         alert('Error adding banner: ' + err.message);
@@ -1179,8 +1203,19 @@
           bootstrap.Modal.getInstance(document.getElementById('editHeroBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to update banner: ' + (err.error || 'Server error'));
+          let errMsg = 'Server error';
+          try {
+            const err = await res.json();
+            errMsg = err.error || err.message || errMsg;
+          } catch (parseErr) {
+            const text = await res.text().catch(() => '');
+            if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
+              errMsg = 'Images are too large (exceeds 4.5MB serverless limit). Please use compressed images or the 1-click Preset.';
+            } else {
+              errMsg = text || `HTTP ${res.status}`;
+            }
+          }
+          alert('Failed to update banner: ' + errMsg);
         }
       } catch (err) {
         alert('Error updating banner: ' + err.message);
