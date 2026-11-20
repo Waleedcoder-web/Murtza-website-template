@@ -230,12 +230,14 @@ ON CONFLICT (id) DO NOTHING;
 
 DO $$
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM storefront_hero LIMIT 1) THEN
-    INSERT INTO storefront_hero (id, title, subtitle, btn_text, btn_link, banner_image, lineup_image, athlete_image, slide_order, is_active)
-    VALUES 
-      (1, 'NEXT-GEN 3D SPORT WEAR', 'Volumetric lighting, layered depth, and tournament-grade custom apparel engineered for champions.', 'DESIGN YOUR KIT', 'customizer.html', '/assets/images/3d-stadium-bg.jpg', '/assets/images/hero-jerseys-lineup-3d.png', '/assets/images/hero-athlete-3d-new.png', 1, true),
-      (2, 'DOMINATE THE COURT', 'Championship-grade custom sublimated jerseys, ultra-breathable speed mesh, and zero-fade dynamic colorways.', 'EXPLORE CATALOGUE', 'catalogue.html', '/assets/images/3d-arena-bg-2.jpg', '/assets/images/hero-jerseys-lineup-2.png', '/assets/images/hero-athlete-3d-2.png', 2, true);
-    PERFORM setval(pg_get_serial_sequence('storefront_hero', 'id'), COALESCE((SELECT MAX(id) FROM storefront_hero), 1));
+  IF NOT EXISTS (SELECT 1 FROM storefront_hero WHERE title = 'NEXT-GEN 3D SPORT WEAR') THEN
+    INSERT INTO storefront_hero (title, subtitle, btn_text, btn_link, banner_image, lineup_image, athlete_image, slide_order, is_active)
+    VALUES ('NEXT-GEN 3D SPORT WEAR', 'Volumetric lighting, layered depth, and tournament-grade custom apparel engineered for champions.', 'DESIGN YOUR KIT', 'customizer.html', '/assets/images/3d-stadium-bg.jpg', '/assets/images/hero-jerseys-lineup-3d.png', '/assets/images/hero-athlete-3d-new.png', 1, true);
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM storefront_hero WHERE title = 'DOMINATE THE COURT') THEN
+    INSERT INTO storefront_hero (title, subtitle, btn_text, btn_link, banner_image, lineup_image, athlete_image, slide_order, is_active)
+    VALUES ('DOMINATE THE COURT', 'Championship-grade custom sublimated jerseys, ultra-breathable speed mesh, and zero-fade dynamic colorways.', 'EXPLORE CATALOGUE', 'catalogue.html', '/assets/images/3d-arena-bg-2.jpg', '/assets/images/hero-jerseys-lineup-2.png', '/assets/images/hero-athlete-3d-2.png', 2, true);
   END IF;
 END $$;
 

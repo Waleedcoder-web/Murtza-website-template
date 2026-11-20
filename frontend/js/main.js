@@ -117,83 +117,106 @@ document.addEventListener('DOMContentLoaded', () => {
   closeCartBtn?.addEventListener('click', closeCartDrawer);
 
   // ==========================================
-  // Hero 3D Parallax Carousel Engine
+  // Hero 3D Parallax Carousel Engine (Dynamic Multi-Slide Support)
   // ==========================================
   const heroCarousel = document.getElementById('heroCarousel3D') || document.querySelector('.hero-carousel');
-  const heroSlides = document.querySelectorAll('.hero-slide');
-  const heroDots = document.querySelectorAll('.hero-dot');
-  const heroPrev = document.getElementById('heroPrevBtn');
-  const heroNext = document.getElementById('heroNextBtn');
   let currentHeroIdx = 0;
   let heroTimer = null;
 
-  function showHeroSlide(index) {
-    if (heroSlides.length === 0) return;
-    heroSlides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
-    heroDots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-    });
-    currentHeroIdx = index;
+  function getHeroSlides() {
+    return document.querySelectorAll('.hero-carousel .hero-slide');
+  }
 
-    // When transitioning to Slide 1 (index 0), trigger fresh 2s 360° spin
-    if (index === 0 && window.triggerTurntableSpin) {
+  function getHeroDots() {
+    return document.querySelectorAll('.hero-carousel .hero-dot');
+  }
+
+  function showHeroSlide(index) {
+    const slides = getHeroSlides();
+    const dots = getHeroDots();
+    if (slides.length === 0) return;
+    currentHeroIdx = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === currentHeroIdx);
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentHeroIdx);
+    });
+
+    // When transitioning to Slide 1 (index 0), trigger fresh 2s 360° spin if present
+    if (currentHeroIdx === 0 && window.triggerTurntableSpin) {
       window.triggerTurntableSpin();
     }
   }
 
   function nextHeroSlide() {
-    const nextIdx = (currentHeroIdx + 1) % heroSlides.length;
-    showHeroSlide(nextIdx);
+    showHeroSlide(currentHeroIdx + 1);
   }
 
   function prevHeroSlide() {
-    const prevIdx = (currentHeroIdx - 1 + heroSlides.length) % heroSlides.length;
-    showHeroSlide(prevIdx);
+    showHeroSlide(currentHeroIdx - 1);
   }
 
   function scheduleHeroSlideTransition() {
     clearTimeout(heroTimer);
     if (window._turntablePaused) return;
+    const slides = getHeroSlides();
+    if (slides.length <= 1) return;
 
-    // Slide 1 has a 2.0s 360° rotation: advance to Slide 2 right after 2.1s!
-    // Slide 2 (basketball arena) stays for 4.5s then returns to Slide 1.
-    const delay = currentHeroIdx === 0 ? 2150 : 4500;
+    // Slide 1 has a 2.5s rotation stage; other slides display for 4.5s
+    const delay = currentHeroIdx === 0 ? 2500 : 4500;
     heroTimer = setTimeout(() => {
       nextHeroSlide();
       scheduleHeroSlideTransition();
     }, delay);
   }
 
-  window.scheduleHeroSlideTransition = scheduleHeroSlideTransition;
+  function refreshHeroCarousel() {
+    clearTimeout(heroTimer);
+    const slides = getHeroSlides();
+    const controls = heroCarousel?.querySelector('.hero-controls');
+    const dotsWrap = heroCarousel?.querySelector('.hero-dots');
 
-  if (heroSlides.length > 1) {
-    heroNext?.addEventListener('click', () => {
-      nextHeroSlide();
-      scheduleHeroSlideTransition();
-    });
+    if (controls) controls.style.display = slides.length > 1 ? 'flex' : 'none';
+    if (dotsWrap) dotsWrap.style.display = slides.length > 1 ? 'flex' : 'none';
 
-    heroPrev?.addEventListener('click', () => {
-      prevHeroSlide();
-      scheduleHeroSlideTransition();
-    });
-
-    heroDots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => {
+    // Bind dots click
+    const dots = getHeroDots();
+    dots.forEach((dot, idx) => {
+      dot.onclick = () => {
         showHeroSlide(idx);
         scheduleHeroSlideTransition();
-      });
+      };
     });
 
-    scheduleHeroSlideTransition();
-  } else {
-    // Single slide: hide navigation arrows and dots
-    const heroControls = heroCarousel?.querySelector('.hero-controls');
-    const heroDotsWrap = heroCarousel?.querySelector('.hero-dots');
-    if (heroControls) heroControls.style.display = 'none';
-    if (heroDotsWrap) heroDotsWrap.style.display = 'none';
+    if (slides.length > 0) {
+      showHeroSlide(0);
+      if (slides.length > 1) {
+        scheduleHeroSlideTransition();
+      }
+    }
   }
+
+  window.scheduleHeroSlideTransition = scheduleHeroSlideTransition;
+  window.nextHeroSlide = nextHeroSlide;
+  window.prevHeroSlide = prevHeroSlide;
+  window.showHeroSlide = showHeroSlide;
+  window.refreshHeroCarousel = refreshHeroCarousel;
+
+  const heroPrev = document.getElementById('heroPrevBtn');
+  const heroNext = document.getElementById('heroNextBtn');
+  heroNext?.addEventListener('click', (e) => {
+    e.preventDefault();
+    nextHeroSlide();
+    scheduleHeroSlideTransition();
+  });
+  heroPrev?.addEventListener('click', (e) => {
+    e.preventDefault();
+    prevHeroSlide();
+    scheduleHeroSlideTransition();
+  });
+
+  refreshHeroCarousel();
 
     // ==========================================
     // Real-Time 3D Mouse Parallax Depth Effect

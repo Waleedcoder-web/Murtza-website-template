@@ -1007,8 +1007,12 @@
         dotsContainer.style.display = heroList.length > 1 ? 'flex' : 'none';
       }
 
-      // Bind interactive controls
-      bindHeroControls();
+      // Re-initialize carousel engine with all dynamic slides
+      if (typeof window.refreshHeroCarousel === 'function') {
+        window.refreshHeroCarousel();
+      } else {
+        bindHeroControls();
+      }
 
       // Initialize interactive 3D Mouse Parallax
       initHero3DParallax();
