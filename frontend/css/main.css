@@ -1488,22 +1488,80 @@ img {
   }
 }
 
+.product-card {
+  cursor: pointer;
+}
+
 .product-card-inner {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 10px 12px 14px 12px;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  position: relative !important;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  justify-content: space-between;
+  background: rgba(226, 232, 240, 0.8) !important;
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 12px 12px 14px 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  z-index: 1;
+}
+
+/* Single White-then-Black Rotating Light Beam Border */
+.product-card-inner::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    #000000 295deg,
+    #111111 320deg,
+    #999999 342deg,
+    #ffffff 352deg,
+    #ffffff 358deg,
+    transparent 360deg
+  );
+  animation: rotateGlassLight 3.8s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Sleek Inner Mask leaving a precise 1.8px glass border */
+.product-card-inner::after {
+  content: '';
+  position: absolute;
+  inset: 1.8px;
+  background: #ffffff;
+  border-radius: 12.2px;
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+/* All card content sits safely above the mask and beam */
+.product-card-inner > * {
+  position: relative;
+  z-index: 2;
 }
 
 .product-card:hover .product-card-inner {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.11);
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1) !important;
+}
+
+@keyframes rotateGlassLight {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .product-img-wrap {

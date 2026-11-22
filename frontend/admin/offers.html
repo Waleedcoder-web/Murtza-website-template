@@ -935,15 +935,16 @@
       AdminApp.showAdminToast('Apex Cyber-Gold Matching Set loaded!', 'bi-stars text-warning');
     }
 
-    // Client-side lightweight image optimizer (resizes & compresses to keep total request well under 1MB)
-    async function optimizeImageFile(file, isPng = false) {
+    // Client-side lightweight image optimizer (resizes & compresses to keep each image ~100KB-250KB)
+    async function optimizeImageFile(file, isCutout = false) {
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           const rawData = e.target.result;
           const img = new Image();
           img.onload = () => {
-            const maxDim = 1400;
+            // Cutouts (athlete/lineup) max 850px, background cover max 1200px
+            let maxDim = isCutout ? 850 : 1200;
             let width = img.width;
             let height = img.height;
 
@@ -957,15 +958,49 @@
               }
             }
 
-            const canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
-            const ctx = canvas.getContext('2d');
+            let ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
-            const mime = isPng ? 'image/png' : 'image/jpeg';
-            const quality = isPng ? undefined : 0.82;
-            resolve(canvas.toDataURL(mime, quality));
+            let dataUrl = '';
+            if (isCutout) {
+              // Try modern WebP first (supports alpha transparency and is 10x smaller than PNG)
+              try {
+                dataUrl = canvas.toDataURL('image/webp', 0.82);
+              } catch {
+                dataUrl = '';
+              }
+              if (!dataUrl || !dataUrl.startsWith('data:image/webp')) {
+                dataUrl = canvas.toDataURL('image/png');
+              }
+            } else {
+              dataUrl = canvas.toDataURL('image/jpeg', 0.80);
+            }
+
+            // Downscale safety loop: if output data URL exceeds 650KB, scale down until safe
+            let loopSafety = 0;
+            while (dataUrl.length > 700000 && loopSafety < 3) {
+              loopSafety++;
+              width = Math.round(width * 0.75);
+              height = Math.round(height * 0.75);
+              canvas.width = width;
+              canvas.height = height;
+              ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              if (isCutout) {
+                try {
+                  dataUrl = canvas.toDataURL('image/webp', 0.80);
+                } catch {
+                  dataUrl = canvas.toDataURL('image/png');
+                }
+              } else {
+                dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+              }
+            }
+
+            resolve(dataUrl);
           };
           img.onerror = () => resolve(rawData);
           img.src = rawData;
@@ -973,6 +1008,24 @@
         reader.onerror = () => resolve('');
         reader.readAsDataURL(file);
       });
+    }
+
+    async function safeParseError(res, fallback = 'Server error') {
+      try {
+        const cloned = res.clone();
+        const data = await cloned.json();
+        return data.error || data.message || fallback;
+      } catch {
+        try {
+          const text = await res.text();
+          if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
+            return 'Image payload too large for Vercel serverless function (4.5MB limit). The image was automatically resized; please try again.';
+          }
+          return text ? text.slice(0, 150) : `HTTP ${res.status}`;
+        } catch {
+          return `HTTP ${res.status}`;
+        }
+      }
     }
 
     async function handleNewBannerBgUpload(event) {
@@ -1127,18 +1180,7 @@
           bootstrap.Modal.getInstance(document.getElementById('addHeroBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          let errMsg = 'Server error';
-          try {
-            const err = await res.json();
-            errMsg = err.error || err.message || errMsg;
-          } catch (parseErr) {
-            const text = await res.text().catch(() => '');
-            if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
-              errMsg = 'Images are too large (exceeds 4.5MB serverless limit). Please use compressed images or the 1-click Preset.';
-            } else {
-              errMsg = text || `HTTP ${res.status}`;
-            }
-          }
+          const errMsg = await safeParseError(res, 'Failed to add hero banner');
           alert('Failed to add banner: ' + errMsg);
         }
       } catch (err) {
@@ -1203,18 +1245,7 @@
           bootstrap.Modal.getInstance(document.getElementById('editHeroBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          let errMsg = 'Server error';
-          try {
-            const err = await res.json();
-            errMsg = err.error || err.message || errMsg;
-          } catch (parseErr) {
-            const text = await res.text().catch(() => '');
-            if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
-              errMsg = 'Images are too large (exceeds 4.5MB serverless limit). Please use compressed images or the 1-click Preset.';
-            } else {
-              errMsg = text || `HTTP ${res.status}`;
-            }
-          }
+          const errMsg = await safeParseError(res, 'Failed to update hero banner');
           alert('Failed to update banner: ' + errMsg);
         }
       } catch (err) {
@@ -1435,8 +1466,8 @@
           bootstrap.Modal.getInstance(document.getElementById('addFeaturedBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to add banner: ' + (err.error || 'Server error'));
+          const errMsg = await safeParseError(res, 'Failed to add featured banner');
+          alert('Failed to add banner: ' + errMsg);
         }
       } catch (err) {
         alert('Error adding banner: ' + err.message);
@@ -1481,8 +1512,8 @@
           bootstrap.Modal.getInstance(document.getElementById('editFeaturedBannerModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to update banner: ' + (err.error || 'Server error'));
+          const errMsg = await safeParseError(res, 'Failed to update featured banner');
+          alert('Failed to update banner: ' + errMsg);
         }
       } catch (err) {
         alert('Error updating banner: ' + err.message);
@@ -1704,8 +1735,8 @@
           bootstrap.Modal.getInstance(document.getElementById('addDealModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to add deal: ' + (err.error || 'Server error'));
+          const errMsg = await safeParseError(res, 'Failed to add deal');
+          alert('Failed to add deal: ' + errMsg);
         }
       } catch (err) {
         alert('Error adding deal: ' + err.message);
@@ -1749,8 +1780,8 @@
           bootstrap.Modal.getInstance(document.getElementById('editDealModal'))?.hide();
           await loadStorefrontOffers();
         } else {
-          const err = await res.json();
-          alert('Failed to update deal: ' + (err.error || 'Server error'));
+          const errMsg = await safeParseError(res, 'Failed to update deal');
+          alert('Failed to update deal: ' + errMsg);
         }
       } catch (err) {
         alert('Error updating deal: ' + err.message);

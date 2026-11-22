@@ -263,10 +263,9 @@ const AdminApp = {
   async uploadImage(file) {
     return new Promise((resolve, reject) => {
       if (!file) return reject(new Error('No file provided'));
-      const reader = new FileReader();
-      reader.onload = async () => {
+
+      const sendPayload = async (base64Data) => {
         try {
-          const base64Data = reader.result;
           const res = await fetch(`${this.API_BASE}/upload`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -275,19 +274,87 @@ const AdminApp = {
               data: base64Data
             })
           });
+
           if (res.ok) {
             const data = await res.json();
             resolve(data);
           } else {
-            const err = await res.json();
-            reject(new Error(err.error || 'Upload failed'));
+            let errMsg = 'Upload failed';
+            try {
+              const cloned = res.clone();
+              const err = await cloned.json();
+              errMsg = err.error || err.message || errMsg;
+            } catch {
+              try {
+                const text = await res.text();
+                if (res.status === 413 || text.includes('Request Entity Too Large') || text.includes('PayloadTooLargeError')) {
+                  errMsg = 'Image size exceeds Vercel 4.5MB serverless limit. Please choose a smaller image.';
+                } else if (text) {
+                  errMsg = text.slice(0, 150);
+                }
+              } catch {}
+            }
+            reject(new Error(errMsg));
           }
         } catch (err) {
           reject(err);
         }
       };
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
+
+      // Client-side auto-optimization for images to keep uploads safely under 500KB
+      if (file.type && file.type.startsWith('image/') && !file.type.includes('svg')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const rawData = e.target.result;
+          const img = new Image();
+          img.onload = () => {
+            const maxDim = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const isPng = file.type.includes('png');
+            let dataUrl = '';
+            if (isPng) {
+              try {
+                dataUrl = canvas.toDataURL('image/webp', 0.85);
+              } catch {
+                dataUrl = '';
+              }
+              if (!dataUrl || !dataUrl.startsWith('data:image/webp')) {
+                dataUrl = canvas.toDataURL('image/png');
+              }
+            } else {
+              dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            }
+            sendPayload(dataUrl);
+          };
+          img.onerror = () => sendPayload(rawData);
+          img.src = rawData;
+        };
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = () => sendPayload(reader.result);
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      }
     });
   },
 

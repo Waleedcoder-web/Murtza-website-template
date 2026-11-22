@@ -493,6 +493,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Whole Product Card Click Navigation (Smooth transition to Product Details)
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.product-card');
+    if (card && !e.target.closest('button, a')) {
+      const link = card.querySelector('a.btn-customize-full, a[href*="product-details.html"]');
+      if (link && link.href) {
+        window.location.href = link.href;
+      }
+    }
+  });
+
   // ==========================================
   // Video Modal
   // ==========================================
