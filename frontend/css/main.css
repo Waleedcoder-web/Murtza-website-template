@@ -892,16 +892,9 @@ img {
   100% { background-position: 150% 0; }
 }
 
-/* Footer / Interaction Bar */
+/* Footer / Interaction Bar (Hidden as requested) */
 .turntable-footer {
-  position: absolute;
-  bottom: 18px;
-  right: 25px;
-  z-index: 25;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  pointer-events: auto;
+  display: none !important;
 }
 
 .turntable-spin-toggle {
