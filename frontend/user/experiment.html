@@ -334,13 +334,36 @@
         scene.add(planesGroup);
         planesGroupRef.current = planesGroup;
 
-        // Texture Loader
+        // Texture Loader & Rounded Card Alpha Mask
         const textureLoader = new THREE.TextureLoader();
         const meshes = [];
         const orbitRadius = 3.35; // Orbital circle radius
         const planeWidth = 2.45;
         const planeHeight = 4.35; // Proportion matched to 756 x 1344 rashguard ratio
         const planeGeo = new THREE.PlaneGeometry(planeWidth, planeHeight);
+
+        // Smooth rounded corner alpha mask to eliminate sharp corners
+        const cornerCanvas = document.createElement('canvas');
+        cornerCanvas.width = 512;
+        cornerCanvas.height = 910;
+        const cCtx = cornerCanvas.getContext('2d');
+        cCtx.fillStyle = '#000000';
+        cCtx.fillRect(0, 0, 512, 910);
+        cCtx.fillStyle = '#ffffff';
+        const cr = 44;
+        cCtx.beginPath();
+        cCtx.moveTo(cr, 0);
+        cCtx.lineTo(512 - cr, 0);
+        cCtx.quadraticCurveTo(512, 0, 512, cr);
+        cCtx.lineTo(512, 910 - cr);
+        cCtx.quadraticCurveTo(512, 910, 512 - cr, 910);
+        cCtx.lineTo(cr, 910);
+        cCtx.quadraticCurveTo(0, 910, 0, 910 - cr);
+        cCtx.lineTo(0, cr);
+        cCtx.quadraticCurveTo(0, 0, cr, 0);
+        cCtx.closePath();
+        cCtx.fill();
+        const cornerAlphaMap = new THREE.CanvasTexture(cornerCanvas);
 
         RASHGUARD_VIEWS.forEach((view, idx) => {
           const texture = textureLoader.load(view.img);
@@ -353,9 +376,10 @@
             texture.offset.x = 1;
           }
 
-          // Double-sided transparent material with smooth depth blending
+          // Double-sided transparent material with smooth rounded depth blending
           const material = new THREE.MeshBasicMaterial({
             map: texture,
+            alphaMap: cornerAlphaMap,
             transparent: true,
             side: THREE.DoubleSide,
             depthWrite: false
