@@ -47,6 +47,10 @@
       "destination": "/frontend/user/index.html"
     },
     {
+      "source": "/experiment",
+      "destination": "/frontend/user/experiment.html"
+    },
+    {
       "source": "/((?!api|admin|css|js|assets).*)",
       "destination": "/frontend/user/$1"
     }
