@@ -680,7 +680,8 @@
 
       let filtered = [...allCatalogueProducts];
       if (selectedSport !== 'all') {
-        filtered = filtered.filter(p => (p.sport || '').toLowerCase().includes(selectedSport.toLowerCase()));
+        const selLow = selectedSport.toLowerCase();
+        filtered = filtered.filter(p => (p.sport || '').toLowerCase().includes(selLow) || (p.category || '').toLowerCase().includes(selLow));
       }
 
       const urlParams = new URLSearchParams(window.location.search);

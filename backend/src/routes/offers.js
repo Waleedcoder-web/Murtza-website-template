@@ -378,14 +378,20 @@ router.put('/featured-banners/:id', async (req, res) => {
   if (isNaN(id)) return res.status(400).json({ error: 'Invalid ID' });
 
   const { title, description, btn_text, btn_link, banner_image, banner_order } = req.body;
+  const cleanImage = (banner_image && typeof banner_image === 'string' && banner_image.trim()) ? banner_image.trim() : null;
+
   try {
     if (db.getIsConnected()) {
       const updateRes = await db.query(
         `UPDATE storefront_featured_banners
-         SET title = $1, description = $2, btn_text = $3, btn_link = $4,
-             banner_image = $5, banner_order = $6
+         SET title = COALESCE($1, title),
+             description = COALESCE($2, description),
+             btn_text = COALESCE($3, btn_text),
+             btn_link = COALESCE($4, btn_link),
+             banner_image = COALESCE($5, banner_image),
+             banner_order = COALESCE($6, banner_order)
          WHERE id = $7 RETURNING *`,
-        [title, description, btn_text, btn_link, banner_image, banner_order || 1, id]
+        [title, description, btn_text, btn_link, cleanImage, banner_order || null, id]
       );
       if (updateRes.rows.length === 0) return res.status(404).json({ error: 'Featured banner not found' });
       return res.json({ success: true, message: 'Featured banner updated', banner: updateRes.rows[0] });
@@ -396,7 +402,13 @@ router.put('/featured-banners/:id', async (req, res) => {
 
   const idx = db.fallbackStore.featured_banners.findIndex(b => b.id === id);
   if (idx !== -1) {
-    db.fallbackStore.featured_banners[idx] = { ...db.fallbackStore.featured_banners[idx], ...req.body, id };
+    const existing = db.fallbackStore.featured_banners[idx];
+    db.fallbackStore.featured_banners[idx] = { 
+      ...existing, 
+      ...req.body, 
+      banner_image: cleanImage || existing.banner_image,
+      id 
+    };
     return res.json({ success: true, message: 'Featured banner updated in local store', banner: db.fallbackStore.featured_banners[idx] });
   }
   return res.status(404).json({ error: 'Featured banner not found' });

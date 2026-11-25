@@ -123,29 +123,51 @@ router.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { name, description, image, is_active } = req.body;
 
-  const cleanName = name ? name.trim() : null;
+  const cleanName = (name && typeof name === 'string' && name.trim().length > 0) ? name.trim() : null;
   const slug = cleanName ? generateSlug(cleanName) : null;
-  const cleanDesc = description !== undefined ? description.trim() : null;
-  const cleanImage = image !== undefined ? image.trim() : null;
-  const cleanActive = is_active !== undefined ? Boolean(is_active) : true;
+  const cleanDesc = description !== undefined ? (description ? description.trim() : '') : null;
+  const cleanImage = (image && typeof image === 'string' && image.trim().length > 0) ? image.trim() : null;
+  const cleanActive = is_active !== undefined ? Boolean(is_active) : null;
 
   try {
-    const result = await db.query(
-      `UPDATE categories 
-       SET name = COALESCE($1, name),
-           slug = COALESCE($2, slug),
-           description = COALESCE($3, description),
-           image = COALESCE($4, image),
-           is_active = $5
-       WHERE id = $6
-       RETURNING *`,
-      [cleanName, slug, cleanDesc, cleanImage, cleanActive, id]
-    );
-    if (result && result.rows) {
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'Category not found' });
+    // Check if category exists in database
+    const catCheck = await db.query('SELECT * FROM categories WHERE id = $1', [id]);
+    if (catCheck && catCheck.rows && catCheck.rows.length > 0) {
+      const oldCat = catCheck.rows[0];
+      const oldName = oldCat.name;
+      const oldSlug = oldCat.slug;
+
+      const result = await db.query(
+        `UPDATE categories 
+         SET name = COALESCE($1, name),
+             slug = COALESCE($2, slug),
+             description = COALESCE($3, description),
+             image = COALESCE($4, image),
+             is_active = COALESCE($5, is_active)
+         WHERE id = $6
+         RETURNING *`,
+        [cleanName, slug, cleanDesc, cleanImage, cleanActive, id]
+      );
+
+      if (result && result.rows && result.rows.length > 0) {
+        const updatedCat = result.rows[0];
+
+        // Cascade update associated products if category name changed
+        if (cleanName && oldName && cleanName.toLowerCase() !== oldName.toLowerCase()) {
+          try {
+            await db.query(
+              `UPDATE products 
+               SET category = $1 
+               WHERE LOWER(category) = LOWER($2) OR LOWER(category) = LOWER($3)`,
+              [cleanName, oldName, oldSlug || '']
+            );
+          } catch (prodCascadeErr) {
+            console.warn('Cascade update products notice:', prodCascadeErr.message);
+          }
+        }
+
+        return res.json(updatedCat);
       }
-      return res.json(result.rows[0]);
     }
   } catch (err) {
     console.error('Error updating category in PostgreSQL:', err);
@@ -156,10 +178,22 @@ router.put('/:id', async (req, res) => {
   if (db.fallbackStore.categories) {
     const cat = db.fallbackStore.categories.find(c => c.id == id || String(c.id) === String(id));
     if (cat) {
+      const oldName = cat.name;
+      const oldSlug = cat.slug;
       if (cleanName) { cat.name = cleanName; cat.slug = slug; }
       if (cleanDesc !== null) cat.description = cleanDesc;
       if (cleanImage !== null) cat.image = cleanImage;
-      if (is_active !== undefined) cat.is_active = cleanActive;
+      if (cleanActive !== null) cat.is_active = cleanActive;
+
+      // Cascade update in fallback products
+      if (cleanName && oldName && cleanName.toLowerCase() !== oldName.toLowerCase() && db.fallbackStore.products) {
+        db.fallbackStore.products.forEach(p => {
+          if (p.category && (p.category.toLowerCase() === oldName.toLowerCase() || (oldSlug && p.category.toLowerCase() === oldSlug.toLowerCase()))) {
+            p.category = cleanName;
+          }
+        });
+      }
+
       return res.json(cat);
     }
   }

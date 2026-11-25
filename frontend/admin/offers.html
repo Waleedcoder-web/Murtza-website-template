@@ -461,11 +461,11 @@
               <div class="row g-3">
                 <div class="col-12">
                   <label class="form-label small fw-bold text-dark mb-1">Featured Deal Banner Image <span class="text-danger">*</span></label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: pointer;" onclick="document.getElementById('newFeatBgFile').click()" title="Click to choose banner image">
                     <img id="newFeatBgPreview" src="" alt="Banner Preview" class="d-none w-100 rounded-2" style="max-height: 160px; object-fit: cover;">
                     <div id="newFeatBgPlaceholder" class="text-muted py-3">
                       <i class="bi bi-cloud-arrow-up fs-2 text-warning d-block mb-1"></i>
-                      <span class="small fw-semibold">Click to upload featured deal banner image</span>
+                      <span class="small fw-semibold">Click or drag & drop featured deal banner image</span>
                     </div>
                     <input type="file" id="newFeatBgFile" accept="image/*" class="d-none" onchange="handleNewFeatBgUpload(event)">
                   </div>
@@ -528,7 +528,7 @@
               <div class="row g-3">
                 <div class="col-12">
                   <label class="form-label small fw-bold text-dark mb-1">Featured Banner Image <span class="text-danger">*</span></label>
-                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2">
+                  <div class="border rounded-3 p-2 text-center bg-light position-relative mb-2" style="cursor: pointer;" onclick="document.getElementById('editFeatBgFile').click()" title="Click to choose new image">
                     <img id="editFeatBgPreview" src="" alt="Banner Preview" class="w-100 rounded-2" style="max-height: 160px; object-fit: cover;">
                     <input type="file" id="editFeatBgFile" accept="image/*" class="d-none" onchange="handleEditFeatBgUpload(event)">
                   </div>
@@ -1389,24 +1389,24 @@
       const placeholder = document.getElementById('newFeatBgPlaceholder');
       const hiddenUrl = document.getElementById('newFeatBgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
+      AdminApp.showAdminToast('Processing featured banner image...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, false);
+      if (optimizedData) {
+        preview.src = optimizedData;
         preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-      };
-      reader.readAsDataURL(file);
+        if (placeholder) placeholder.classList.add('d-none');
+        hiddenUrl.value = optimizedData;
+      }
 
-      AdminApp.showAdminToast('Uploading featured banner...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Featured banner image uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Upload failed: ' + err.message);
+        console.warn('Server upload notice, using direct image data:', err.message);
       }
+      AdminApp.showAdminToast('Featured banner image ready!', 'bi-check-circle-fill text-success');
     }
 
     async function handleEditFeatBgUpload(event) {
@@ -1416,26 +1416,36 @@
       const preview = document.getElementById('editFeatBgPreview');
       const hiddenUrl = document.getElementById('editFeatBgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => { preview.src = e.target.result; };
-      reader.readAsDataURL(file);
+      AdminApp.showAdminToast('Processing banner image...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, false);
+      if (optimizedData) {
+        preview.src = optimizedData;
+        hiddenUrl.value = optimizedData;
+      }
 
-      AdminApp.showAdminToast('Uploading updated banner...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Banner image updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Upload failed: ' + err.message);
+        console.warn('Server upload notice, using direct image data:', err.message);
       }
+      AdminApp.showAdminToast('Banner image ready!', 'bi-check-circle-fill text-success');
     }
 
     async function submitNewFeaturedBanner(event) {
       event.preventDefault();
 
-      const banner_image = document.getElementById('newFeatBgUrl').value.trim();
+      let banner_image = document.getElementById('newFeatBgUrl').value.trim();
+      if (!banner_image) {
+        const previewEl = document.getElementById('newFeatBgPreview');
+        if (previewEl && previewEl.src && !previewEl.classList.contains('d-none')) {
+          banner_image = previewEl.src;
+          document.getElementById('newFeatBgUrl').value = banner_image;
+        }
+      }
+
       if (!banner_image) {
         alert('Please choose and upload a featured banner image first.');
         return;
@@ -1481,7 +1491,15 @@
       event.preventDefault();
 
       const id = document.getElementById('editFeatId').value;
-      const banner_image = document.getElementById('editFeatBgUrl').value.trim();
+      let banner_image = document.getElementById('editFeatBgUrl').value.trim();
+      if (!banner_image) {
+        const previewEl = document.getElementById('editFeatBgPreview');
+        if (previewEl && previewEl.src) {
+          banner_image = previewEl.src;
+          document.getElementById('editFeatBgUrl').value = banner_image;
+        }
+      }
+
       if (!banner_image) {
         alert('Banner image is required.');
         return;
@@ -1659,24 +1677,24 @@
       const placeholder = document.getElementById('newDealImgPlaceholder');
       const hiddenUrl = document.getElementById('newDealImgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        preview.src = e.target.result;
+      AdminApp.showAdminToast('Processing deal image...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      if (optimizedData) {
+        preview.src = optimizedData;
         preview.classList.remove('d-none');
-        placeholder.classList.add('d-none');
-      };
-      reader.readAsDataURL(file);
+        if (placeholder) placeholder.classList.add('d-none');
+        hiddenUrl.value = optimizedData;
+      }
 
-      AdminApp.showAdminToast('Uploading deal image...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Deal image uploaded!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Upload failed: ' + err.message);
+        console.warn('Server upload notice, using direct image data:', err.message);
       }
+      AdminApp.showAdminToast('Deal image ready!', 'bi-check-circle-fill text-success');
     }
 
     async function handleEditDealImgUpload(event) {
@@ -1686,26 +1704,36 @@
       const preview = document.getElementById('editDealImgPreview');
       const hiddenUrl = document.getElementById('editDealImgUrl');
 
-      const reader = new FileReader();
-      reader.onload = (e) => { preview.src = e.target.result; };
-      reader.readAsDataURL(file);
+      AdminApp.showAdminToast('Processing deal image...', 'bi-arrow-repeat text-info');
+      const optimizedData = await optimizeImageFile(file, true);
+      if (optimizedData) {
+        preview.src = optimizedData;
+        hiddenUrl.value = optimizedData;
+      }
 
-      AdminApp.showAdminToast('Uploading updated image...', 'bi-arrow-repeat text-info');
       try {
         const uploadResult = await AdminApp.uploadImage(file);
         if (uploadResult && uploadResult.url) {
           hiddenUrl.value = uploadResult.url;
-          AdminApp.showAdminToast('Image updated!', 'bi-check-circle-fill text-success');
         }
       } catch (err) {
-        alert('Upload failed: ' + err.message);
+        console.warn('Server upload notice, using direct image data:', err.message);
       }
+      AdminApp.showAdminToast('Deal image ready!', 'bi-check-circle-fill text-success');
     }
 
     async function submitNewDeal(event) {
       event.preventDefault();
 
-      const image = document.getElementById('newDealImgUrl').value.trim();
+      let image = document.getElementById('newDealImgUrl').value.trim();
+      if (!image) {
+        const previewEl = document.getElementById('newDealImgPreview');
+        if (previewEl && previewEl.src && !previewEl.classList.contains('d-none')) {
+          image = previewEl.src;
+          document.getElementById('newDealImgUrl').value = image;
+        }
+      }
+
       if (!image) {
         alert('Please choose and upload a deal image first.');
         return;

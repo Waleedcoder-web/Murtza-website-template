@@ -331,8 +331,6 @@
                   <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-wrestling.png')">Wrestling</span>
                   <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-cheer.png')">Cheer</span>
                   <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/sport-lacrosse.png')">Lacrosse</span>
-                </div>
-              </div>
                   <span class="preset-img-pill" onclick="pickPresetImg('/assets/images/hero-athlete-3d-new.png')">Football 3D</span>
                 </div>
               </div>
@@ -453,12 +451,12 @@
                 : '<span class="badge bg-secondary bg-opacity-10 text-secondary border px-2 py-1">Disabled</span>'}
             </td>
             <td class="text-end">
-              <div class="d-inline-flex gap-1">
-                <button class="btn btn-sm btn-outline-dark" onclick="openEditCategoryModal(${c.id})" title="Edit Category">
+              <div class="d-inline-flex gap-2">
+                <button class="admin-icon-btn edit-btn" onclick="openEditCategoryModal(${c.id})" title="Edit Category" aria-label="Edit Category">
                   <i class="bi bi-pencil-square"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${count})" title="Delete Category">
-                  <i class="bi bi-trash"></i>
+                <button class="admin-icon-btn delete-btn" onclick="confirmDeleteCategory(${c.id}, '${c.name.replace(/'/g, "\\'")}', ${count})" title="Delete Category" aria-label="Delete Category">
+                  <i class="bi bi-trash3"></i>
                 </button>
               </div>
             </td>
@@ -501,21 +499,26 @@
 
     async function handleCatFileUpload(input) {
       if (input.files && input.files[0]) {
+        const file = input.files[0];
+        // 1. Instantly read base64 preview so image preview displays immediately
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          document.getElementById('catImageUrlInput').value = ev.target.result;
+          updateCatImgPreview(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        // 2. Upload to backend if available
         try {
-          const res = await AdminApp.uploadImage(input.files[0]);
+          const res = await AdminApp.uploadImage(file);
           if (res && res.url) {
             document.getElementById('catImageUrlInput').value = res.url;
             updateCatImgPreview(res.url);
             AdminApp.showAdminToast('Category image uploaded successfully!', 'bi-check-circle-fill text-success');
           }
         } catch (e) {
-          // If upload fails, use local base64 preview
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            document.getElementById('catImageUrlInput').value = ev.target.result;
-            updateCatImgPreview(ev.target.result);
-          };
-          reader.readAsDataURL(input.files[0]);
+          console.warn('Category image direct upload notice:', e.message);
+          AdminApp.showAdminToast('Category image ready!', 'bi-check-circle-fill text-success');
         }
       }
     }
@@ -533,7 +536,7 @@
     }
 
     function openEditCategoryModal(id) {
-      const cat = allCategories.find(c => c.id === id);
+      const cat = allCategories.find(c => c.id == id);
       if (!cat) return;
 
       document.getElementById('categoryModalTitle').textContent = `Edit Category: ${cat.name}`;
@@ -555,9 +558,15 @@
       saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
 
       const editId = document.getElementById('editCategoryId').value;
+      const catName = document.getElementById('catNameInput').value.trim();
+      let catImg = document.getElementById('catImageUrlInput').value.trim();
+      if (!catImg) {
+        catImg = document.getElementById('catModalImgPreview').src || '/assets/images/sport-7v7.png';
+      }
+
       const payload = {
-        name: document.getElementById('catNameInput').value.trim(),
-        image: document.getElementById('catImageUrlInput').value.trim() || '/assets/images/products/rashguard-1.jpg',
+        name: catName,
+        image: catImg,
         description: document.getElementById('catDescInput').value.trim(),
         is_active: document.getElementById('catActiveSwitch').checked
       };
