@@ -301,27 +301,15 @@
               </div>
             </div>
 
-            <div class="form-text text-muted" style="font-size: 0.74rem;">Click to select category. Defines sport type and storefront filters.</div>
-          </div>
-
-          <!-- 3. Collection Tag (Optional) -->
-          <div class="mb-3">
-            <label class="form-label small fw-bold text-dark mb-1">
-              <i class="bi bi-collection-fill text-primary me-1"></i>Collection Tag (Optional)
-            </label>
-            <input type="text" class="form-control form-control-glass py-2 mb-2" id="newProductCollectionTag" list="collectionTagsDatalist" placeholder="e.g. Best Sellers, New Arrivals, Trending Now">
-            <datalist id="collectionTagsDatalist">
-              <option value="Best Sellers">
-              <option value="New Arrivals">
-              <option value="Trending Now">
-              <option value="Featured Release">
-            </datalist>
-            <div class="d-flex gap-1 flex-wrap align-items-center">
-              <span class="text-muted" style="font-size: 0.72rem;">Quick Tags:</span>
-              <span class="collection-tag-pill" onclick="pickCollectionTag('Best Sellers')">+ Best Sellers</span>
-              <span class="collection-tag-pill" onclick="pickCollectionTag('New Arrivals')">+ New Arrivals</span>
-              <span class="collection-tag-pill" onclick="pickCollectionTag('Trending Now')">+ Trending Now</span>
+            <!-- Quick Create / Custom Category Name input -->
+            <div class="mt-2 pt-2 border-top d-flex gap-2 align-items-center">
+              <input type="text" class="form-control form-control-glass form-control-sm" id="newCustomCategoryTyped" placeholder="Or type a new category name (auto-created on upload)..." oninput="handleCustomCategoryTyped(this.value)">
+              <button type="button" class="btn btn-sm btn-outline-primary text-nowrap" onclick="applyCustomTypedCategory()" title="Apply custom category name">
+                <i class="bi bi-plus-lg me-1"></i>Apply
+              </button>
             </div>
+
+            <div class="form-text text-muted" style="font-size: 0.74rem;">Choose an existing category above, or type a new one to auto-create it with this product.</div>
           </div>
 
           <!-- Product Image File Uploader -->
@@ -571,7 +559,9 @@
       const selectedSub = document.getElementById('customCatSelectedSub');
       const trigger = document.getElementById('customCategoryTrigger');
       const menu = document.getElementById('customCategoryMenu');
+      const typedInput = document.getElementById('newCustomCategoryTyped');
 
+      if (typedInput) typedInput.value = '';
       if (hiddenInput) hiddenInput.value = name;
       if (selectedText) selectedText.textContent = name;
       if (selectedIcon && iconUrl) selectedIcon.src = iconUrl;
@@ -582,6 +572,30 @@
 
       // Update active state in menu items
       populateCategoriesUI();
+    }
+
+    function handleCustomCategoryTyped(val) {
+      const clean = val.trim();
+      const hiddenInput = document.getElementById('newProductCategorySelect');
+      const selectedText = document.getElementById('customCatSelectedText');
+      const selectedSub = document.getElementById('customCatSelectedSub');
+
+      if (clean) {
+        if (hiddenInput) hiddenInput.value = clean;
+        if (selectedText) selectedText.textContent = clean;
+        if (selectedSub) selectedSub.textContent = 'New custom category (auto-created on save)';
+      }
+    }
+
+    function applyCustomTypedCategory() {
+      const input = document.getElementById('newCustomCategoryTyped');
+      const val = input ? input.value.trim() : '';
+      if (!val) {
+        alert('Please enter a category name.');
+        return;
+      }
+      handleCustomCategoryTyped(val);
+      AdminApp.showAdminToast(`Category "${val}" selected!`, 'bi-check2 text-success');
     }
 
     // Edit Modal Custom Category Dropdown Helpers
@@ -1082,9 +1096,15 @@
       }
 
       try {
-        const name = document.getElementById('newProductName').value;
-        const category = document.getElementById('newProductCategorySelect').value;
-        const collectionTag = document.getElementById('newProductCollectionTag')?.value.trim() || 'New Arrivals';
+        const name = document.getElementById('newProductName').value.trim();
+        let category = document.getElementById('newProductCategorySelect').value.trim();
+        const customTyped = document.getElementById('newCustomCategoryTyped')?.value.trim();
+        if (customTyped) {
+          category = customTyped;
+        }
+        if (!category) {
+          category = 'Compression Wear';
+        }
 
         // 2. Upload the selected image file to backend or fallback to preview data URI
         let finalImageUrl = '';
@@ -1103,25 +1123,43 @@
           finalImageUrl = previewImg?.src || '';
         }
 
-        // 3. Create product in PostgreSQL / Storefront
+        // 3. Auto-create category in categories database/list if not already present
+        const catExists = categoriesList && categoriesList.some(c => c.name.toLowerCase() === category.toLowerCase());
+        if (!catExists) {
+          try {
+            await AdminApp.createCategory({
+              name: category,
+              image: finalImageUrl || '/assets/images/sport-7v7.png',
+              description: `${category} performance sportswear uniforms`,
+              is_active: true
+            });
+          } catch (catErr) {
+            console.warn('Category auto-create notice:', catErr.message);
+          }
+        }
+
+        // 4. Create product in PostgreSQL / Storefront with category assigned
         await AdminApp.createProduct({
           name,
           sport: category,
-          category: collectionTag,
+          category: category,
           price: 0,
           image: finalImageUrl
         });
 
-        // 4. Close modal and clean reset
+        // 5. Close modal and clean reset
         const modalEl = document.getElementById('addProductModal');
         const modalInstance = bootstrap.Modal.getInstance(modalEl);
         if (modalInstance) modalInstance.hide();
 
         e.target.reset();
+        const typedInput = document.getElementById('newCustomCategoryTyped');
+        if (typedInput) typedInput.value = '';
         removeSelectedImage();
 
-        // 5. Refresh products and categories in admin
+        // 6. Refresh products and categories in admin
         await Promise.all([loadCategories(), loadProducts()]);
+        AdminApp.showAdminToast(`Product & Category "${category}" published!`, 'bi-check-circle-fill text-success');
       } catch (err) {
         alert('Failed to publish product: ' + err.message);
       } finally {

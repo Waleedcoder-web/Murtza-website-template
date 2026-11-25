@@ -86,24 +86,46 @@ router.post('/', async (req, res) => {
 
   const generatedSku = sku || `PRO-${Math.floor(100 + Math.random() * 900)}`;
   const cleanPrice = price !== undefined && price !== null && price !== '' ? parseFloat(price) : 0.00;
-  const cleanSport = sport || '7v7 Football';
-  const cleanCategory = category || cleanSport || 'Compression Wear';
+  const cleanSport = (sport && typeof sport === 'string' && sport.trim()) ? sport.trim() : ((category && typeof category === 'string' && category.trim()) ? category.trim() : 'Compression Wear');
+  const cleanCategory = (category && typeof category === 'string' && category.trim()) ? category.trim() : cleanSport;
   const cleanImage = image || '';
   const cleanType = type || 'model';
   const cleanDesc = description || `${cleanSport} performance uniform.`;
 
-  try {
-    // Auto-register category if not present
-    if (cleanCategory) {
-      const catSlug = cleanCategory.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
+  // Auto-register category if not present (in PostgreSQL & fallbackStore)
+  const catToRegister = (cleanCategory || cleanSport).trim();
+  if (catToRegister) {
+    const catSlug = catToRegister.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
+    const defaultCatImg = cleanImage || '/assets/images/sport-7v7.png';
+    try {
       await db.query(
-        `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-        [cleanCategory.trim(), catSlug]
-      ).catch(e => {
-        console.warn('Auto-category note:', e.message);
-      });
+        `INSERT INTO categories (name, slug, description, image, is_active)
+         VALUES ($1, $2, $3, $4, true)
+         ON CONFLICT (name) DO UPDATE 
+         SET is_active = true`,
+        [catToRegister, catSlug, `${catToRegister} athletic wear`, defaultCatImg]
+      );
+    } catch (catDbErr) {
+      console.warn('Auto-category insert note:', catDbErr.message);
     }
 
+    if (db.fallbackStore.categories) {
+      const catExists = db.fallbackStore.categories.some(c => c.name.toLowerCase() === catToRegister.toLowerCase());
+      if (!catExists) {
+        db.fallbackStore.categories.push({
+          id: Date.now(),
+          name: catToRegister,
+          slug: catSlug,
+          description: `${catToRegister} athletic wear`,
+          image: defaultCatImg,
+          is_active: true,
+          product_count: 1
+        });
+      }
+    }
+  }
+
+  try {
     const result = await db.query(
       `INSERT INTO products (name, sku, price, sport, category, image, type, description) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
@@ -151,9 +173,26 @@ router.put('/:id', async (req, res) => {
     if (cleanCategory) {
       const catSlug = cleanCategory.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `cat-${Date.now()}`;
       await db.query(
-        `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-        [cleanCategory, catSlug]
+        `INSERT INTO categories (name, slug, description, image, is_active)
+         VALUES ($1, $2, $3, $4, true)
+         ON CONFLICT (name) DO UPDATE SET is_active = true`,
+        [cleanCategory, catSlug, `${cleanCategory} athletic wear`, cleanImage || '/assets/images/sport-7v7.png']
       ).catch(e => console.warn('Auto-category note on update:', e.message));
+
+      if (db.fallbackStore.categories) {
+        const catExists = db.fallbackStore.categories.some(c => c.name.toLowerCase() === cleanCategory.toLowerCase());
+        if (!catExists) {
+          db.fallbackStore.categories.push({
+            id: Date.now(),
+            name: cleanCategory,
+            slug: catSlug,
+            description: `${cleanCategory} athletic wear`,
+            image: cleanImage || '/assets/images/sport-7v7.png',
+            is_active: true,
+            product_count: 1
+          });
+        }
+      }
     }
 
     const result = await db.query(
